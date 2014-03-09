@@ -1,0 +1,137 @@
+######################
+# - Conky settings - #
+######################
+update_interval 2
+total_run_times 0
+net_avg_samples 1
+cpu_avg_samples 2
+
+imlib_cache_size 0
+double_buffer yes
+no_buffers yes
+
+format_human_readable
+
+#####################
+# - Text settings - #
+#####################
+use_xft yes
+xftfont Droid Sans:size=8
+override_utf8_locale yes
+text_buffer_size 2048
+
+#############################
+# - Window specifications - #
+#############################
+own_window_class Conky
+own_window yes
+own_window_transparent yes
+own_window_type override
+own_window_argb_visual yes
+own_window_argb_value 150
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+alignment bottom_right
+gap_y 42
+gap_x 50
+border_inner_margin 8
+
+minimum_size 180 500
+maximum_width 180
+maximum_height 560
+
+default_bar_size 92 6
+
+#########################
+# - Graphics settings - #
+#########################
+draw_shades yes
+default_shade_color 000000
+default_color FFFFFF
+
+#########################
+# - Mail Settings- #
+#########################
+mail_spool /var/mail/hersh 
+
+
+##################
+#  Custom Stuff  #
+##################
+#lua_load ~/.conky/calendar.lua
+#lua_draw_hook_post main 
+
+TEXT
+${font Droid Sans:style=Bold:size=8}SYSTEM $stippled_hr${font}
+##############
+# - SYSTEM - #
+##############
+${voffset 6}${font OpenLogos:size=19}B${font}${goto 40}${voffset -15}Kernel:  ${alignr}${kernel}
+${goto 40}Uptime: ${alignr}${uptime}
+# |--UPDATES
+${goto 40}Updates: ${alignr}${font Droid Sans:style=Bold:size=8}${execi 10800 pacman -Qu | wc -l}${font} Packages
+# |--CPU
+${voffset 6}${font Droid Sans:style=Bold:size=8}CPU${font}${offset -20}${voffset 10}${cpubar cpu0 4,18}
+${voffset -23}${goto 40}Core 1: ${font Droid Sans:style=Bold:size=8}${cpu cpu1}%${font} ${alignr}${cpubar cpu1 7,70 EEEEEE}
+${voffset 1}${goto 40}Core 2: ${font Droid Sans:style=Bold:size=8}${cpu cpu2}%${font} ${alignr}${cpubar cpu2 7,70 EEEEEE}
+#${voffset 1}${goto 40}Core 3: ${font Droid Sans:style=Bold:size=8}${cpu cpu3}%${font} ${alignr}${cpubar cpu3 7,70 EEEEEE}
+#${voffset 1}${goto 40}Core 4: ${font Droid Sans:style=Bold:size=8}${cpu cpu4}%${font} ${alignr}${cpubar cpu4 7,70 EEEEEE}
+# |--MEM
+${voffset 6}${font Droid Sans:style=Bold:size=8}RAM${font}${goto 40}RAM: ${font Droid Sans:style=Bold:size=8}$memperc%${font}
+${voffset 6}${offset 1}${voffset -8}${membar 4,18}${voffset 4}${goto 40}${voffset -2}Free: ${font Droid Sans:style=Bold:size=8}${memeasyfree}${font} ${goto 110}Used: ${font Droid Sans:style=Bold:size=8}${mem}${font}
+# |--SWAP
+#${voffset 5}${font Droid Sans:style=Bold:size=8}SWP${font}${goto 40}Swap: ${font Droid Sans:style=Bold:size=8}${swapperc}%${font}
+#${voffset 4}${offset 1}${voffset -7}${swapbar 4,18}${voffset 4}${goto 40}Free: ${font Droid Sans:style=Bold:size=8}$swapmax${font} ${goto 110}Used: ${font Droid Sans:style=Bold:size=8}$swap${font}
+# |--PROC
+${voffset 4}${font Droid Sans:style=Bold:size=8}TOP${font}${voffset 0}${goto 126}CPU${alignr}RAM
+${voffset -1}${goto 40}${top name 1}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 1}${alignr }${top mem 1}${font}
+${voffset -1}${goto 40}${top name 2}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 2}${alignr }${top mem 2}${font}
+${voffset -1}${goto 40}${top name 3}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 3}${alignr }${top mem 3}${font}
+${voffset -1}${goto 40}${top name 4}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 4}${alignr }${top mem 4}${font}
+#${voffset -1}${goto 40}${top name 5}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 5}${alignr }${top mem 5}${font}
+#${voffset -1}${goto 40}${top name 6}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 6}${alignr }${top mem 6}${font}
+#${voffset -1}${goto 40}${top name 7}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 7}${alignr }${top mem 7}${font}
+#${voffset -1}${goto 40}${top name 8}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 8}${alignr }${top mem 8}${font}
+#${voffset -1}${goto 40}${top name 9}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 9}${alignr }${top mem 9}${font}
+#${voffset -1}${goto 40}${top name 10}${font Droid Sans:style=Bold:size=8} ${goto 120}${top cpu 10}${alignr }${top mem 10}${font}
+##############
+#  CALENDAR  #
+##############
+${voffset 6}${font Droid Sans:style=Bold:size=8}CALENDAR $stippled_hr${font}
+${font Droid Sans:size=25}${alignc}${time %H:%M}${font}
+${alignc}${time %d %B %Y}
+${voffset -5}${goto 20}${execi 60 rem -aa -q -g | tail -n +2}
+###############
+# - NETWORK - #
+###############
+#${voffset 100}
+${voffset 4}${font Droid Sans:style=Bold:size=8}NETWORK: eth0 $stippled_hr${font}
+${voffset 4}${goto 20}Upload: ${font Droid Sans:style=Bold:size=8}${upspeed eth0}${font} ${alignr}${upspeedgraph eth0 8,50 EEEEEE}
+${goto 20}Overall: ${font Droid Sans:style=Bold:size=8}${totalup eth0}${font}
+${voffset 4}${goto 20}Download: ${font Droid Sans:style=Bold:size=8}${downspeed eth0}${font} ${alignr}${downspeedgraph eth0 8,50 EEEEEE}
+${goto 20}Overall: ${font Droid Sans:style=Bold:size=8}${totaldown eth0}${font}
+${voffset 4}${goto 20}Local IP: ${alignr}${font Droid Sans:style=Bold:size=8}${addr eth0} ${font}
+#${voffset 4}${goto 20}Upload: ${font Droid Sans:style=Bold:size=8}${upspeed wlan0}${font} ${alignr}${upspeedgraph wlan0 8,50 EEEEEE}
+#${goto 20}Overall: ${font Droid Sans:style=Bold:size=8}${totalup eth0}${font}
+#${voffset 4}${goto 20}Download: ${font Droid Sans:style=Bold:size=8}${downspeed wlan0}${font} ${alignr}${downspeedgraph wlan0 8,50 EEEEEE}
+#${goto 20}Overall: ${font Droid Sans:style=Bold:size=8}${totaldown wlan0}${font}
+#${voffset 4}${goto 20}Local IP: ${alignr}${font Droid Sans:style=Bold:size=8}${addr wlan0}${font}
+#${goto 20}Public IP: ${alignr}${font Droid Sans:style=Bold:size=8}${execi 10800 ~/.public_ip}${font}
+##########
+# - HD - #
+##########
+${voffset 4}${font Droid Sans:style=Bold:size=8}HD $stippled_hr${font}
+# |--HD default
+  ${voffset 4}${goto 20}Root: ${font Droid Sans:style=Bold:size=8}${fs_used_perc /}%${font}${goto 100}${alignr}${fs_bar 6,68 /}
+  ${offset 7}Free: ${font Droid Sans:style=Bold:size=8}${fs_free /}${font} ${alignr 1}Used: ${font Droid Sans:style=Bold:size=8}${fs_used /}${font}
+  ${voffset 4}${goto 20}D: ${font Droid Sans:style=Bold:size=8}${fs_used_perc /mnt/d}%${font}${goto 100}${alignr}${fs_bar 6,68 /mnt/d}
+  ${offset 7}Free: ${font Droid Sans:style=Bold:size=8}${fs_free /mnt/d}${font} ${alignr 1}Used: ${font Droid Sans:style=Bold:size=8}${fs_used /mnt/d}${font}
+  ${voffset 4}${goto 20}C: ${font Droid Sans:style=Bold:size=8}${fs_used_perc /mnt/c}%${font}${goto 100}${alignr}${fs_bar 6,68 /mnt/c}
+  ${offset 7}Free: ${font Droid Sans:style=Bold:size=8}${fs_free /mnt/c}${font} ${alignr 1}Used: ${font Droid Sans:style=Bold:size=8}${fs_used /mnt/c}${font}
+# |--HDTEMP1
+  #${voffset 7}${goto 20}${voffset -4}Temperature: ${font Droid Sans:style=Bold:size=8}${execi 120 sudo hddtemp /dev/sda -n --unit=C}°C${font}${alignr}/dev/sda
+##########
+# - Local Mail - #
+##########
+${voffset 4}${font Droid Sans:style=Bold:size=8}Mail $stippled_hr${font}
+  ${voffset 4}${goto 20}Local Mail: ${font Droid Sans:style=Bold:size=8}${new_mails /var/mail/hersh} unread mails
