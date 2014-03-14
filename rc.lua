@@ -26,9 +26,6 @@ menu = require("menu")
 -- Calendar Widget
 cal = require("cal")
 
--- Tyrannical for Dynamic Tagging
-local tyrannical = require("tyrannical")
-
 -- Use Menubar - New in Awesome 3.7
 local menubar = require("menubar")
  menubar.cache_entries = true
@@ -290,6 +287,7 @@ info_modal_keybinds = "\
     a - Arch Notes\
     w - Remind Calendar\
     d - Dokuwiki IDE\
+    f - Dokuwiki in Vim\
     s - Wordlist\
     \
 <b>Quotebook</b>\
@@ -330,6 +328,7 @@ global_mode_modal_keybinds = {
     ["w"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/calendars/imp.rem"') end,
     ["d"] = function () awful.util.spawn('firefox -new-window http://localhost/doku') 
         awful.util.spawn('urxvt -e vim /home/hersh/doku -c "silent cd /home/hersh/doku" -c "silent call FirefoxRefresher()"') end,
+    ["f"] = function () awful.util.spawn('urxvt -e vim /home/hersh/doku -c "silent cd /home/hersh/doku"') end,
     ["s"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/notes/study/wordlist/wordlist.txt"') end,
     -- Quotebook
     ["s"] = function () awful.util.spawn(homedir .. '/scripts/getQuote/save_current_quote.sh') end,
