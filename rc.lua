@@ -26,6 +26,9 @@ menu = require("menu")
 -- Calendar Widget
 cal = require("cal")
 
+-- Dynamic Tagging
+eminent = require("eminent")
+
 -- Use Menubar - New in Awesome 3.7
 local menubar = require("menubar")
  menubar.cache_entries = true
