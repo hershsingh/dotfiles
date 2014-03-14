@@ -170,19 +170,7 @@ vnoremap <Space> zf
 "}}}
 
 " Clipboard Copy/Paste Mappings"{{{
-"autocmd FocusGained * let @z=@+
-"copy
-vmap <F7> "+ygv"+y`>
-vmap ,y "+ygv"+y`>
-
-"paste (Shift-F7 to paste after normal cursor, Ctrl-F7 to paste over visual selection)
-vmap <C-F7> "+p`]
-cmap <F7> <C-r><C-o>+
-imap <F7> <C-r><C-o>+
-
-nmap ,Y "+y$
-nmap ,p "+gp
-nmap ,P "+gP
+set clipboard=unnamedplus
 "}}}
 
 " Sprunge/ix.io Pastebin " {{{
