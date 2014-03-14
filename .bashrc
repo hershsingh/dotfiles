@@ -25,7 +25,7 @@ function wakeat() {
 export WINEPREFIX=/home/hersh/.wine/win32
 export WINEARCH=win32
 
-export PATH=$PATH:/home/hersh/bin/:/home/hersh/.gem/ruby/2.0.0/bin
+export PATH=$PATH:/home/hersh/bin/:/home/hersh/.gem/ruby/2.0.0/bin:/home/hersh/.gem/ruby/2.1.0/bin
 
 alias less='less -NRmsx4 '
 alias mousereload='sudo rmmod psmouse; sudo modprobe psmouse'
@@ -46,10 +46,6 @@ alias ipy='ipython2 --gui=wx'
 alias msword='WINEPREFIX=~/.win32 wine "/home/hersh/.win32/drive_c/Program Files/Microsoft Office/Office14/WINWORD.EXE"'
 alias wgetimages='wget -r -l1 -H -np -nd -A.jpg'
 
-#source /home/hersh/scripts/proxy.sh
-
-#alias winword='WINEPREFIX=/home/hersh/.win32 wine "/home/hersh/.win32/dosdevices/c:/Program Files/Microsoft Office/Office14/WINWORD.EXE"'
 # https://bbs.archlinux.org/viewtopic.php?pid=1068202#p1068202
 
-#archey 
 [ -n "$RANGER_LEVEL" ] && PS1="$PS1"'[in ranger] '
