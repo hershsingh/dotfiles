@@ -79,12 +79,6 @@ let g:yankring_history_dir = '$HOME/.vim/'
 nnoremap <F3> :SyntasticToggleMode<CR>
 "}}}
 
-" Plugin: vim-airline {{{
-set laststatus=2 " Always display the statusline in all windows
-set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-"}}}
 
 " Plugin: GnuPG  {{{
 " http://pig-monkey.com/2013/04/4/password-management-vim-gnupg/
@@ -291,14 +285,31 @@ function! RangerChooser()
   redraw!
 endfunction
 map ,r :call RangerChooser()<CR>"}}}
-
-function WordCount()
-  let s:old_status = v:statusmsg
-  exe "silent normal g\<c-g>"
-  let s:word_count = str2nr(split(v:statusmsg)[11])
-  let v:statusmsg = s:old_status
-  return s:word_count
+" Function: WordCount {{{
+function! WordCount()
+    let s:old_status = v:statusmsg
+    let position = getpos(".")
+    exe ":silent normal g\<C-g>"
+    let stat = v:statusmsg
+    let s:word_count = 0
+    if stat != '--No lines in buffer--'
+        let s:word_count = str2nr(split(v:statusmsg)[11])
+        let v:statusmsg = s:old_status
+    end
+    call setpos('.', position)
+    return s:word_count 
 endfunction
-set statusline=wc:%{WordCount()}
+
+"}}}
+
+" Plugin: vim-airline {{{
+set laststatus=2 " Always display the statusline in all windows
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline)
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+
+" Show WordCount in Airline, needs the WordCount() function defined above
+let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr}%#__accent_bold#%4l%#__restore__#:%3c WC:%{WordCount()}'
+"}}}
 
 "  vim: foldmethod=marker foldclose=all
