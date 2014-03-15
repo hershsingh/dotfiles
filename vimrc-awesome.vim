@@ -144,16 +144,6 @@ endif
 "}}}
 
 " Personal
-" Custom: Notes Autocommands"{{{
-" Notes.vim in the syntax directory is essential for the following stuff
-" set filetype to -notes- whenever a file is read/created in my Notes directory
-augroup notes
-    au!
-    au BufNewFile,BufRead,BufWritePost */notes/*.txt :set filetype=notes
-    " invoke :helptags function to update the tags file whenever a file is written to my Notes folder
-    au BufWritePost */notes/*.txt :helptags /home/hersh/notes
-augroup END
-"}}}
 " Custom: Dokuwiki Notes Plugin "{{{
 " should make this into a plugin for vim sometime.
 
