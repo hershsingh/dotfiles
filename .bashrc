@@ -27,6 +27,10 @@ export WINEARCH=win32
 
 export PATH=$PATH:/home/hersh/bin/:/home/hersh/.gem/ruby/2.0.0/bin:/home/hersh/.gem/ruby/2.1.0/bin
 
+# This is to fix a problem with the LESS pager, which sometimes issues the warning: 
+#   Warning: Terminal is not fully functional.
+export TERM=rxvt-unicode-256color
+
 alias less='less -NRmsx4 '
 alias mousereload='sudo rmmod psmouse; sudo modprobe psmouse'
 alias ecfs='ecryptfs-simple '
