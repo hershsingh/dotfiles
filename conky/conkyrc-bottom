@@ -69,6 +69,7 @@ default_color  111111
 default_outline_color EEEEEE
 color1 333333
 color2 333333
+color_orange FF6600
 
 #font1 Heydings Icons:size 11
 mpd_host 127.0.0.1
@@ -86,14 +87,23 @@ ${voffset -4}\
 ${if_existing /sys/class/power_supply/ADP1/online 0}\
 ${if_match ${battery_percent BAT0} <= 50}${color red}\
 ${if_match ${battery_percent BAT0} <= 10}${execi 3 notify-send --expire-time=2000 --urgency=critical "Battery about to die. May God save your data. Amen."}$endif\
-$else${color orange}$endif$endif\
+$else${color color_orange}$endif$endif\
 ${font Heydings Icons:size=13}r\
 $font${voffset -2}${battery_percent BAT0}% \
-${battery_bar 5,50 BAT0}$color  | \
+${battery_bar 5,50 BAT0}$color | \
 ${color1}System Temp:${color}\
 ${if_match ${hwmon 1 temp 3} > 92}${execi 3 notify-send --expire-time=2000 --urgency=critical "System temperature too high! Immerse the laptop in water asap :P"}$endif\
-${if_match ${hwmon 1 temp 3} > 80}${color red}${hwmon 1 temp 3}°${color}${endif}${if_match ${hwmon 1 temp 3} <= 80}${if_match ${hwmon 1 temp 3} >=70}${color orange}${hwmon 1 temp 3}°${color}${endif}${endif}${if_match ${hwmon 1 temp 3} < 70}${hwmon 1 temp 3}°${endif}  | \
+${if_match ${hwmon 1 temp 3} > 80}${color red}${hwmon 1 temp 3}°${color}${endif}${if_match ${hwmon 1 temp 3} <= 80}${if_match ${hwmon 1 temp 3} >=70}${color color_orange}${hwmon 1 temp 3}°${color}${endif}${endif}${if_match ${hwmon 1 temp 3} < 70}${hwmon 1 temp 3}°${endif} | \
 ${color1}CPU Temp:${color}\
-${if_match ${hwmon 2 temp 2} > 73}${color red}${hwmon 2 temp 2}°${color}${endif}${if_match ${hwmon 2 temp 2} <= 73}${if_match ${hwmon 2 temp 2} >=70}${color orange}${hwmon 2 temp 2}°${color}${endif}${endif}${if_match ${hwmon 2 temp 2} < 70}${hwmon 2 temp 2}°${endif}  | \
+${if_match ${hwmon 2 temp 2} > 73}${color red}${hwmon 2 temp 2}°${color}${endif}\
+${if_match ${hwmon 2 temp 2} <= 73}\
+${if_match ${hwmon 2 temp 2} >=70}${color color_orange}${hwmon 2 temp 2}°${color}${endif}${endif}\
+${if_match ${hwmon 2 temp 2} < 70}${hwmon 2 temp 2}°${endif} | \
+${color1}GPU Temp:${color}\
+${if_match ${hwmon 0 temp 1} > 90}${color red}${hwmon 0 temp 1}°${color}${endif}\
+${if_match ${hwmon 0 temp 1} <= 90}\
+${if_match ${hwmon 0 temp 1} >=80}${color color_orange}${hwmon 0 temp 1}°${color}${endif}\
+${endif}\
+${if_match ${hwmon 0 temp 1} < 80}${hwmon 0 temp 1}°${endif} | \
 ${color1}CPU:${color} ${cpu}% ${cpubar cpu0 5,50}  ${color}| \
 ${color1}RAM:${color} ${memperc}% ${membar 5,50}        
