@@ -106,4 +106,4 @@ ${if_match ${hwmon 0 temp 1} >=80}${color color_orange}${hwmon 0 temp 1}°${colo
 ${endif}\
 ${if_match ${hwmon 0 temp 1} < 80}${hwmon 0 temp 1}°${endif} | \
 ${color1}CPU:${color} ${cpu}% ${cpubar cpu0 5,50}  ${color}| \
-${color1}RAM:${color} ${memperc}% ${membar 5,50}        
+${color1}RAM:${color} ${memperc}% ${membar 5,50}    
