@@ -19,7 +19,7 @@ format_human_readable yes
 #####################
 use_xft yes
 
-xftfont Droid Sans:size=8
+xftfont Droid Sans Mono:size=7
 override_utf8_locale yes
 text_buffer_size 2048
 
