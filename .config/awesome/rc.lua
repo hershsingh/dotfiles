@@ -21,19 +21,19 @@ wibox = require("wibox")
 beautiful = require("beautiful")
 -- Notification library
 naughty = require("naughty")
-menu = require("menu")
+-- menu = require("menu")
 --menubar = require("menubar")
 -- Calendar Widget
-cal = require("cal")
+--cal = require("cal")
 
 -- Dynamic Tagging
 --eminent = require("eminent")
 
 -- Use Menubar - New in Awesome 3.7
-local menubar = require("menubar")
- menubar.cache_entries = true
- menubar.app_folders = { "/usr/share/applications/" }
- menubar.show_categories = true   -- Change to false if you want only programs to appear in the menu
+--local menubar = require("menubar")
+ --menubar.cache_entries = true
+ --menubar.app_folders = { "/usr/share/applications/" }
+ --menubar.show_categories = true   -- Change to false if you want only programs to appear in the menu
 
 --------------- Naughty notification properties -------------
 
@@ -89,7 +89,7 @@ end
 -- {{{ Variable definitions
 homedir = os.getenv('HOME')
 -- Themes define colours, icons, and wallpapers
-beautiful.init(homedir .. "/.config/awesome/awesome-themes-3.5/sky-grey/theme.lua")
+beautiful.init(homedir .. "/.config/awesome/themes/sky-grey/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/bio/theme.lua")
 theme.wallpaper = homedir .. "/background" 
@@ -168,7 +168,7 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
-cal.register(mytextclock)
+--cal.register(mytextclock)
 
 -- CUSTOM: Create an empty wibox to place the conky bar
 mystatusbar = awful.wibox({ position = "bottom", screen = 1, ontop = false, width = 1, height = 16 })
@@ -499,8 +499,8 @@ globalkeys = awful.util.table.join(
     -- Prompt
     --awful.key({ modkey },            "r",     function () mypromptbox[mouse.screen]:run() end),
 
-    -- Awesome MenuBar
-    awful.key({ modkey }, "p", function () menubar.show() end),
+     --Awesome MenuBar
+    --awful.key({ modkey }, "p", function () menubar.show() end),
 
     awful.key({ modkey }, "F12", function () awful.util.spawn("slimlock") end),
     --awful.key({ modkey }, "Escape" function () menubar.exit() end),
@@ -845,11 +845,11 @@ mytimer:connect_signal("timeout",
 -- Startup Stuff
 
 -- Composite Manager - required for transparency effects
-run_once("xcompmgr &") --run_once("unagi &")
+--run_once("xcompmgr &") --run_once("unagi &")
 -- Impersonate another non-reparenting WM recognized by Java VM. Required to make MATLAB work.
-run_once("wmname LG3D &")
-run_once("pasystray &")
-run_once("unclutter &")
+--run_once("wmname LG3D &")
+--run_once("pasystray &")
+--run_once("unclutter &")
 
 -- start the transparent terminal.. the settings for this are in the particular profile
 --run_or_raise("gnome-terminal --role=transparent_wallpaper --profile=transparent_wallpaper", {role="transparent_wallpaper"})
