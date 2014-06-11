@@ -9,28 +9,30 @@
 set nocompatible
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " My bundles here:
 " original repos on GitHub
-Bundle 'SirVer/ultisnips'
-Bundle 'LaTeX-Box-Team/LaTeX-Box'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/syntastic'
-"Bundle 'vim-scripts/YankRing.vim'
-Bundle 'kien/ctrlp.vim'
-Bundle 'jamessan/vim-gnupg'
-Bundle 'w0ng/vim-hybrid'
-Bundle 'bling/vim-airline'
-Bundle 'scrooloose/nerdtree'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-fugitive'
+Plugin 'SirVer/ultisnips'
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/syntastic'
+"Plugin 'vim-scripts/YankRing.vim'
+Plugin 'kien/ctrlp.vim'
+Plugin 'jamessan/vim-gnupg'
+Plugin 'w0ng/vim-hybrid'
+Plugin 'bling/vim-airline'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
 
+" All of your Plugins must be added before the following line
+call vundle#end()
 filetype plugin indent on     " required!
 "
 " Brief help
@@ -47,6 +49,8 @@ filetype plugin indent on     " required!
 " Disable 'matching $' feature - causes high CPU usage with larger files
 let g:LatexBox_loaded_matchparen=1 
 let g:LatexBox_latexmk_options="--shell-escape --enable-write18"
+let g:LatexBox_Folding=1
+let g:LatexBox_fold_envs=0
 " }}}
 
 " Plugin: Ultisnips" {{{
@@ -78,7 +82,6 @@ let g:yankring_history_dir = '$HOME/.vim/'
 " Plugin: Syntastic "{{{
 nnoremap <F3> :SyntasticToggleMode<CR>
 "}}}
-
 
 " Plugin: GnuPG  {{{
 " http://pig-monkey.com/2013/04/4/password-management-vim-gnupg/
@@ -299,7 +302,7 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
 " Show WordCount in Airline, needs the WordCount() function defined above
-let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr}%#__accent_bold#%4l%#__restore__#:%3c WC:%{WordCount()}'
+"let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr}%#__accent_bold#%4l%#__restore__#:%3c WC:%{WordCount()}'
 "}}}
 
 "  vim: foldmethod=marker foldclose=all

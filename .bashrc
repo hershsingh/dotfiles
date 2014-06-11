@@ -5,6 +5,11 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+export EDITOR=vim
+
+# TexLive Network Installation
+export PATH=$PATH:/usr/local/texlive/2013/bin/i386-linux
+
 alias ixio='ix | xclip && xclip -o'
 
 findhere() {

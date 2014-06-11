@@ -1,0 +1,92 @@
+extends texmath
+
+############
+#  Custom  #
+############
+snippet doc "Empty Document Template" b
+\documentclass[a4paper]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+
+\begin{document}
+${1}
+\end{document}
+endsnippet
+
+snippet bal "Align Environment" b
+\begin{align*}
+	${0:${VISUAL}}
+\end{align*}
+endsnippet
+
+snippet baln "Align Environment" b
+\begin{align}
+	${0:${VISUAL}}
+\end{align}
+endsnippet
+
+snippet -> "a right arrow "
+\rightarrow
+endsnippet
+snippet x-> "a right arrow "
+\xrightarrow{${1:stuff over the arrow}}$2
+endsnippet
+snippet c-> "a right arrow "
+\hookrightarrow $1
+endsnippet
+snippet ->> "a right arrow "
+\twoheadrightarrow $1
+endsnippet
+
+snippet dod "Partial derivative"
+\frac{d ${1:x}}{d ${2:y}}$3
+endsnippet
+
+snippet pdod "Partial derivative"
+\frac{\partial ${1:x}}{\partial ${2:y}}$3
+endsnippet
+
+snippet int "Integral"
+\int_{${1}}^{${2}}\! ${0}
+endsnippet
+snippet intn "Integral with No limits"
+\int \! ${0}
+endsnippet
+snippet oint "Integral"
+\oint_{${1}}^{${2}}\! ${0}
+endsnippet
+snippet ointn "Integral"
+\oint\! ${0}
+endsnippet
+
+snippet tbf "Boldface" 
+\textbf{${0:${VISUAL}}}
+endsnippet
+
+snippet tem "Emphasize" 
+\emph{${0:${VISUAL}}}
+endsnippet
+
+snippet eqr "Equation Reference"
+\eqref{eqn:${1:label}} ${0}
+endsnippet
+
+snippet tikz "Insert tikzpicture" b
+\begin{tikzpicture}[]
+	${1}
+\end{tikzpicture}
+endsnippet
+
+snippet fig "Insert Figure" b
+\begin{figure}[h]
+	\centering
+	\input{${1}}
+	\caption{${2}}
+	\label{${3}}
+\end{figure}
+endsnippet
+
+snippet pmat "Inset pmatrix" 
+\begin{pmatrix} ${1} \end{pmatrix}
+endsnippet
+

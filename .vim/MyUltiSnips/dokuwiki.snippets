@@ -1,0 +1,32 @@
+snippet h1
+======${0:heading}======
+endsnippet
+snippet h2
+=====${0:heading}=====
+endsnippet
+snippet h3
+====${0:heading}====
+endsnippet
+snippet h4
+===${0:heading}===
+endsnippet
+snippet h5
+==${0:heading}==
+endsnippet
+
+###########################
+#  Dokuwiki Tex Snippets  #
+###########################
+extends dokuwiki
+
+snippet def "Definition" b
+===Definition===
+$1
+endsnippet
+snippet thm "Theorem" b
+===Theorem ${1:name}===
+${2:statement}\\\\
+**Proof**:${3:proof}\\\\
+$4
+endsnippet
+# vim:ft=snippets:

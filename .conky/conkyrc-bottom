@@ -19,7 +19,7 @@ format_human_readable yes
 #####################
 use_xft yes
 
-xftfont Droid Sans Mono:size=7
+xftfont Terminus:size=8
 override_utf8_locale yes
 text_buffer_size 2048
 
@@ -36,8 +36,8 @@ draw_shades no
 
 gap_x 0
 gap_y 0
-minimum_size 1366 0
-maximum_width 1366
+minimum_size 1280 0
+maximum_width 1280
 
 no_buffers yes
 out_to_console no
@@ -78,6 +78,7 @@ mpd_host 127.0.0.1
 # ${voffset -4}${font RaphaelIcons:size=18}M${voffset -4}${font} ${execpi 300 ~/scripts/check_gmail.sh} | \
 #${hwmon 2 temp 2}°C${hwmon 2 temp 3}°C ${color}| \
 #${execi 3 notify-send --expire-time=2000 --urgency=critical "Battery about to die. Save your work and run!"}\
+${if_match ${battery_percent BAT0} <= 10}${execi 3 notify-send --expire-time=2000 --urgency=critical "Battery about to die. May God save your data. Amen."}$endif\
 TEXT
 ${if_mpd_playing} MPD: [${mpd_status} - ${mpd_elapsed}/${mpd_length}] ${mpd_smart} ${else}\
 ${color1}MPD: [off]${endif}\
@@ -86,13 +87,11 @@ ${alignr}${color1}\
 ${voffset -4}\
 ${if_existing /sys/class/power_supply/ADP1/online 0}\
 ${if_match ${battery_percent BAT0} <= 50}${color red}\
-${if_match ${battery_percent BAT0} <= 10}${execi 3 notify-send --expire-time=2000 --urgency=critical "Battery about to die. May God save your data. Amen."}$endif\
 $else${color color_orange}$endif$endif\
 ${font Heydings Icons:size=13}r\
 $font${voffset -2}${battery_percent BAT0}% \
 ${battery_bar 5,50 BAT0}$color | \
 ${color1}System Temp:${color}\
-${if_match ${hwmon 1 temp 3} > 92}${execi 3 notify-send --expire-time=2000 --urgency=critical "System temperature too high! Immerse the laptop in water asap :P"}$endif\
 ${if_match ${hwmon 1 temp 3} > 80}${color red}${hwmon 1 temp 3}°${color}${endif}${if_match ${hwmon 1 temp 3} <= 80}${if_match ${hwmon 1 temp 3} >=70}${color color_orange}${hwmon 1 temp 3}°${color}${endif}${endif}${if_match ${hwmon 1 temp 3} < 70}${hwmon 1 temp 3}°${endif} | \
 ${color1}CPU Temp:${color}\
 ${if_match ${hwmon 2 temp 2} > 73}${color red}${hwmon 2 temp 2}°${color}${endif}\
@@ -106,4 +105,4 @@ ${if_match ${hwmon 0 temp 1} >=80}${color color_orange}${hwmon 0 temp 1}°${colo
 ${endif}\
 ${if_match ${hwmon 0 temp 1} < 80}${hwmon 0 temp 1}°${endif} | \
 ${color1}CPU:${color} ${cpu}% ${cpubar cpu0 5,50}  ${color}| \
-${color1}RAM:${color} ${memperc}% ${membar 5,50}    
+${color1}RAM:${color} ${memperc}% ${membar 5,50}       

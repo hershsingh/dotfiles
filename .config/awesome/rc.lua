@@ -27,7 +27,7 @@ menu = require("menu")
 cal = require("cal")
 
 -- Dynamic Tagging
-eminent = require("eminent")
+--eminent = require("eminent")
 
 -- Use Menubar - New in Awesome 3.7
 local menubar = require("menubar")
@@ -698,7 +698,8 @@ client.connect_signal("manage", function (c, startup)
 end)
 
 client.connect_signal("focus", function(c) 
-    c.border_color = beautiful.border_focus
+    --c.border_color = beautiful.border_focus
+    c.border_color = "#0097FF"
     c.opacity = 1.0
 end)
 client.connect_signal("unfocus", function(c) 
@@ -844,7 +845,7 @@ mytimer:connect_signal("timeout",
 -- Startup Stuff
 
 -- Composite Manager - required for transparency effects
-run_once("cairo-compmgr &") --run_once("unagi &")
+run_once("xcompmgr &") --run_once("unagi &")
 -- Impersonate another non-reparenting WM recognized by Java VM. Required to make MATLAB work.
 run_once("wmname LG3D &")
 run_once("pasystray &")

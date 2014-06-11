@@ -1,0 +1,13 @@
+! Switch caps lock and escape keys ! - a relief while using vim !
+keycode 66 = Caps_Lock
+keycode 9 = Escape
+remove Lock = Caps_Lock
+add Lock = Escape
+keycode 9 = Caps_Lock
+keycode 66 = Escape
+
+! Switch ~ and ` keys - useful as the ~ key gets used more often
+keycode  49 = asciitilde grave asciitilde grave 
+
+! Make the right click menu key behave the same as windows key
+keycode 135 = Super_L
