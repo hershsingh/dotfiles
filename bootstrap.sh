@@ -3,6 +3,7 @@
 DOTFILES=$(pwd)
 DOTFILES_OLD=$HOME/dotfiles_old
 
+# Create a list of all files (excluding git files) in the current directory.
 find . * -type f | grep -v "\./.\git" > dotfiles.txt
 
 mkdir -p $DOTFILES_OLD
