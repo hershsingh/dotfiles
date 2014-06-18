@@ -5,12 +5,36 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+export HISTCONTROL=ignorespace:ignoredups:erasedups
 export EDITOR=vim
+export BROWSER=firefox
+
+#Pipe output to xclip to put it in the X clipboard so that you can copy-paste
+alias xclip='xclip -selection c'
 
 # TexLive Network Installation
 export PATH=$PATH:/usr/local/texlive/2013/bin/i386-linux
 
+#invoke bc with default scale set to 20 digits
+alias bc='bc -l'
+
 alias ixio='ix | xclip && xclip -o'
+
+alias grep='grep --color=auto' #colored grep
+alias ls='ls --color=auto' #colored ls
+export LESS="-R" # colored less
+export SUDO_EDITOR="/usr/bin/vim -p -X"
+
+alias pacfind='sudo pacman -Ss'
+alias pacput='sudo pacman -S'
+alias pacputu='sudo pacman -U'
+
+# Safety Features
+# By default "mv" overwrites existing files without asking! Correct that.
+alias mv="mv -i" 
+alias cp="cp -i" 
+alias rm="rm -i" 
+alias ln="ln -i" 
 
 findhere() {
     STRING=.*$(echo $@ | sed 's/\s/\.\*/g').*
@@ -55,6 +79,27 @@ alias ipy='ipython2 --gui=wx'
 alias msword='WINEPREFIX=~/.win32 wine "/home/hersh/.win32/drive_c/Program Files/Microsoft Office/Office14/WINWORD.EXE"'
 alias wgetimages='wget -r -l1 -H -np -nd -A.jpg'
 
+#for colored man pages using "less"
+man() {
+	env \
+		LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+		LESS_TERMCAP_md=$(printf "\e[1;31m") \
+		LESS_TERMCAP_me=$(printf "\e[0m") \
+		LESS_TERMCAP_se=$(printf "\e[0m") \
+		LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+		LESS_TERMCAP_ue=$(printf "\e[0m") \
+		LESS_TERMCAP_us=$(printf "\e[1;32m") \
+			man "$@"
+}
 # https://bbs.archlinux.org/viewtopic.php?pid=1068202#p1068202
 
+PS1="\[\033[0;37m\]╾─\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[0;31m\]\u'; else echo '\[\033[0;33m\]\u\[\033[0;37m\]'; fi)\[\033[0;37m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;37m\]]\[\033[0;37m\]─╼ \[\033[0m\]"
+
+PS3='> '
+PS4='+ '
+
+# Impersonate another non-reparenting WM recognized by Java VM. Required to make MATLAB work.
+# wmname LG3D
+#to use system anti-aliased fonts and make swing use the GTK look and feel:
+export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 [ -n "$RANGER_LEVEL" ] && PS1="$PS1"'[in ranger] '
