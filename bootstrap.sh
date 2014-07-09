@@ -6,10 +6,10 @@ DOTFILES_OLD=$HOME/dotfiles_old
 # Create a list of all files (excluding git files) in the current directory.
 find . * -type f | grep -v "\./.\git" > dotfiles.txt
 
-mkdir -p $DOTFILES_OLD
 
 # Backup all files that currently exist into the folder $DOTFILES_OLD, 
 # while preserving the directory structure and dereferencing links.
+mkdir -p $DOTFILES_OLD && cd
 rsync -Razq --copy-links --files-from=$DOTFILES/dotfiles.txt . $DOTFILES_OLD/
 
 # Loop over all dotfiles and create symlinks for all.
@@ -21,3 +21,11 @@ do
     rm -f $HOME/$src
     ln -s $DOTFILES/$src $HOME/$src
 done < $DOTFILES/dotfiles.txt
+
+
+# Vim - Vundle
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+vim +VundleInstall +qall
+
+# AwesomeWM - Beautiful Themes
+git clone https://github.com/mikar/awesome-themes.git ~/.config/awesome/themes
