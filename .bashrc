@@ -13,7 +13,7 @@ export BROWSER=firefox
 alias xclip='xclip -selection c'
 
 # TexLive Network Installation
-export PATH=$PATH:/usr/local/texlive/2013/bin/i386-linux
+export PATH=$PATH:/usr/local/texlive/2013/bin/x86_64-linux
 
 #invoke bc with default scale set to 20 digits
 alias bc='bc -l'
@@ -103,3 +103,18 @@ PS4='+ '
 #to use system anti-aliased fonts and make swing use the GTK look and feel:
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
 [ -n "$RANGER_LEVEL" ] && PS1="$PS1"'[in ranger] '
+
+mount_internal_ntfs() {
+    # $ mount_internal_ntfs /dev/sda3 as hersh
+    # This needs to be executed as root, but will allow user $3 to read/write.
+    # User needs to be a member of disks group
+    # gpasswd -a $AIS_USER disk
+    MOUNTDIR=/media/"$(blkid -s LABEL -o value $1)"
+    sudo sh -c "mkdir -p $MOUNTDIR; chown $3 $MOUNTDIR; mount -t ntfs-3g -o uid=$3,gid=$3,umask=0022 $1 $MOUNTDIR"
+}
+
+findhere() {
+    # Description: Does a quasi fuzzy search in the current directory.
+    STRING=.*$(echo $@ | sed 's/\s/\.\*/g').*
+    find . -iregex "$STRING" | less -N
+}
