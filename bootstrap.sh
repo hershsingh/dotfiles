@@ -26,7 +26,7 @@ do
     rm -f $HOME/$src
     ln -s $SOURCE $HOME/$src
 done < $DOTFILES/$DOTFILES_LIST
-# 
+ 
 # # Vim - Vundle
 # git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 # vim +VundleInstall +qall
