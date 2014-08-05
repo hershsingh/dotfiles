@@ -14,7 +14,7 @@ fi
 xset -b #Disable the annoying beep!
 syndaemon -t -d -i 0.2 &
 
-/home/hersh/scripts/conky_start.sh &
+#/home/hersh/scripts/conky_start.sh &
 
 # Set the keymap
 xmodmap /home/hersh/.Xmodmap &
@@ -27,6 +27,12 @@ xinput set-button-map "15" 1 25 3
 
 # Udiskie to automatically handle mounting of USB drives etc.
 udiskie --tray &
+
+# Systray Battery Monitor
+batterymon &
+
+# Redshift - adjusts display color temperature according to time/location.
+redshift &
 
 # run systemd as a user instance (for mpd)
 /usr/lib/systemd/systemd --user & 
