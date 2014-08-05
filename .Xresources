@@ -10,10 +10,14 @@ URxvt.letterSpace:-0.9
 
 !# how many lines you want it to save per session
 URxvt*saveLines:32767
-URxvt*font: xft:Inconsolata:antialias=true:pixelsize=16
-URxvt*boldFont: xft:Inconsolata:style=bold:antialias=true:pixelsize=16
-URxvt*italicFont: xft:Inconsolata:style=italic:antialias=true:pixelsize=16
-URxvt*boldItalicFont: xft:Inconsolata:style=bolditalic:antialias=true:pixelsize=16
+URxvt*font: xft:Inconsolata\ for\ Powerline:antialias=true:pixelsize=16
+URxvt*boldFont: xft:Inconsolata\ for\ Powerline:style=bold:antialias=true:pixelsize=16
+URxvt*italicFont: xft:Inconsolata\ for\ Powerline:style=italic:antialias=true:pixelsize=16
+URxvt*boldItalicFont: xft:Inconsolata\ for\ Powerline:style=bolditalic:antialias=true:pixelsize=16
+!URxvt*font: xft:Inconsolata:antialias=true:pixelsize=16
+!URxvt*boldFont: xft:Inconsolata:style=bold:antialias=true:pixelsize=16
+!URxvt*italicFont: xft:Inconsolata:style=italic:antialias=true:pixelsize=16
+!URxvt*boldItalicFont: xft:Inconsolata:style=bolditalic:antialias=true:pixelsize=16
 
 !# with this set to true, when an app sends a bell to the terminal, awesome hilights the appropriate tag(s) 
 URxvt*urgentOnBell: true
