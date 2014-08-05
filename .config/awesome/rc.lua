@@ -89,10 +89,10 @@ end
 -- {{{ Variable definitions
 homedir = os.getenv('HOME')
 -- Themes define colours, icons, and wallpapers
-beautiful.init(homedir .. "/.config/awesome/themes/sky-grey/theme.lua")
+beautiful.init(homedir .. "/.config/awesome/themes/dust/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/bio/theme.lua")
-theme.wallpaper = homedir .. "/background" 
+--theme.wallpaper = homedir .. "/background" 
 --awful.util.spawn(homedir .. "/scripts/wallsmart.sh")
 
 theme.font = "Droid Sans 8"
@@ -171,7 +171,7 @@ mytextclock = awful.widget.textclock()
 --cal.register(mytextclock)
 
 -- CUSTOM: Create an empty wibox to place the conky bar
-mystatusbar = awful.wibox({ position = "bottom", screen = 1, ontop = false, width = 1, height = 16 })
+--mystatusbar = awful.wibox({ position = "bottom", screen = 1, ontop = false, width = 1, height = 16 })
 
 -- Create a wibox for each screen and add it
 mywibox = {}
