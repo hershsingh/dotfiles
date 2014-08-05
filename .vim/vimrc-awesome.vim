@@ -17,8 +17,12 @@ call vundle#begin()
 Plugin 'gmarik/vundle'
 
 " My bundles here:
-" original repos on GitHub
+
+" UltiSnips
 Plugin 'SirVer/ultisnips'
+" UltiSnips Snippets 
+Plugin 'honza/vim-snippets'
+
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
@@ -54,8 +58,11 @@ let g:LatexBox_fold_envs=0
 " }}}
 
 " Plugin: Ultisnips" {{{
-   let g:UltiSnipsSnippetDirectories=["UltiSnips", "MyUltiSnips"]"
-   let g:UltiSnipsDontReverseSearchPath="1"
+    let g:UltiSnipsSnippetDirectories=["MyUltiSnips"]"
+    let g:UltiSnipsDontReverseSearchPath="1"
+
+    " If you want :UltiSnipsEdit to split your window.
+    let g:UltiSnipsEditSplit="vertical"
 " }}}
 
 " Plugin: CtrlP.vim"{{{
