@@ -1,59 +1,25 @@
 ----------------------------------------------------------------------------------------
 -- rc.lua: Awesome WM Config
--- Author: Hersh Singh [hershdeep@gmail.com]
--- Date: August 09, 2013
-----------------------------------------------------------------------------------------
--- General Information:
--- naughty.notify (text, title, timeout, hover_timeout, screen, position, ontop, height, 
---      width, font, icon, icon_size, fg, bg, border_width, border_color, run, preset, 
---      replaces_id, callback)
 ----------------------------------------------------------------------------------------
 
-----------------------------------------------------------------------------------------
--- not having "local gears" etc. is better as that allows me to use awesome-client
-gears = require("gears") -- had "local gears = ..." before this
+gears = require("gears")
 awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
+
 -- Widget and layout library
 wibox = require("wibox")
+
 -- Theme handling library
 beautiful = require("beautiful")
+
 -- Notification library
 naughty = require("naughty")
--- menu = require("menu")
---menubar = require("menubar")
--- Calendar Widget
---cal = require("cal")
-
--- Dynamic Tagging
---eminent = require("eminent")
-
--- Use Menubar - New in Awesome 3.7
---local menubar = require("menubar")
- --menubar.cache_entries = true
- --menubar.app_folders = { "/usr/share/applications/" }
- --menubar.show_categories = true   -- Change to false if you want only programs to appear in the menu
 
 --------------- Naughty notification properties -------------
-
 naughty.config.defaults.font             = "Droid Sans 8"
---naughty.config.default_preset.font          = ""
---naughty.config.default_preset.timeout          = 5
---naughty.config.default_preset.screen           = 1
---naughty.config.default_preset.position         = "top_right"
---naughty.config.default_preset.margin           = 10
-----naughty.config.default_preset.height           = 50
-----naughty.config.default_preset.width            = 100
---naughty.config.default_preset.gap              = 1
---naughty.config.default_preset.ontop            = true
---naughty.config.default_preset.icon_size        = 128
---naughty.config.default_preset.fg               = beautiful.fg_focus
---naughty.config.default_preset.bg               = beautiful.bg_normal
---naughty.config.presets.normal.border_color     = beautiful.fg_focus
---naughty.config.default_preset.border_width     = 2
---naughty.config.default_preset.hover_timeout    = nil
 ---------------------------------------------------------------
+
 -- {{{ ERROR HANDLING
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -79,7 +45,7 @@ do
 end
 -- }}}
 
--- CUSTOM: Nifty funtion to debug code using naughty
+-- Nifty funtion to debug code using naughty
 function dbg(vars)
     local text = ""
     for i=1, #vars do text = text .. vars[i] .. " | " end
@@ -91,12 +57,10 @@ homedir = os.getenv('HOME')
 -- Themes define colours, icons, and wallpapers
 beautiful.init(homedir .. "/.config/awesome/themes/dust/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
---beautiful.init("/usr/share/awesome/themes/bio/theme.lua")
 --theme.wallpaper = homedir .. "/background" 
 --awful.util.spawn(homedir .. "/scripts/wallsmart.sh")
 
 theme.font = "Droid Sans 8"
-
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -161,14 +125,11 @@ mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesom
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
 
--- Menubar configuration
---menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
---cal.register(mytextclock)
 
 -- CUSTOM: Create an empty wibox to place the conky bar
 --mystatusbar = awful.wibox({ position = "bottom", screen = 1, ontop = false, width = 1, height = 16 })
