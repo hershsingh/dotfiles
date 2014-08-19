@@ -18,6 +18,7 @@ alias xclip='xclip -selection c'
 # PATH variable #
 # TexLive Network Installation
 export PATH=$PATH:/usr/local/texlive/2013/bin/x86_64-linux
+
 # Ruby Gems
 export PATH=$PATH:/home/hersh/.gem/ruby/2.0.0/bin:/home/hersh/.gem/ruby/2.1.0/bin
 
@@ -63,8 +64,6 @@ alias ln="ln -i"
 #   Warning: Terminal is not fully functional.
 export TERM=rxvt-unicode-256color
 
-# Some random aliases
-
 # Reload the mouse module. Fixes random issues with the mouse.
 alias mousereload='sudo rmmod psmouse && sudo modprobe psmouse'
 
@@ -89,16 +88,6 @@ PS4='+ '
 
 # Use system anti-aliased fonts and make swing use the GTK look and feel:
 export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel'
-
-mount_internal_ntfs() {
-# $ mount_internal_ntfs /dev/sda3 as hersh
-# This needs to be executed as root, but will allow user $3 to read/write.
-# User needs to be a member of disks group
-# gpasswd -a $AIS_USER disk
-# FIX THIS.
-    MOUNTDIR=/media/"$(blkid -s LABEL -o value $1)"
-    sudo sh -c "mkdir -p $MOUNTDIR; chown $3 $MOUNTDIR; mount -t ntfs-3g -o uid=$3,gid=$3,umask=0022 $1 $MOUNTDIR"
-}
 
 findhere() {
 # Does a quasi fuzzy search in the current directory.
