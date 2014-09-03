@@ -5,7 +5,14 @@
 " - Always use augroup for autocommands.
 "   }}}
 
-" Vundle "{{{
+" Plugin: LaTeX-Box [before loading the plugin] {{{
+" Needs to be called before LaTeX-Box is invoked, so that it does not set up
+" the autocommands for matching parenthesis on every CursorMoved event. Speeds
+" up stuff.
+let g:LatexBox_loaded_matchparen=1
+" }}}
+
+" Vundle: Load the plugins! "{{{
 set nocompatible
 filetype off
 
@@ -51,14 +58,13 @@ filetype plugin indent on     " required!
 
 " Plugin: LaTeX-Box {{{
 " Disable 'matching $' feature - causes high CPU usage with larger files
-let g:LatexBox_loaded_matchparen=1 
 let g:LatexBox_latexmk_options="--shell-escape --enable-write18"
 let g:LatexBox_Folding=1
 let g:LatexBox_fold_envs=0
 " }}}
 
 " Plugin: Ultisnips" {{{
-    let g:UltiSnipsSnippetDirectories=["MyUltiSnips"]"
+    let g:UltiSnipsSnippetDirectories=["MyUltiSnips","UltiSnips"]
     let g:UltiSnipsDontReverseSearchPath="1"
 
     " If you want :UltiSnipsEdit to split your window.
