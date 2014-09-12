@@ -57,7 +57,6 @@ filetype plugin indent on     " required!
 "}}}
 
 " Plugin: LaTeX-Box {{{
-" Disable 'matching $' feature - causes high CPU usage with larger files
 let g:LatexBox_latexmk_options="--shell-escape --enable-write18"
 let g:LatexBox_Folding=0
 let g:LatexBox_fold_envs=0
