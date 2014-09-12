@@ -59,8 +59,12 @@ filetype plugin indent on     " required!
 " Plugin: LaTeX-Box {{{
 " Disable 'matching $' feature - causes high CPU usage with larger files
 let g:LatexBox_latexmk_options="--shell-escape --enable-write18"
-let g:LatexBox_Folding=1
+let g:LatexBox_Folding=0
 let g:LatexBox_fold_envs=0
+
+" SyncTeX with Zathura
+let g:LatexBox_viewer= '/usr/bin/zathura --fork -s -x "vim --servername " . v:servername . " --remote +\%{line} \%{input}"' 
+nnoremap <expr><buffer> <LocalLeader>ls ':LatexView  ' . '--synctex-forward ' . line(".") . ":" . col(".") . ":" . expand('%:p') . '<CR>'
 " }}}
 
 " Plugin: Ultisnips" {{{
