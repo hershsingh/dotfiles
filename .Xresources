@@ -10,31 +10,35 @@ URxvt.letterSpace:-0.9
 
 !# how many lines you want it to save per session
 URxvt*saveLines:32767
+
 URxvt*font: xft:Inconsolata\ for\ Powerline:antialias=true:pixelsize=16
 URxvt*boldFont: xft:Inconsolata\ for\ Powerline:style=bold:antialias=true:pixelsize=16
 URxvt*italicFont: xft:Inconsolata\ for\ Powerline:style=italic:antialias=true:pixelsize=16
 URxvt*boldItalicFont: xft:Inconsolata\ for\ Powerline:style=bolditalic:antialias=true:pixelsize=16
-!URxvt*font: xft:Inconsolata:antialias=true:pixelsize=16
-!URxvt*boldFont: xft:Inconsolata:style=bold:antialias=true:pixelsize=16
-!URxvt*italicFont: xft:Inconsolata:style=italic:antialias=true:pixelsize=16
-!URxvt*boldItalicFont: xft:Inconsolata:style=bolditalic:antialias=true:pixelsize=16
+
 
 !# with this set to true, when an app sends a bell to the terminal, awesome hilights the appropriate tag(s) 
 URxvt*urgentOnBell: true
 
-!# these three lines enable clicking on links to open them 
-!## if you want to enable tab support, append ,tabbed to the next line
-!## then use shift+down arrow to create tabs and shift+{left,right} arrows to switch between them
-URxvt*perl-ext-common: default,matcher,clipboard
+! 'font-size' perl extension enables changing the font on-the-fly. Install 'urxvt-font-size-git' from AUR.
+! 'clipboard' extension allows interaction with X clipboard.
+URxvt*perl-ext-common: default,matcher,clipboard,font-size
+
+! 'font-size' extension mappings
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+URxvt.keysym.C-S-Up:   perl:font-size:incglobal
+URxvt.keysym.C-S-Down: perl:font-size:decglobal
+
 !URxvt*perl-ext-common: default,matcher,-option-popup,-selection-popup,-realine,clipboard
 URxvt*matcher.button: 1
+
 ! Bindings for copy-paste, as given in the clipboard extension
-!URxvt.keysym.M-S-c:   perl:clipboard:copy
-!URxvt.keysym.M-S-v:   perl:clipboard:paste
-!URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
-URxvt.iso14755: false
 URxvt.keysym.Shift-Control-V: perl:clipboard:paste
 URxvt.keysym.Shift-Control-C: perl:clipboard:copy
+
+! Need to do this for Control+Shift mappings to work.
+URxvt.iso14755: false
 
 ! do not scroll with output
 URxvt*scrollTtyOutput: false
