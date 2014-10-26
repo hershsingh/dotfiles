@@ -62,8 +62,11 @@ let g:LatexBox_Folding=0
 let g:LatexBox_fold_envs=0
 
 " SyncTeX with Zathura
-let g:LatexBox_viewer= '/usr/bin/zathura --fork -s -x "vim --servername " . v:servername . " --remote +\%{line} \%{input}"' 
-nnoremap <expr><buffer> <LocalLeader>ls ':LatexView  ' . '--synctex-forward ' . line(".") . ":" . col(".") . ":" . expand('%:p') . '<CR>'
+" Enable Forward Search
+"let g:LatexBox_viewer= '/usr/bin/zathura --fork -s -x "vim --servername ' . v:servername . ' --remote +\%{line} \%{input}"' 
+let g:LatexBox_viewer= '/usr/bin/zathura --fork -s -x "vim --servername VIM --remote +\%{line} \%{input}"' 
+" Enable Reverse Search
+" There's a mapping for forward searching in ~/.vim/ftplugin/tex.vim
 " }}}
 
 " Plugin: Ultisnips" {{{
