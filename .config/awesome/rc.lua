@@ -400,6 +400,16 @@ globalkeys = awful.util.table.join(
     -- Screenshot for PrintScreen Key
     awful.key({ }, "Print",function () awful.util.spawn( "import -window root " .. homedir ..  "/screenshot.png" ) end),
 
+     -- Brightness
+    awful.key({ }, "XF86MonBrightnessDown", function ()
+        awful.util.spawn("xbacklight -dec 10") 
+        getBrightness()
+    end),
+    awful.key({ }, "XF86MonBrightnessUp", function ()
+        awful.util.spawn("xbacklight -inc 10") 
+        getBrightness()
+    end),
+
     -- Natural way to change tabs!
     awful.key({ modkey,           }, "Tab",   awful.tag.viewnext       ),
     awful.key({ modkey,"Shift"    }, "Tab",   awful.tag.viewprev       ),
@@ -680,6 +690,16 @@ function showCurrentSong()
 
     -- using ID ensures that mpd notifications dont flood the screen and only replaces the older notificaitons
     last_mpd_notification = naughty.notify({ title = "MPD", text=status, replaces_id = last_mpd_notification}).id
+end
+
+
+-- Show the current brighness level using a notification
+function getBrightness()
+    local fd = io.popen("xbacklight -get")
+    --local fd = io.open("/sys/class/backlight/intel_backlight/brightness", "r")
+    local status = fd:read("*all")
+    fd:close()
+    last_brightness_notification = naughty.notify({ title = "Brightness", text=status, replaces_id = last_brightness_notification}).id
 end
 
 ----------------------------------------
