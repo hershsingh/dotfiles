@@ -324,13 +324,6 @@ end)
 
 globalkeys = awful.util.table.join(
     -- CUSTOM: Program Shortcuts
-    -- dmenu
-    awful.key({ modkey },            "r",     function ()
-        awful.util.spawn("dmenu_run -i -p 'Run command:' -nb '" .. 
-            beautiful.bg_normal .. "' -nf '" .. beautiful.fg_normal .. 
-            "' -sb '" .. beautiful.bg_focus .. 
-            "' -sf '" .. beautiful.fg_focus .. "'") 
-        end),
     
     -- Trigger modal keybinds on Mod4+~
     awful.key({ modkey }, "~", function(c)
