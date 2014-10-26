@@ -57,7 +57,7 @@ homedir = os.getenv('HOME')
 -- Themes define colours, icons, and wallpapers
 beautiful.init(homedir .. "/.config/awesome/themes/dust/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
---theme.wallpaper = homedir .. "/background" 
+theme.wallpaper = homedir .. "/background" 
 --awful.util.spawn(homedir .. "/scripts/wallsmart.sh")
 
 theme.font = "Droid Sans 8"
