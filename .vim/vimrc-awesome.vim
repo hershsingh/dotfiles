@@ -25,6 +25,11 @@ Plugin 'gmarik/vundle'
 
 " My bundles here:
 
+" Unite
+Plugin 'Shougo/unite.vim'
+" Vimproc needs to be compiled manually
+Plugin 'Shougo/vimproc.vim' 
+
 " UltiSnips
 Plugin 'SirVer/ultisnips'
 " UltiSnips Snippets 
@@ -34,7 +39,7 @@ Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
 "Plugin 'vim-scripts/YankRing.vim'
-Plugin 'kien/ctrlp.vim'
+"Plugin 'kien/ctrlp.vim'
 Plugin 'jamessan/vim-gnupg'
 Plugin 'w0ng/vim-hybrid'
 Plugin 'bling/vim-airline'
@@ -55,6 +60,27 @@ filetype plugin indent on     " required!
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Bundle commands are not allowed.
 "}}}
+
+" Plugin: Unite {{{
+
+let g:unite_source_history_yank_enable = 1
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+nnoremap <leader>e :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+
+" Custom mappings for the unite buffer
+autocmd FileType unite call s:unite_settings()
+function! s:unite_settings()
+  " Enable navigation with control-j and control-k in insert mode
+  imap <buffer> <C-j>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+endfunction
+"
+" }}}
 
 " Plugin: LaTeX-Box {{{
 let g:LatexBox_latexmk_options="--shell-escape --enable-write18"
@@ -78,14 +104,14 @@ let g:LatexBox_viewer= '/usr/bin/zathura --fork -s -x "vim --servername VIM --re
 " }}}
 
 " Plugin: CtrlP.vim"{{{
-set runtimepath^=~/.vim/bundle/ctrlp.vim
+"set runtimepath^=~/.vim/bundle/ctrlp.vim
 
-let g:ctrlp_follow_symlinks = 1
-let g:ctrlp_working_path_mode = 'c'
-let g:ctrlp_clear_cache_on_exit = 0
+"let g:ctrlp_follow_symlinks = 1
+"let g:ctrlp_working_path_mode = 'c'
+"let g:ctrlp_clear_cache_on_exit = 0
 
-nnoremap <Tab> :CtrlPBuffer<CR>
-nnoremap <Leader>o :CtrlP<CR>
+"nnoremap <Tab> :CtrlPBuffer<CR>
+"nnoremap <Leader>o :CtrlP<CR>
 "}}}
 
 " Plugin: NERDTree {{{
