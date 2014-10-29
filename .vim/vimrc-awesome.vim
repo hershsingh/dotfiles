@@ -89,8 +89,8 @@ let g:LatexBox_fold_envs=0
 
 " SyncTeX with Zathura
 " Enable Forward Search
-"let g:LatexBox_viewer= '/usr/bin/zathura --fork -s -x "vim --servername ' . v:servername . ' --remote +\%{line} \%{input}"' 
-let g:LatexBox_viewer= '/usr/bin/zathura --fork -s -x "vim --servername VIM --remote +\%{line} \%{input}"' 
+let g:LatexBox_viewer= '/usr/bin/zathura --fork --synctex-editor-command "vim --servername VIM --remote +\%{line} \%{input}"' 
+
 " Enable Reverse Search
 " There's a mapping for forward searching in ~/.vim/ftplugin/tex.vim
 " }}}
