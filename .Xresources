@@ -49,14 +49,6 @@ URxvt*scrollTtyKeypress: true
 ! dont forget to change this to your favorite browser
 URxvt*urlLauncher: firefox
 
-! Render setting for cairo -> pango -> gtk
-Xft.autohint: 0
-Xft.lcdfilter:  lcddefault
-Xft.hintstyle:  hintfull
-Xft.hinting: 1
-Xft.antialias: 0
-Xft.rgba: rgb
-
 ! Hybrid Terminal Colours. Uses the palette from Tomorrow-Night:
 ! https://github.com/chriskempson/tomorrow-theme/blob/master/vim/colors/Tomorrow-Night.vim
 ! vim: ft=xdefaults
