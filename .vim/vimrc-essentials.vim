@@ -34,7 +34,7 @@ set noswapfile
 
 " Tab completion in commandline
 set wildmenu        " awesome enhanced TAB filename completion
-set wildignore=*.o,*~,*.pyc
+set wildignore=*.o,*~,*.pyc,*.aux,*.dvi,*.fdb_latexmk,*.fls,*.log,*.out,*.pdf,*.synctex.gz,*.toc
 
 " Search options
 set magic           " magic for RegEx
