@@ -52,24 +52,11 @@ set smartcase
 """ General Mappings
 nnoremap <S-u> :undo<CR>
 
-""" Searching (Google)
-map  <C-k> ogoogle<Space>
-imap <C-k> <Esc>ogoogle<Space>
-map  <C-S-k> tgoogle<Space>
-imap <C-S-k> <Esc>tgoogle<Space>
 
-""" Firefox Dialogs
-"""" Downloads
-noremap  <C-j> <C-t>:downloads<CR>
-inoremap <C-j> <Esc><C-t>:downloads<CR>
-cnoremap <C-j> <C-t>:downloads<CR>
 """" Print
 noremap  <C-p> :dialog print<CR>
 
 """ Tabs
-"""" Modified Firefox Hotkey(s)
-noremap  <C-t> <C-t>o
-inoremap <C-t> <C-t>o
 
 " Private Window
 noremap  <C-n> :winopen -private<CR>
