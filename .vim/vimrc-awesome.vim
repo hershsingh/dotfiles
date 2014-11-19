@@ -38,8 +38,6 @@ Plugin 'honza/vim-snippets'
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
-"Plugin 'vim-scripts/YankRing.vim'
-"Plugin 'kien/ctrlp.vim'
 Plugin 'jamessan/vim-gnupg'
 Plugin 'w0ng/vim-hybrid'
 Plugin 'bling/vim-airline'
@@ -103,26 +101,10 @@ let g:LatexBox_viewer= '/usr/bin/zathura --fork --synctex-editor-command "vim --
     let g:UltiSnipsEditSplit="vertical"
 " }}}
 
-" Plugin: CtrlP.vim"{{{
-"set runtimepath^=~/.vim/bundle/ctrlp.vim
-
-"let g:ctrlp_follow_symlinks = 1
-"let g:ctrlp_working_path_mode = 'c'
-"let g:ctrlp_clear_cache_on_exit = 0
-
-"nnoremap <Tab> :CtrlPBuffer<CR>
-"nnoremap <Leader>o :CtrlP<CR>
-"}}}
-
 " Plugin: NERDTree {{{
 nmap <silent> ,n :NERDTreeToggle<CR>
 "nmap <silent> ,nc :NERDTreeCWD<CR>
 " }}}
-
-" Plugin: YankRing"{{{
-nnoremap <Leader>p :YRShow<CR>
-let g:yankring_history_dir = '$HOME/.vim/'
-"}}}
 
 " Plugin: Syntastic "{{{
 nnoremap <F3> :SyntasticToggleMode<CR>
