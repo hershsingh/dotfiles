@@ -60,6 +60,7 @@ homedir = os.getenv('HOME')
 -- Themes define colours, icons, and wallpapers
 beautiful.init(homedir .. "/.config/awesome/themes/dust/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
+wallpaper_vertical = theme.wallpaper
 theme.wallpaper = homedir .. "/background" 
 --awful.util.spawn(homedir .. "/scripts/wallsmart.sh")
 
@@ -98,6 +99,10 @@ if beautiful.wallpaper then
         gears.wallpaper.maximized(beautiful.wallpaper, s, true)
     end
 end
+
+-- Set wallpaper for screen 2
+-- That's a vertical screen for me. So the usual wallpaper doesn't go well
+gears.wallpaper.maximized(wallpaper_vertical, 2, true)
 -- }}}
 
 -- {{{ CUSTOM: Tags
@@ -202,8 +207,13 @@ for s = 1, screen.count() do
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
-    mywibox[s] = awful.wibox({ position = "top", ontop=false, screen = s})
-    --mywibox[s].visible=false
+    if s==2 then 
+        -- Hack to have the second screen leave some space on the top
+        mywibox_vertical = awful.wibox({ position = "top", ontop=false, height=100, screen = s})
+        mywibox[s] = awful.wibox({ position = "bottom", ontop=false, height=18, screen = s})
+    else
+        mywibox[s] = awful.wibox({ position = "top", ontop=false, screen = s})
+    end
 
     -- Widgets that are aligned to the left
     local left_layout = wibox.layout.fixed.horizontal()
