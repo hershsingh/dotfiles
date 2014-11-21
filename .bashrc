@@ -5,6 +5,9 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Disable Flow Control. Frees up the Ctrl-Q and Ctrl-S mappings
+stty -ixon
+
 export HISTCONTROL=ignorespace:ignoredups:erasedups
 
 # Preferred applications
