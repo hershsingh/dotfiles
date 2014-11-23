@@ -45,6 +45,14 @@ endfunction
 " Forward Search mapping
 nnoremap <expr><buffer> <LocalLeader>ls ':LatexView  ' . '--synctex-forward ' . line(".") . ":" . col(".") . ":" . expand('%:p') . '<CR>'
 
+" Some nifty mappings
+inoremap <buffer> [[     \begin{
+inoremap <buffer> ]]     <Plug>LatexCloseCurEnv
+nnoremap <buffer> <F5>   <Plug>LatexChangeEnv
+vnoremap <buffer> <F7>   <Plug>LatexWrapSelection
+vnoremap <buffer> <S-F7> <Plug>LatexEnvWrapSelection
+inoremap <buffer> ((     \eqref{
+
 " Greek letters, AucTex style bindings   {{{
 
 inoremap <buffer> <LocalLeader><LocalLeader> <LocalLeader>
