@@ -41,6 +41,9 @@ function! ToggleLatexAutocommands()
     endif
 endfunction
 
+" SyncTeX with Zathura
+" Forward Search mapping
+nnoremap <expr><buffer> <LocalLeader>ls ':LatexView  ' . '--synctex-forward ' . line(".") . ":" . col(".") . ":" . expand('%:p') . '<CR>'
 
 " Greek letters, AucTex style bindings   {{{
 
