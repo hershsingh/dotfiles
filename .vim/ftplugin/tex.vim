@@ -55,10 +55,6 @@ inoremap <buffer> ((     \eqref{
 
 " Greek letters, AucTex style bindings   {{{
 
-inoremap <buffer> <LocalLeader><LocalLeader> <LocalLeader>
-"inoremap <buffer> <LocalLeader>a <C-g>u'a<Esc>ui<C-g>u\alpha
-"inoremap <buffer> <LocalLeader>a 'a<C-g>u<Esc>F'dfaa\alpha
-"inoremap <buffer> <LocalLeader>a a<C-g>u<Esc>xa\alpha
 inoremap <buffer> <LocalLeader>a \alpha
 inoremap <buffer> <LocalLeader>b \beta
 inoremap <buffer> <LocalLeader>c \chi
