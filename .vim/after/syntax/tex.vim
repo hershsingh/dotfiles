@@ -16,5 +16,5 @@ syn region LuaTeXSnippet matchgroup=LuaTeXIdentifier
     \ end='}'
     \ contains=@LUA
 
-highlight link LuaTeXSnippet SpecialComment
+highlight link LuaTeXIdentifier SpecialComment
 " }}}
