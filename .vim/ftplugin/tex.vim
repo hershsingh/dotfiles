@@ -1,7 +1,6 @@
-" Hersh Singh [hershdeep@gmail.com]
-" Date: August 07, 2013
-" Description: Greek letter mappings for latex.
-"   Derived from a section of the auctex.vim plugin.
+" Author: Hersh Singh [hershdeep at gmail dot com]
+" Description: 
+"   - The greek letter mappings for latex are derived from a section of the auctex.vim plugin.
 " Installation: Copy this to $VIMRUNTIME$/ftplugin/tex.vim
 
 let maplocalleader = "]"
