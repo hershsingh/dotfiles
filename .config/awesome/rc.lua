@@ -97,12 +97,15 @@ local layouts =
 if beautiful.wallpaper then
     for s = 1, screen.count() do
         gears.wallpaper.maximized(beautiful.wallpaper, s, true)
+
+        -- Set wallpaper for screen 2
+        -- That's a vertical screen for me. So the usual wallpaper doesn't go well
+        if s==2 then 
+            gears.wallpaper.maximized(wallpaper_vertical, 2, true)
+        end
     end
 end
 
--- Set wallpaper for screen 2
--- That's a vertical screen for me. So the usual wallpaper doesn't go well
-gears.wallpaper.maximized(wallpaper_vertical, 2, true)
 -- }}}
 
 -- {{{ CUSTOM: Tags
