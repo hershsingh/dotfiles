@@ -12,7 +12,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
 fi
 
 xset -b #Disable the annoying beep!
-syndaemon -t -d -i 0.2 &
+syndaemon -t -d -i 0.5 &
 
 #/home/hersh/scripts/conky_start.sh &
 
@@ -21,9 +21,6 @@ xmodmap /home/hersh/.Xmodmap &
 
 # Source .Xresources
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
-
-# Disable the middle-click (it pastes stuff, which is irritating while using two-finger scroll)
-xinput set-button-map "15" 1 25 3
 
 # Udiskie to automatically handle mounting of USB drives etc.
 udiskie --tray &
