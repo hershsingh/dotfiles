@@ -52,6 +52,9 @@ set nu		        " show line numbers
 set cmdheight=1     " height of the command menu
 set so=7            " seven lines gap before/after the cursor while scrolling
 
+" Aesthetics
+set showbreak=↪     " Prettier line wrappings
+
 " Text Visuals
 set wrap            " wordwrap
 set linebreak       " break lines only on chars specified by the 'breakat' option
