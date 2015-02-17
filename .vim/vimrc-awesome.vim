@@ -47,6 +47,8 @@ Plugin 'tpope/vim-fugitive'
 
 Plugin 'sjl/gundo.vim'
 
+Plugin 'ivanov/vim-ipython'
+
 " All of your Plugins must be added before the following line
 call vundle#end()
 filetype plugin indent on     " required!
