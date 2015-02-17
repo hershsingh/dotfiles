@@ -34,8 +34,12 @@ URxvt.keysym.C-S-Down: perl:font-size:decglobal
 URxvt*matcher.button: 1
 
 ! Bindings for copy-paste, as given in the clipboard extension
-URxvt.keysym.Shift-Control-V: perl:clipboard:paste
-URxvt.keysym.Shift-Control-C: perl:clipboard:copy
+URxvt.keysym.M-c:   perl:clipboard:copy
+URxvt.keysym.M-v:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+
+URxvt.clipboard.copycmd:  xclip -i -selection clipboard
+URxvt.clipboard.pastecmd: xclip -o -selection clipboard
 
 ! Need to do this for Control+Shift mappings to work.
 URxvt.iso14755: false
