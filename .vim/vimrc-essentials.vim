@@ -9,6 +9,9 @@ filetype indent on
 filetype plugin on
 syntax on
 
+" Persistant undo. Saves a lot of pain.
+set undofile 
+
 " Make sure you're using UTF-8.. Saves alot of pain later
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,latin1
