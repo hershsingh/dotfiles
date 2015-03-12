@@ -55,6 +55,8 @@ function dbg(vars)
     naughty.notify({ text = text, timeout = 0 })
 end
 
+
+
 -- {{{ Variable definitions
 homedir = os.getenv('HOME')
 -- Themes define colours, icons, and wallpapers
@@ -116,6 +118,8 @@ for s = 1, screen.count() do
     tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
 -- }}}
+
+require("timetracker.timetracker")
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
@@ -492,9 +496,19 @@ globalkeys = awful.util.table.join(
                   mypromptbox[mouse.screen].widget,
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
+              end),
+
+    awful.key({ modkey, "Shift" }, "r",
+              function ()
+                  awful.prompt.run({ prompt = "Rename tag: ", text = awful.tag.selected(1).name, },
+                      mypromptbox[mouse.screen].widget,
+                      function(s)
+                          awful.tag.selected(1).name = s
+                      end )
               end)
     -- Menubar
     --awful.key({ modkey }, "p", function() menubar.show() end)
+    --
 )
 
 clientkeys = awful.util.table.join(
