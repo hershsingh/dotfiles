@@ -1,8 +1,17 @@
 # Currently this path is appendend to dynamically when picking a ruby version
-export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/bin/core_perl:/usr/local/texlive/2013/bin/x86_64-linux:/home/hersh/.gem/ruby/2.0.0/bin:/home/hersh/.gem/ruby/2.1.0/bin
+export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin
+export PATH=$PATH:/usr/bin/core_perl
+export PATH=$PATH:/usr/local/texlive/2013/bin/x86_64-linux
+export PATH=$PATH:/home/hersh/.gem/ruby/2.0.0/bin:/home/hersh/.gem/ruby/2.1.0/bin:/home/hersh/.gem/ruby/2.2.0/bin
 
-# Setup terminal, and turn on colors
-export TERM=rxvt-unicode-256color
+if [[ ${DISPLAY} ]]; then
+    # Set default terminal to urxvt if X is running.
+    export TERM=rxvt-unicode-256color
+else;
+    # Set the default terminal if running in a tty.
+    export TERM=linux
+fi 
+
 export CLICOLOR=1
 #export LSCOLORS=Gxfxcxdxbxegedabagacad
 
