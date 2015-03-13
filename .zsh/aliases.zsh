@@ -1,6 +1,9 @@
 # Colorize output, add file type indicator, and put sizes in human readable format
 alias ls='ls -GFh --color=auto'
 
+# Grep colors
+alias grep='grep --color=auto'
+
 # Same as above, but in long listing format
 alias ll='ls -GFhal --color=auto'
 
