@@ -96,12 +96,25 @@ class rangerfind(Command):
 
     """
     def execute(self):
+        from os.path import expanduser
+        self.rangerfind_script = '~/scripts/rangerfind.sh'
+        self.rangerfind_dir = "~/.rangersearch"
+
+        self.rangerfind_script = expanduser(self.rangerfind_script)
+        self.rangerfind_dir = expanduser(self.rangerfind_dir)
+
         if not self.arg(1):
             self.fm.notify('rangerfind needs atleast one argument', bad=True)
         else:
-            self.fm.execute_console('shell ~/scripts/rangerfind.sh ' + self.rest(1))
+            self.stuff_to_find  = self.rest(1)
+
+            # expand the tilde into the user directory
+            if self.stuff_to_find.startswith('~'):
+                self.stuff_to_find = expanduser(stuff_to_find)
+
+            self.fm.execute_console('shell ' + self.rangerfind_script + ' ' + self.stuff_to_find)
             self.fm.tab_new()
-            self.fm.cd("/home/hersh/.rangersearch")
+            self.fm.cd(self.rangerfind_dir)
 
 class setaswallpaper(Command):
     """
