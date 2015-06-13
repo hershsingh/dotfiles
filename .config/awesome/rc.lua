@@ -63,8 +63,15 @@ homedir = os.getenv('HOME')
 beautiful.init(homedir .. "/.config/awesome/themes/dust/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
 wallpaper_vertical = theme.wallpaper
-theme.wallpaper = homedir .. "/background" 
---awful.util.spawn(homedir .. "/scripts/wallsmart.sh")
+
+-- Set the ~/background as the wallpaper if it exists
+function file_exists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end
+if file_exists(homedir .. "/background") then
+    theme.wallpaper = homedir .. "/background" 
+end
 
 theme.font = "Droid Sans 8"
 
@@ -216,7 +223,7 @@ for s = 1, screen.count() do
     -- Create the wibox
     if s==2 then 
         -- Hack to have the second screen leave some space on the top
-        mywibox_vertical = awful.wibox({ position = "top", ontop=false, height=100, screen = s})
+        --mywibox_vertical = awful.wibox({ position = "top", ontop=false, height=100, screen = s})
         mywibox[s] = awful.wibox({ position = "bottom", ontop=false, height=18, screen = s})
     else
         mywibox[s] = awful.wibox({ position = "top", ontop=false, screen = s})
@@ -415,7 +422,7 @@ globalkeys = awful.util.table.join(
             showCurrentSong() 
         end),
     -- Screenshot for PrintScreen Key
-    awful.key({modkey, }, "Print",function () awful.util.spawn( "import -window root " .. homedir ..  "/screenshot.png" ) end),
+    awful.key({modkey, }, "Print",function () awful.util.spawn( "import -window root " .. homedir ..  "/screenshot" .. os.date("_%y-%m-%d_%H-%M-%S").. ".png" ) end),
 
      -- Brightness
     awful.key({ }, "XF86MonBrightnessDown", function ()
