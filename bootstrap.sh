@@ -66,3 +66,13 @@ then
     git clone https://github.com/mikar/awesome-themes.git ~/.config/awesome/themes
 fi
 echo
+
+# Powerline Fonts
+header "Powerline Fonts"
+read -p "Do you wish to install fonts for powerline? (y/N)" -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    bash <(curl aur.sh) -si powerline-fonts-git
+fi
+echo
