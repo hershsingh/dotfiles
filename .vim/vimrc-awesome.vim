@@ -32,6 +32,8 @@ Plugin 'Shougo/neocomplcache.vim'
 Plugin 'Shougo/unite.vim'
 " Vimproc needs to be compiled manually
 Plugin 'Shougo/vimproc.vim' 
+" For MRU features with unite.vim
+Plugin 'Shougo/neomru.vim' 
 
 " UltiSnips
 Plugin 'SirVer/ultisnips'
