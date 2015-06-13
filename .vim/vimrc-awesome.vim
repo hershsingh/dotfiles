@@ -107,7 +107,7 @@ let g:LatexBox_viewer= '/usr/bin/zathura --fork --synctex-editor-command "vim --
 " Plugin: Ultisnips" {{{
     let g:UltiSnipsSnippetDirectories=["MyUltiSnips","UltiSnips"]
     let g:UltiSnipsDontReverseSearchPath="1"
-    let g:UltiSnipsExpandTrigger="<c-j>"
+    let g:UltiSnipsExpandTrigger="<C-L>"
     " If you want :UltiSnipsEdit to split your window.
     let g:UltiSnipsEditSplit="vertical"
 " }}}
