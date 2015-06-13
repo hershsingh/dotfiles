@@ -54,6 +54,8 @@ Plugin 'sjl/gundo.vim'
 
 Plugin 'ivanov/vim-ipython'
 
+Plugin 'godlygeek/tabular'
+
 " All of your Plugins must be added before the following line
 call vundle#end()
 filetype plugin indent on     " required!
