@@ -436,8 +436,5 @@ set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusl
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 
-" Show WordCount in Airline, needs the WordCount() function defined above
-"let g:airline_section_z = '%3p%% %{g:airline_symbols.linenr}%#__accent_bold#%4l%#__restore__#:%3c WC:%{WordCount()}'
-"}}}
 
 "  vim: foldmethod=marker foldclose=all
