@@ -25,6 +25,13 @@ Plugin 'gmarik/Vundle.vim'
 
 " My bundles here:
 
+" Vim-Slime
+Plugin 'jpalardy/vim-slime'
+" Vim-Slime Config {{{
+    let g:slime_python_ipython = 1
+    let g:slime_target = "tmux"
+" }}}
+
 " Neocomplcache
 Plugin 'Shougo/neocomplcache.vim'
 
