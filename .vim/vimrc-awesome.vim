@@ -53,7 +53,6 @@ Plugin 'scrooloose/syntastic'
 Plugin 'jamessan/vim-gnupg'
 Plugin 'w0ng/vim-hybrid'
 Plugin 'bling/vim-airline'
-Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 
@@ -117,11 +116,6 @@ let g:LatexBox_viewer= '/usr/bin/zathura --fork --synctex-editor-command "vim --
     let g:UltiSnipsExpandTrigger="<C-L>"
     " If you want :UltiSnipsEdit to split your window.
     let g:UltiSnipsEditSplit="vertical"
-" }}}
-
-" Plugin: NERDTree {{{
-nmap <silent> ,n :NERDTreeToggle<CR>
-"nmap <silent> ,nc :NERDTreeCWD<CR>
 " }}}
 
 " Plugin: Syntastic "{{{
