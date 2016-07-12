@@ -1,8 +1,8 @@
 
 " LuaTeX Syntax Highlighting {{{
-if exists("b:current_syntax")
-    unlet b:current_syntax
-endif
+"if exists("b:current_syntax")
+    "unlet b:current_syntax
+"endif
 
 syn include @LUA syntax/lua.vim
 

@@ -28,8 +28,12 @@ set tabstop=4
 set autoindent		" set auto indent on
 set lazyredraw      " dont redraw while executing macros ?
 set mouse=a	        " make the mouse work in all modes
-set switchbuf=usetab "now use :sb <buffer_name> to switch to that tab
 set history=100     " Remember more! 
+
+" Buffers
+set hidden          " allow a buffer to be hidden without saving changes
+"set switchbuf=usetab "now use :sb <buffer_name> to switch to that tab
+
 
 " No backup files clutter
 set nobackup
@@ -73,7 +77,7 @@ let g:tex_flavor = "latex"
 
 " Encryption {{{
 " Use as $ vim -x newfile.txt or in vim, :X 
-set cryptmethod=blowfish
+" set cryptmethod=blowfish
 " }}}
 
 " GUI Settings {{{
@@ -112,8 +116,8 @@ vnoremap gk k
 " Normal Mode: Switch tabs "{{{
 "nnoremap J gt
 "nnoremap K gT
-nnoremap J :bn<CR>
-nnoremap K :bp<CR>
+" nnoremap J :bn<CR>
+" nnoremap K :bp<CR>
 "}}}
 " Normal Mode: Misc"{{{
 " Join Lines

@@ -3,10 +3,6 @@ set! browser.startup.page=1
 
 map J gt
 map K gT
-inoremap ; :
-inoremap : ;
-nnoremap ; :
-nnoremap : ;
 
 nnoremap <C-b> :bmarks 
 
@@ -78,4 +74,5 @@ hi CompItem  font-size: 10px;
 hi CompTitle color: magenta; font-weight: bold; font-size: 10px;
 hi Hint -append  font-size: 14px;
 hi CmdLine background: black; color: white; transition: all 0.25s; 
+
 
