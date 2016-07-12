@@ -1,11 +1,15 @@
 ----------------------------------------------------------------------------------------
--- rc.lua: Awesome WM Config
+-- rc.lua: Awesome WM Config --
 ----------------------------------------------------------------------------------------
 
 gears = require("gears")
 awful = require("awful")
 awful.rules = require("awful.rules")
 require("awful.autofocus")
+
+-- Blingbling
+vicious = require("vicious")
+blingbling = require("blingbling")
 
 -- Widget and layout library
 wibox = require("wibox")
@@ -17,7 +21,8 @@ beautiful = require("beautiful")
 naughty = require("naughty")
 
 -- Dynamic Tagging
-eminent = require("eminent")
+-- eminent = require("eminent")
+
 
 --------------- Naughty notification properties -------------
 naughty.config.defaults.font             = "Droid Sans 8"
@@ -55,8 +60,6 @@ function dbg(vars)
     naughty.notify({ text = text, timeout = 0 })
 end
 
-
-
 -- {{{ Variable definitions
 homedir = os.getenv('HOME')
 -- Themes define colours, icons, and wallpapers
@@ -88,9 +91,8 @@ modkey = "Mod4"
 local layouts =
 {
     awful.layout.suit.tile.left,
-    --awful.layout.suit.tile,
+    awful.layout.suit.tile,
     awful.layout.suit.tile.bottom,
-    --awful.layout.suit.tile.bottom,
     awful.layout.suit.max,
     --awful.layout.suit.fair,
     --awful.layout.suit.fair.horizontal,
@@ -126,7 +128,7 @@ for s = 1, screen.count() do
 end
 -- }}}
 
-require("timetracker.timetracker")
+--require("timetrackel.timetracker")
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
@@ -203,6 +205,50 @@ mytasklist.buttons = awful.util.table.join(
                                               if client.focus then client.focus:raise() end
                                           end))
 
+cores_graph_conf ={height = 18, width = 8, rounded_size = 0.3}
+cores_graphs = {}
+for i=1,2 do
+  cores_graphs[i] = blingbling.progress_graph( cores_graph_conf)
+  vicious.register(cores_graphs[i], vicious.widgets.cpu, "$"..(i+1).."",1)
+end
+
+
+-- Volume
+--
+volume_bar = awful.widget.progressbar()
+volume_bar:set_width(8)
+volume_bar:set_height(10)
+volume_bar:set_vertical(true)
+volume_bar:set_background_color('#494B4F')
+volume_bar:set_color('#AECF96')
+--volume_bar:set_gradient_colors({ '#AECF96', '#88A175', '#FF5656' })
+volume_bar:set_value(0.5)
+
+volume_tooltip = awful.tooltip({ objects = { volume_bar }})
+
+--Example with cpu_graph created previously with default color :
+--blingbling.popups.htop(cpu_graph, { terminal =  terminal })
+
+mail_widget = wibox.widget.textbox()
+function mail_update(widget)
+        local fd = io.popen("ls ~/Maildir/INBOX/new | wc -w | tr -d '\n'")
+        local mail_new = fd:read("*all")
+        fd:close()
+        --naughty.notify({text = mail_new})
+        return mail_new
+end
+
+mail_widget_timer = timer({timeout = 1})
+mail_widget_timer:connect_signal(
+        "timeout",
+        function()
+                mail_widget:set_text(" ✉ " .. (mail_update()) .. " ")
+                --stuff = " [Unread mail: " .. (mail_update()) .. " ]"
+                --naughty.notify({text=stuff})
+        end
+)
+mail_widget_timer:start()
+
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
     mypromptbox[s] = awful.widget.prompt()
@@ -238,8 +284,11 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(mail_widget)
+    right_layout:add(volume_bar)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
+    right_layout:add(cores_graphs[2])
     --right_layout:add(powerline_widget)
 
 
@@ -267,7 +316,7 @@ info_modal_keybinds = "\
 <b>Apps</b>\
     1 - Firefox\
     2 - Google Chrome\
-    3 - Ncmpcpp\
+    3 - Emacsclient\
     4 - Vim\
     5 - LinuxDCPP\
     6 - GoldenDict\
@@ -290,6 +339,7 @@ info_modal_keybinds = "\
     \
 <b>netctl</b>\
     e - Ethernet-dhcp\
+    n - select netctl profile\
     x - disconnect all profiles\
     \
 <b>Stuff</b>\
@@ -299,7 +349,7 @@ info_modal_keybinds = "\
     p - Poweroff\
     [ - Reboot\
     ] - Suspend\
-  ⏏ - Lock Screen\
+  Del - Lock Screen\
 "
 
  -- mapping for modal client keys
@@ -308,13 +358,14 @@ global_mode_modal_keybinds = {
     -- Apps
     ["1"] = function () run_or_raise("firefox", {class="FireFox"} ) end,
     ["2"] = function () run_or_raise("google-chrome-stable", {class="Google-chrome"} ) end,
-    ["3"] = function () awful.util.spawn(terminal .. ' -e "ncmpcpp"') end,
+    --["3"] = function () awful.util.spawn(terminal .. ' -e "ncmpcpp"') end,
+    ["3"] = function () awful.util.spawn("emacsclient -c") end,
     ["4"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/scratchpad.txt"') end,
     ["5"] = function () awful.util.spawn('linuxdcpp') end,
     ["6"] = function () awful.util.spawn('goldendict') end,
     ["7"] = function () awful.util.spawn('dropboxd') end,
     -- Notebook
-    ["a"] = function () awful.util.spawn('urxvt -e bash -ic "vim /srv/http/doku/data/pages/arch.txt"') end,
+    ["a"] = function () awful.util.spawn('emacsclient -c ~/org/arch.org') end,
     ["w"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/calendars/imp.rem"') end,
     ["d"] = function () awful.util.spawn('firefox -new-window http://localhost/doku') 
         awful.util.spawn('urxvt -e vim /home/hersh/doku -c "silent cd /home/hersh/doku" -c "silent call FirefoxRefresher()"') end,
@@ -328,11 +379,13 @@ global_mode_modal_keybinds = {
     ["v"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/.vimrc"') end,
     -- Netctl 
     ["e"] = function () awful.util.spawn(homedir .. '/scripts/netctlpanel.sh connect ethernet-dhcp') end,
+    ["n"] = function () awful.util.spawn(homedir .. '/scripts/netcon.sh') end,
     ["x"] = function () awful.util.spawn(homedir .. '/scripts/netctlpanel.sh disconnect') end,
     -- Stuff
     ["/"] = function () awful.util.spawn_with_shell(homedir .. '/scripts/ecryptfspanel.sh') end,
     -- Logout Options
-    ["XF86Eject"] = function () awful.util.spawn("slimlock") end,
+    ["XF86Eject"] = function () awful.util.spawn("slock") end,
+    ["Delete"] = function () awful.util.spawn("slock") end,
     ["o"] = function () awful.util.spawn('xset dpms force off') end,
     ["p"] = function () awful.util.spawn(homedir .. '/scripts/shutdown.sh shutdown') end,
     ["["] = function () awful.util.spawn(homedir .. '/scripts/shutdown.sh reboot') end,
@@ -386,7 +439,7 @@ globalkeys = awful.util.table.join(
 
     awful.key({modkey, }, "XF86Eject", function () awful.util.spawn('udiskie-umount -a') end),
     awful.key({ },        "XF86Eject", function () awful.util.spawn('eject /dev/sr0') end),
-    awful.key({modkey, }, "F1", function () awful.util.spawn('urxvt -e bash -ic "ranger"') end),
+    awful.key({modkey, }, "F1", function () awful.util.spawn('urxvt -e "ranger"') end),
     awful.key({modkey, }, "b", function () mywibox[1].visible=not mywibox[1].visible end),
 
     -- Refresh Wallpaper
@@ -397,19 +450,19 @@ globalkeys = awful.util.table.join(
     -- Multimedia Keys to change volume 
     -- The following is for alsamixer... am I not using pulseaudio ?
     awful.key({}, "#122", function () 
-        awful.util.spawn("amixer -c 0 set Master playback 10%-")
+        awful.util.spawn("amixer set Master playback 10%-", false)
         getVolume()
     end),
     awful.key({}, "#123", function () 
-        awful.util.spawn("amixer -c 0 set Master playback 10%+")
+        awful.util.spawn("amixer set Master playback 10%+", false)
         getVolume()
     end),
     awful.key({"Shift"}, "#122", function () 
-        awful.util.spawn("amixer -c 0 set Master playback 5%-")
+        awful.util.spawn("amixer set Master playback 5%-", false)
         getVolume()
     end),
     awful.key({"Shift"}, "#123", function () 
-        awful.util.spawn("amixer -c 0 set Master playback 5%+")
+        awful.util.spawn("amixer set Master playback 5%+", false)
         getVolume()
     end),
     awful.key({}, "#121", function () awful.util.spawn("amixer -c 0 set Master playback toggle") end),
@@ -713,10 +766,16 @@ end)
 -- MORE CUSTOMIZATIONS --
 last_mpd_notification =0 
 function getVolume()
-    local fd=io.popen('amixer -c 0 get Master|tail -n1|sed -E "s/.*\\[([0-9]+)\\%\\].*/\\1/"|tr "\\n" " "')
+    local fd=io.popen('amixer get Master|tail -n1|sed -E "s/.*\\[([0-9]+)\\%\\].*/\\1/"|tr "\\n" " "')
     local vol = fd:read("*all")
     fd:close()
+
     last_vol_notification = naughty.notify({title="Volume", text=vol.."%", timeout=.5, replaces_id=last_vol_notification}).id
+
+    local vol_num = (tonumber(vol)/100)
+    volume_bar:set_value(vol_num)
+    volume_tooltip:set_text("Volume: " .. vol)
+    
 end
 
 function showCurrentSong() 
@@ -865,3 +924,4 @@ mytimer:connect_signal("timeout",
 
 -- start the transparent terminal.. the settings for this are in the particular profile
 --run_or_raise("gnome-terminal --role=transparent_wallpaper --profile=transparent_wallpaper", {role="transparent_wallpaper"})
+--run_or_raise("urxvt")
