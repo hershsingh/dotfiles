@@ -179,13 +179,13 @@ I think at some point I'll replace all =electric= things with something like =sm
 ** Recentf
 Keeps a track of recently used files.
 #+BEGIN_SRC emacs-lisp
-
 ;; Find files faster with the recent files package
-(require 'recentf)
-
-(recentf-mode t)
-(setq recentf-max-saved-items 200)
-
+(use-package recentf
+  :ensure t
+  :config
+  (recentf-mode t)
+  (setq recentf-max-saved-items 200)
+)
 #+END_SRC
 ** Ido-mode
 Can't live without this.
@@ -525,12 +525,14 @@ I subsituting this for powerline, after experiencing some rendering issues with 
 
 ** Yasnippet
 #+BEGIN_SRC emacs-lisp :results none
-(require 'yasnippet)
-
-; This must be set before enabling yas-global-mode
-(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-
-(yas-global-mode 1)
+(use-package yasnippet
+  :ensure t
+  :init
+  ;; This must be set before enabling yas-global-mode
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  :config
+  (yas-global-mode 1)
+  )
 #+END_SRC
 
 *** Trigger key conflict with Company-mode
@@ -589,56 +591,60 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
 #+END_SRC
 
 ** Prompt/popup menu
-
-#+BEGIN_SRC emacs-lisp
-
+#+BEGIN_SRC emacs-lisp :results none
 (plist-put minibuffer-prompt-properties
            'point-entered 'minibuffer-avoid-prompt)
 
 ;;; use popup menu for yas-choose-value
-(require 'popup)
-
-;; add some shotcuts in popup menu mode
-(define-key popup-menu-keymap (kbd "M-n") 'popup-next)
-(define-key popup-menu-keymap (kbd "TAB") 'popup-next)
-(define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
-(define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
-(define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
-
-(defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
-  (when (featurep 'popup)
-    (popup-menu*
-     (mapcar
-      (lambda (choice)
-        (popup-make-item
-         (or (and display-fn (funcall display-fn choice))
-             choice)
-         :value choice))
-      choices)
-     :prompt prompt
-     ;; start isearch mode immediately
-     :isearch t
-     )))
-
-;(setq yas-prompt-functions '(yas-popup-isearch-prompt yas-ido-prompt yas-no-prompt))
-(setq yas-prompt-functions '(yas-ido-prompt yas-no-prompt))
-
+(use-package popup
+  :ensure t
+  :config
+  ;; add some shotcuts in popup menu mode
+  (define-key popup-menu-keymap (kbd "M-n") 'popup-next)
+  (define-key popup-menu-keymap (kbd "TAB") 'popup-next)
+  (define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
+  (define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
+  (define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
+  
+  (defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
+    (when (featurep 'popup)
+      (popup-menu*
+       (mapcar
+        (lambda (choice)
+          (popup-make-item
+           (or (and display-fn (funcall display-fn choice))
+               choice)
+           :value choice))
+        choices)
+       :prompt prompt
+       ;; start isearch mode immediately
+       :isearch t
+       )))
+  
+  ;(setq yas-prompt-functions '(yas-popup-isearch-prompt yas-ido-prompt yas-no-prompt))
+  (setq yas-prompt-functions '(yas-ido-prompt yas-no-prompt))
+)
 #+END_SRC
+
+#+RESULTS:
+: t
+
 ** Smex
 #+BEGIN_SRC emacs-lisp
-
-;;-----------------------------------------------------''
-(require 'smex) ; Not needed if you use package.el
-(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
-                  ; when Smex is auto-initialized on its first run.
-
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
-
-
+(use-package smex
+  :ensure t
+  :init
+  (smex-initialize) 
+  :config
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  ;; This is your old M-x.
+  (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+  )
 #+END_SRC
+
+#+RESULTS:
+: t
 
 ** Slime
 #+BEGIN_SRC emacs-lisp
@@ -734,22 +740,7 @@ Pabbrev mode and predictive-mode are similar. I am trying to test which one suit
 #+end_src
 
 #+begin_src emacs-lisp :results none
-(add-to-list 'load-path "/home/hersh/.emacs.d/predictive")
-(add-to-list 'load-path "/home/hersh/.emacs.d/predictive/misc")
-(add-to-list 'load-path "/home/hersh/.emacs.d/predictive/html")
-(add-to-list 'load-path "/home/hersh/.emacs.d/predictive/texinfo")
-(add-to-list 'load-path "/home/hersh/.emacs.d/predictive/latex")
-(require 'predictive)
-
-  ;; (add-to-list 'load-path "~/.emacs.d/lisp/predictive")
-  ;; ;; (require 'predictive)
-  ;; (autoload 'predictive-mode "predictive" "predictive" t)
-  ;; (set-default 'predictive-auto-add-to-dict t)
-  ;; (setq predictive-main-dict 'rpg-dictionary
-  ;;       predictive-auto-learn t
-  ;;       predictive-add-to-dict-ask nil
-  ;;       predictive-use-auto-learn-cache nil
-  ;;       predictive-which-dict t)
+(use-package "~/.emacs.d/predictive")
 #+end_src
 ** Browse-kill-ring
 View the kill-ring
@@ -1054,42 +1045,44 @@ interface for all of them.
 ;; Checkout this for full html support in emacs 25
     ;; https://groups.google.com/forum/#!topic/mu-discuss/JqHEGycEyKI
 
-(require 'mu4e)
+(use-package mu4e
+  :config
 
-(setq mu4e-sent-folder   "/Sent")
-(setq mu4e-drafts-folder "/Drafts")
-(setq mu4e-trash-folder  "/Trash")
-
-;; http://www.djcbsoftware.nl/code/mu/mu4e/Attachments.html#Attachments
-(setq mu4e-attachment-dir  "~/attachments/")
-
-;; with Emacs 23.1, you have to set this explicitly (in MS Windows)
-;; otherwise it tries to send through OS associated mail client
-(setq message-send-mail-function 'message-send-mail-with-sendmail)
-;; we substitute sendmail with msmtp
-(setq sendmail-program "/usr/bin/msmtp")
-;;need to tell msmtp which account we're using
-(setq message-sendmail-extra-arguments '("-a" "default"))
-;; you might want to set the following too
-(setq mail-host-address "phy.duke.edu")
-(setq user-full-name "Hersh Singh")
-(setq user-mail-address "hersh@phy.duke.edu")
-
-(setq  mu4e-user-mail-address-list '("hersh@phy.duke.edu" "hersh.singh@duke.edu" "hs171@duke.edu"))
-;; smtp mail setting; these are the same that `gnus' uses. 
-(setq
-    message-send-mail-function   'smtpmail-send-it
-    smtpmail-default-smtp-server "mail.phy.duke.edu"
-    smtpmail-smtp-server         "mail.phy.duke.edu"
-    smtpmail-local-domain        "phy.duke.edu")
-
-;; allow for updating mail using 'U' in the main view:
-(setq mu4e-get-mail-command "offlineimap -o") ;; -o to run it only once
-;; (setq mu4e-update-interval 30)
-
-;; Message citation line
-(setq message-citation-line-function 'message-insert-formatted-citation-line)
-(setq message-citation-line-format "On %a, %b %d %Y at %r, %f wrote:")
+  (setq mu4e-sent-folder   "/Sent")
+  (setq mu4e-drafts-folder "/Drafts")
+  (setq mu4e-trash-folder  "/Trash")
+  
+  ;; http://www.djcbsoftware.nl/code/mu/mu4e/Attachments.html#Attachments
+  (setq mu4e-attachment-dir  "~/attachments/")
+  
+  ;; with Emacs 23.1, you have to set this explicitly (in MS Windows)
+  ;; otherwise it tries to send through OS associated mail client
+  (setq message-send-mail-function 'message-send-mail-with-sendmail)
+  ;; we substitute sendmail with msmtp
+  (setq sendmail-program "/usr/bin/msmtp")
+  ;;need to tell msmtp which account we're using
+  (setq message-sendmail-extra-arguments '("-a" "default"))
+  ;; you might want to set the following too
+  (setq mail-host-address "phy.duke.edu")
+  (setq user-full-name "Hersh Singh")
+  (setq user-mail-address "hersh@phy.duke.edu")
+  
+  (setq  mu4e-user-mail-address-list '("hersh@phy.duke.edu" "hersh.singh@duke.edu" "hs171@duke.edu"))
+  ;; smtp mail setting; these are the same that `gnus' uses. 
+  (setq
+      message-send-mail-function   'smtpmail-send-it
+      smtpmail-default-smtp-server "mail.phy.duke.edu"
+      smtpmail-smtp-server         "mail.phy.duke.edu"
+      smtpmail-local-domain        "phy.duke.edu")
+  
+  ;; allow for updating mail using 'U' in the main view:
+  (setq mu4e-get-mail-command "offlineimap -o") ;; -o to run it only once
+  ;; (setq mu4e-update-interval 30)
+  
+  ;; Message citation line
+  (setq message-citation-line-function 'message-insert-formatted-citation-line)
+  (setq message-citation-line-format "On %a, %b %d %Y at %r, %f wrote:")
+  )
 #+END_SRC
 
 ** Interface and Usability Tweaks
@@ -1167,7 +1160,7 @@ interface for all of them.
 (setq mu4e-headers-include-related t)
 
 ;(setq mu4e-html2text-command "html2text --unicode-snob -b 72")
-(require 'mu4e-contrib)
+(use-package mu4e-contrib)
 
 ;; Fix some colors for HTML rendering by shr2text
 ;; Not sure if this makes any differnece though
@@ -1231,7 +1224,6 @@ Evil keybindings for mu4e.
 #+begin_src emacs-lisp :results none
 ;;store org-mode links to messages
 (use-package org-mu4e)
-;; (require 'org-mu4e)
 ;;store link to message if in header view, not to header query
 (setq org-mu4e-link-query-in-headers-mode nil)
 #+end_src
@@ -1660,7 +1652,7 @@ This is to publish my org mode files as html. I may decide to use some setup lik
 #+BEGIN_SRC emacs-lisp
 
 ;; Org-mode Projects
-(require 'ox-publish)
+(use-package ox-publish) 
 
 (defun my-publishing-function () 
     ;(setq org-html-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
