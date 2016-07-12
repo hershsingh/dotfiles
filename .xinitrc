@@ -12,7 +12,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
 fi
 
 xset -b #Disable the annoying beep!
-syndaemon -t -d -i 0.5 &
+syndaemon -i 0.5 -t -d &
 
 #/home/hersh/scripts/conky_start.sh &
 
@@ -26,18 +26,21 @@ xmodmap /home/hersh/.Xmodmap &
 udiskie --tray &
 
 # Systray Battery Monitor
-batterymon &
+cbatticon &
 
 # Redshift - adjusts display color temperature according to time/location.
 redshift &
 
 # run systemd as a user instance (for mpd)
-/usr/lib/systemd/systemd --user & 
+#/usr/lib/systemd/systemd --user & 
 
 # Start 'remind' as a daemon which displays reminders as notifications.
 # remind -z -k'notify-send --expiry-time 10000 "Reminder" %s &' ~/.reminders &
 
 # Dropbox Client
-dropboxd &
+dropbox &
+
+systemctl start --user emacs.service &
 
 exec awesome
+#exec i3
