@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: A transac
+# key: today
+# binding: direct-keybinding
+# --
+${1:`(format-time-string "%Y/%m/%d" (current-time))`} ${2:Transaction name}
+    ${3:Destination}     ${5:Amount}
+    ${4:Source}

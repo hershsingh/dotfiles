@@ -1,0 +1,13 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: TikZ picture in centered figure
+# key: tikz
+# binding: direct-keybinding
+# --
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    $0
+  \end{tikzpicture}
+  \caption{${1:Caption}}
+  \label{${2:label$$(unless yas/modified-p (reftex-label nil 'dont-insert))}}
+\end{figure}

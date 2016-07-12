@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: elisp (with silent results)
+# key: el_
+# --
+#+begin_src emacs-lisp :results none
+$0
+#+end_src
