@@ -14,6 +14,9 @@ export PR_BOLD_WHITE PR_BOLD_BLACK
 
 export CLICOLOR=1
 
+# Fix some colors for ls. Need the ~/.dircolors file
+eval "$(dircolors ~/.dircolors)";
+
 # Colored man pages in less
 man() {
     env LESS_TERMCAP_mb=$'\E[01;31m' \
