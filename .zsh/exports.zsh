@@ -1,8 +1,8 @@
 # Currently this path is appendend to dynamically when picking a ruby version
-export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin
+export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/bin:$HOME/.local/bin
 export PATH=$PATH:/usr/bin/core_perl
 export PATH=$PATH:/usr/local/texlive/2013/bin/x86_64-linux
-export PATH=$PATH:/home/hersh/.gem/ruby/2.0.0/bin:/home/hersh/.gem/ruby/2.1.0/bin:/home/hersh/.gem/ruby/2.2.0/bin
+export PATH=$PATH:/home/hersh/.gem/ruby/2.0.0/bin:/home/hersh/.gem/ruby/2.1.0/bin:/home/hersh/.gem/ruby/2.2.0/bin:/home/hersh/.gem/ruby/2.3.0/bin
 
 if [[ ${DISPLAY} ]]; then
     # Set default terminal to urxvt if X is running.
