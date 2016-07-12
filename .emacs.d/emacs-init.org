@@ -1423,6 +1423,14 @@ This is really cool major mode for writing Lisp.
 (setq scheme-program-name "guile")
 #+end_src
 
+** Flycheck
+#+begin_src emacs-lisp :results none
+(use-package flycheck
+  :ensure t
+  )
+#+end_src
+
+
 * Org-Mode
 ** General
 #+BEGIN_SRC emacs-lisp
