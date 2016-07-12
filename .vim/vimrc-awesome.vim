@@ -25,6 +25,9 @@ Plugin 'gmarik/Vundle.vim'
 
 " My bundles here:
 
+" Vim-orgmoe
+Plugin 'jceb/vim-orgmode'
+
 " Vim-Slime
 Plugin 'jpalardy/vim-slime'
 " Vim-Slime Config {{{
@@ -41,18 +44,31 @@ Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimproc.vim' 
 " For MRU features with unite.vim
 Plugin 'Shougo/neomru.vim' 
+" For Yank History with unite.vim
+Plugin 'Shougo/neoyank.vim'
 
 " UltiSnips
 Plugin 'SirVer/ultisnips'
 " UltiSnips Snippets 
 Plugin 'honza/vim-snippets'
 
-Plugin 'LaTeX-Box-Team/LaTeX-Box'
+" LaTeX
+"Plugin 'LaTeX-Box-Team/LaTeX-Box'
+" VimTeX Config {{{
+    "let g:vimtex_imaps_disabled=['((']
+    let g:vimtex_complete_close_braces=1
+    let g:vimtex_view_method='zathura'
+    let g:vimtex_imaps_leader=']'
+    let g:vimtex_motion_matchparen=0
+" }}}
+Plugin 'lervag/vimtex'
+
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
 Plugin 'jamessan/vim-gnupg'
 Plugin 'w0ng/vim-hybrid'
 Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 
@@ -65,27 +81,26 @@ Plugin 'godlygeek/tabular'
 " All of your Plugins must be added before the following line
 call vundle#end()
 filetype plugin indent on     " required!
-"
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install (update) bundles
-" :BundleSearch(!) foo - search (or refresh cache first) for foo
-" :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle commands are not allowed.
+
 "}}}
 
 " Plugin: Unite {{{
 
+" Prefix key for Unite
+nnoremap [unite] <Nop>
+nmap <Leader> [unite]
+
+" Settings
 let g:unite_source_history_yank_enable = 1
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
-nnoremap <leader>t :<C-u>Unite -buffer-name=files   -start-insert file_rec/async:!<cr>
-nnoremap <leader>f :<C-u>Unite -buffer-name=files   -start-insert file<cr>
-nnoremap <leader>r :<C-u>Unite -buffer-name=mru     -start-insert file_mru<cr>
-nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
-nnoremap <leader>y :<C-u>Unite -buffer-name=yank    history/yank<cr>
-nnoremap <leader>e :<C-u>Unite -buffer-name=buffer  buffer<cr>
+
+" Mappings
+nnoremap [unite]t :<C-u>Unite -buffer-name=files   -start-insert file_rec/async:!<cr>
+nnoremap [unite]f :<C-u>Unite -buffer-name=files   -start-insert file<cr>
+nnoremap [unite]r :<C-u>Unite -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap [unite]o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+nnoremap [unite]y :<C-u>Unite -buffer-name=yank    history/yank<cr>
+nnoremap [unite]e :<C-u>Unite -buffer-name=buffer  buffer<cr>
 
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
@@ -113,7 +128,7 @@ let g:LatexBox_viewer= '/usr/bin/zathura --fork --synctex-editor-command "vim --
 " Plugin: Ultisnips" {{{
     let g:UltiSnipsSnippetDirectories=["MyUltiSnips","UltiSnips"]
     let g:UltiSnipsDontReverseSearchPath="1"
-    let g:UltiSnipsExpandTrigger="<C-L>"
+    let g:UltiSnipsExpandTrigger="<C-l>"
     " If you want :UltiSnipsEdit to split your window.
     let g:UltiSnipsEditSplit="vertical"
 " }}}
@@ -371,7 +386,7 @@ endfunction
 " Custom Functions
 " Function: CheckOpenVimrc"{{{
 " Edit .vimrc mapping
-nnoremap <F2> :tabedit ~/.vim/<CR>
+nnoremap <F2> :edit ~/.vim/<CR>
 nnoremap <S-F2> :source %<CR>:wq<CR>
 
 " Open vimrc if not currently open, Save and source it if its open
