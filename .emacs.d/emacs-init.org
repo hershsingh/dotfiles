@@ -1218,8 +1218,11 @@ This lets you attach a file in the current composition buffer by invoking the co
 ** mu4e-evil
 Evil keybindings for mu4e.
 #+begin_src emacs-lisp :results none
-(use-package evil-mu4e
-  :load-path "lisp/"   
+(use-package mu4e
+    :config
+    (use-package evil-mu4e
+    :load-path "lisp/"   
+    )
 )
 #+end_src
 
