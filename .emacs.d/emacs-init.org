@@ -266,28 +266,21 @@ To make emacs into a good text editor :-)
 
 *** Init
 #+BEGIN_SRC emacs-lisp
-  ;;--------------------------------------------------;; 
-  ;; Evil Mode
-  (setq evil-want-Y-yank-to-eol t)
+;;--------------------------------------------------;; 
+;; Evil Mode
+(use-package evil
+  :ensure t
+  :config
+    (setq evil-want-Y-yank-to-eol t)
 
-  (require 'evil)
+    ; Evil-mode settings
+    (setq evil-move-cursor-back nil)
 
-  (setq evil-want-Y-yank-to-eol t)
+    (evil-emacs-state)
+    (evil-mode t)
 
-  ; Evil-mode settings
-  (setq evil-move-cursor-back nil)
-
-  ;; (define-key evil-normal-state-map ",r" 'ido-recentf-open)
-  ;; (define-key evil-normal-state-map ",b" 'ido-switch-buffer)
-  ;; (define-key evil-normal-state-map ",r" 'ido-recentf-open)
-  ;; (define-key evil-normal-state-map ",b" 'ido-switch-buffer)
-  ;;Find file
-  ;; (define-key evil-normal-state-map ",f" 'find-file)
-
-  (evil-emacs-state)
-  (evil-mode t)
-
-  (display-time-mode t)
+    (display-time-mode t)
+  )
 #+END_SRC
 
 #+RESULTS:
