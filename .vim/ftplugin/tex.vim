@@ -20,38 +20,13 @@ inoremap <buffer> 4p 4\pi\epsilon_0 r
 nnoremap <buffer> =7 :s/=/\&=/g<CR>:noh<CR> 
 " }}}
 
-" Autocompile after every write
-"nnoremap <buffer> <F4> :let g:LatexBox_latexmk_preview_continuously=1-g:LatexBox_latexmk_preview_continuously<CR>:echo g:LatexBox_latexmk_preview_continuously<CR>
-
-nnoremap <buffer> <F4> :call ToggleLatexAutocommands()<CR>
-function! ToggleLatexAutocommands()
-    if b:latexau==0
-        augroup Latex
-            au!
-            au BufWritePost <buffer> :Latexmk
-        augroup END
-        let b:latexau=1
-        echo "Autocompile Enabled"
-    elseif b:latexau==1
-        augroup Latex
-            au!
-        augroup END
-        let b:latexau=0
-        echo "Autocompile Disabled"
-    endif
-endfunction
-
-" SyncTeX with Zathura
-" Forward Search mapping
-nnoremap <expr><buffer> <LocalLeader>ls ':LatexView  ' . '--synctex-forward ' . line(".") . ":" . col(".") . ":" . expand('%:p') . '<CR>'
-
 " Some nifty mappings
-inoremap <buffer> [[     \begin{
-inoremap <buffer> ]]     <Plug>LatexCloseCurEnv
-nnoremap <buffer> <F5>   <Plug>LatexChangeEnv
-vnoremap <buffer> <F7>   <Plug>LatexWrapSelection
-vnoremap <buffer> <S-F7> <Plug>LatexEnvWrapSelection
-inoremap <buffer> ((     \eqref{
+"inoremap <buffer> [[     \begin{
+"inoremap <buffer> ]]     <Plug>LatexCloseCurEnv
+"nnoremap <buffer> <F5>   <Plug>LatexChangeEnv
+"vnoremap <buffer> <F7>   <Plug>LatexWrapSelection
+"vnoremap <buffer> <S-F7> <Plug>LatexEnvWrapSelection
+"inoremap <buffer> ((     \eqref{
 
 " Greek letters, AucTex style bindings   {{{
 
@@ -59,7 +34,8 @@ inoremap <buffer> <LocalLeader>a \alpha
 inoremap <buffer> <LocalLeader>b \beta
 inoremap <buffer> <LocalLeader>c \chi
 inoremap <buffer> <LocalLeader>d \delta
-inoremap <buffer> <LocalLeader>e \epsilon
+inoremap <buffer> <LocalLeader>e \varepsilon
+inoremap <buffer> <LocalLeader>E \epsilon
 inoremap <buffer> <LocalLeader>f \phi
 inoremap <buffer> <LocalLeader><LocalLeader>f \varphi
 inoremap <buffer> <LocalLeader>g \gamma
@@ -98,7 +74,7 @@ inoremap <buffer> <LocalLeader>U \Upsilon
 inoremap <buffer> <LocalLeader>X \Xi
 inoremap <buffer> <LocalLeader>Y \Psi
 inoremap <buffer> <LocalLeader>0 \emptyset
-inoremap <buffer> <LocalLeader>1 \left
+inoremap <buffer> <LocalLeader>1 ^{-1}
 inoremap <buffer> <LocalLeader>2 \right
 inoremap <buffer> <LocalLeader>3 \Big
 inoremap <buffer> <LocalLeader>6 \partial
