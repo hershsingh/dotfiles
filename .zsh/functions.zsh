@@ -24,3 +24,12 @@ function aurafind() {
 # Searches both the arch official repos and the AUR for a package.
     aura -Ss $1; aura -As $1;
 } 
+
+rg() {
+    if [ -z "$RANGER_LEVEL" ]
+    then
+        ranger
+    else
+        exit
+    fi
+}
