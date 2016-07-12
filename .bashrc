@@ -79,10 +79,10 @@ alias wget_images='wget -r -l1 -H -t1 -nd -N -np -A.jpeg,.jpg -erobots=off'
 #   PS2 – Continuation interactive prompt
 #   PS3 – Prompt used by “select” inside shell script
 #   PS4 – Used by “set -x” to prefix tracing output
-PS1="\[\033[0;37m\]╾─\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[0;31m\]\u'; else echo '\[\033[0;33m\]\u\[\033[0;37m\]'; fi)\[\033[0;37m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;37m\]]\[\033[0;37m\]─╼ \[\033[0m\]"
-PS2='\[\033[0;37m\]─╼ \[\033[0m\]'
-PS3='> '
-PS4='+ '
+#PS1="\[\033[0;37m\]╾─\$([[ \$? != 0 ]] && echo \"[\[\033[0;31m\]\342\234\227\[\033[0;37m\]]\342\224\200\")[$(if [[ ${EUID} == 0 ]]; then echo '\[\033[0;31m\]\u'; else echo '\[\033[0;33m\]\u\[\033[0;37m\]'; fi)\[\033[0;37m\]]\342\224\200[\[\033[0;32m\]\w\[\033[0;37m\]]\[\033[0;37m\]─╼ \[\033[0m\]"
+#PS2='\[\033[0;37m\]─╼ \[\033[0m\]'
+#PS3='> '
+#PS4='+ '
 # Remember if shell is inside ranger file manager
 [ -n "$RANGER_LEVEL" ] && PS1="$PS1"'[in ranger] '
 
