@@ -31,3 +31,7 @@ export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswi
 export EDITOR=vim
 export BROWSER=firefox
 export SUDO_EDITOR="/usr/bin/vim -p -X"
+
+
+# Ledger
+export LEDGER_FILE=$HOME/ledger/main.ledger
