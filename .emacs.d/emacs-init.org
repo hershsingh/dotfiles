@@ -1,0 +1,1915 @@
+#+OPTIONS: H:4 num:t toc:t \n:nil @:t ::t |:t ^:nil -:t f:t *:t <:t
+#+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+#+OPTIONS: author:nil email:nil creator:nil timestamp:nil
+#+TITLE: Emacs Init File 
+#+STARTUP: indent
+#+LANGUAGE: en
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+
+#+LANGUAGE: en
+#+TAGS: LUKA(L) ARNAUD(A) WEB(W) noexporT(n)
+
+* Initialization
+You need to load this =.org= file from your =~/.emacs.d/init.el= file. Here is my current =init.el= file
+#+INCLUDE: "~/.emacs.d/init.el" src emacs-lisp
+* Packages
+We add some package repos here. 
+
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+
+;(unless package-archive-contents    ;; Refresh the packages descriptions
+  ;(package-refresh-contents))
+(setq package-load-list '(all))     ;; List of packages to load
+
+;(unless (package-installed-p 'org)  ;; Make sure the Org package is
+  ;(package-install 'org))           ;; installed, install it if not
+;; (setq org-...)                   ;; Your custom settings
+
+;;(setq package-enable-at-startup nil)
+(package-initialize)
+#+END_SRC
+
+#+RESULTS:
+: t
+
+I need to expand this include a list of packages that can be automatically downloaded if not present. As of now, I just install packages using =M-x package-install= which isn't very portable.
+
+** use-package
+This is a nice package to keep the package configs tidy.
+
+#+BEGIN_SRC emacs-lisp
+(setq use-package-verbose t)
+(require 'use-package)
+#+END_SRC
+
+* Config
+** Fix shell in emacs
+#+begin_src emacs-lisp :results none
+(setq system-uses-terminfo nil)
+#+end_src
+
+** Theme
+#+BEGIN_SRC emacs-lisp
+  ;; Load theme
+  (use-package solarized-theme
+    :ensure t
+    :config
+    (load-theme 'solarized-dark t)
+)
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** General Settings
+
+#+BEGIN_SRC emacs-lisp
+
+  ;Let’s start out by getting rid of the “yes or no” prompt and replace it with “y or n”
+  (fset 'yes-or-no-p 'y-or-n-p)
+  ; To instead use the 'y' and 'n' keys at these prompts:
+  (defalias 'yes-or-no-p 'y-or-n-p)
+
+  ; Remember last position of a file. Super useful! 
+  (setq-default save-place t)
+  (setq save-place-file "~/.emacs.d/etc/saveplace")
+
+  ; If you type part of keybind, Emacs will display this part in the echo area after a timeout
+  (setq echo-keystrokes 0.1)
+
+  ;Next up is the annoying confirmation if a file or buffer does not exist when you use C-x C-f or C-x b.
+  (setq confirm-nonexistent-file-or-buffer nil)
+
+  (scroll-bar-mode -1)
+
+  ; Wrap lines
+  (global-visual-line-mode t)
+  ;(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow)) 
+
+   ;; Set the highlight current line minor mode 
+  (global-hl-line-mode 1)
+
+  (setq scroll-step 1)
+   ;; ========== Enable Line and Column Numbering ==========
+
+  ;; Show line-number in the mode line
+  (line-number-mode 1)
+
+  ;; Show column-number in the mode line
+  (column-number-mode 1)
+
+
+  ; Show matching parenthesis
+  (setq show-paren-delay 0)
+  (show-paren-mode 1)
+
+  ; To stop the cursor blinking, use:
+  (blink-cursor-mode -1)
+
+  ; No GUI
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+
+  ; to only use spaces for indentation everywhere:
+  (setq-default indent-tabs-mode nil)
+
+  ;You can also rid yourself of the splash screen and the echo area message:
+  (setq inhibit-startup-message t
+        inhibit-startup-echo-area-message t)
+
+  (setq browse-url-generic-program
+        (cond
+         ((eq window-system 'mac) "open") ; mac
+         ((or (eq system-type 'gnu/linux) (eq system-type 'linux)) ; linux
+          (executable-find "firefox"))
+         ))
+
+
+  (defun bh/set-truncate-lines ()
+    "Toggle value of truncate-lines and refresh window display."
+    (interactive)
+    (setq truncate-lines (not truncate-lines))
+    ;; now refresh window display (an idiom from simple.el):
+    (save-excursion
+      (set-window-start (selected-window)
+                        (window-start (selected-window)))))
+
+  (defun bh/switch-to-scratch ()
+    (interactive)
+    (switch-to-buffer "*scratch*"))
+#+END_SRC
+
+#+RESULTS:
+: bh/switch-to-scratch
+
+** Line numbers
+=linum-mode= makes Emacs really sluggish. A much better alternative is =nlinum=.
+
+#+begin_src emacs-lisp :results none
+;; (setq linum-format "%4d \u2502 ")
+;; (global-linum-mode 1)
+(use-package linum
+  :ensure t
+  :init
+    ;; (global-nlinum-mode t)
+    (setq linum-format "%4d \u2502 ")
+  :config
+)
+#+end_src
+
+** Electric Pair
+I think at some point I'll replace all =electric= things with something like =smartparens=. It's more configurable, and can deal with more complex things like =\begin... \end = in LaTeX.
+#+begin_src emacs-lisp :results none
+(electric-pair-mode 1)
+#+end_src
+
+** Fill-column indicator
+#+begin_src emacs-lisp :results none
+(use-package fill-column-indicator
+  :ensure t)
+#+end_src
+
+** Recentf
+Keeps a track of recently used files.
+#+BEGIN_SRC emacs-lisp
+
+;; Find files faster with the recent files package
+(require 'recentf)
+
+(recentf-mode t)
+(setq recentf-max-saved-items 200)
+
+#+END_SRC
+** Ido-mode
+Can't live without this.
+
+#+BEGIN_SRC emacs-lisp
+  ;;--------------------------------------------------;; 
+  ;; Ido-mode
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (ido-mode 1)
+  (use-package ido-ubiquitous
+    :ensure t
+    :init
+    (ido-ubiquitous-mode)
+    )
+
+  ; never ask before creating buffers
+  (setq ido-create-new-buffer 'always)
+
+  ;customize the order in which files are sorted when Ido displays them in the minibuffer 
+  (setq ido-file-extensions-order '(".org" ".tex" ".txt" ".py" ".emacs" ))
+
+  (setq ido-ignore-extensions t)
+
+
+  (setq ido-use-virtual-buffers t)        ; include recentf files
+
+  ;; get rid of `find-file-read-only' and replace it with something
+  ;; more useful.
+  (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
+  ;; Other-window 
+  (global-set-key (kbd "M-o") 'other-window)
+
+  (global-set-key (kbd "M-b") 'ido-switch-buffer)
+
+  ;; enable recent files mode.
+  (recentf-mode t)
+
+  ; 50 files ought to be enough.
+  (setq recentf-max-saved-items 50)
+
+  (defun ido-recentf-open ()
+    "Use `ido-completing-read' to \\[find-file] a recent file"
+    (interactive)
+    (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+        (message "Opening file...")
+      (message "Aborting")))
+#+END_SRC
+
+#+RESULTS:
+: ido-recentf-open
+
+*** flx: Better fuzzy matching for ido 
+This fixes some issues with the ordering of matches by =ido=.
+
+#+begin_src emacs-lisp :results none
+(use-package flx-ido
+  :ensure t
+  :init
+    (flx-ido-mode 1)
+  :config
+    ;; disable ido faces to see flx highlights.
+    (setq ido-enable-flex-matching t)
+    (setq ido-use-faces nil)
+    
+    ;; Customize flx-ido-threshold to change the collection size above which flx will revert to flex matching.
+    ;; As soon as the collection is narrowed below flx-ido-threshold, flx will kick in again.
+    (setq flx-ido-threshold 1000)
+
+    ;; If you don't want to use the flx's highlights you can turn them off like this:
+    ; (setq flx-ido-use-faces nil)
+)
+#+end_src
+
+** Evil-mode
+To make emacs into a good text editor :-)
+
+*** Init
+#+BEGIN_SRC emacs-lisp
+  ;;--------------------------------------------------;; 
+  ;; Evil Mode
+  (setq evil-want-Y-yank-to-eol t)
+
+  (require 'evil)
+
+  (setq evil-want-Y-yank-to-eol t)
+
+  ; Evil-mode settings
+  (setq evil-move-cursor-back nil)
+
+  ;; (define-key evil-normal-state-map ",r" 'ido-recentf-open)
+  ;; (define-key evil-normal-state-map ",b" 'ido-switch-buffer)
+  ;; (define-key evil-normal-state-map ",r" 'ido-recentf-open)
+  ;; (define-key evil-normal-state-map ",b" 'ido-switch-buffer)
+  ;;Find file
+  ;; (define-key evil-normal-state-map ",f" 'find-file)
+
+  (evil-emacs-state)
+  (evil-mode t)
+
+  (display-time-mode t)
+#+END_SRC
+
+#+RESULTS:
+: t
+
+*** Evil-surround
+#+begin_src emacs-lisp :results none
+(use-package evil-surround
+  :ensure t
+  :config
+    (global-evil-surround-mode 1)
+)
+#+end_src
+
+*** Evil-leader
+#+BEGIN_SRC emacs-lisp
+  (use-package evil-leader
+    :ensure t
+    :init
+      (global-evil-leader-mode)
+    :config
+      (evil-leader/set-leader "SPC")
+    )
+#+END_SRC
+
+#+RESULTS:
+: t
+
+*** Evil-Unimpaired
+**** Move between compilation error messages
+Particularly useful for c/c++ modes.
+
+Reference:http://stackoverflow.com/questions/21125015/cycle-through-results-using-next-error-previous-error
+#+begin_src emacs-lisp :results none
+
+(defvar my-modeline-flash-color "#af00d7")
+
+(defun my-indicate-error-nav-wrapped (direction)
+  "Display a message in minibuffer indicating that we wrapped
+also flash the mode-line"
+  (let ((mode-line-color (face-background 'mode-line)))
+    (message "Wrapped %s error" (symbol-name direction))
+    (set-face-background 'mode-line my-modeline-flash-color)
+    (sit-for 0.3)
+    (set-face-background 'mode-line mode-line-color)))
+
+(defun my-next-error-wrapped (&optional arg reset)
+  "Jumps to previous error if at first error jump to last error instead.
+Prefix argument ARG says how many error messages to move forwards (or
+backwards, if negative). With just C-u as prefix moves to first error"
+  (interactive "P")
+  (condition-case nil
+      (call-interactively 'next-error)
+    ('user-error (progn (next-error 1 t)
+                        (my-indicate-error-nav-wrapped 'next)))))
+
+(defun my-jump-to-last-error (buffer)
+  "Jump to last error in the BUFFER, this assumes that
+the error is at last but third line"
+  (save-selected-window
+    (select-window (get-buffer-window buffer))
+    (goto-char (point-max))
+    (forward-line -3)
+    (call-interactively 'compile-goto-error)))
+
+(defun my-previous-error-wrapped (&optional arg)
+  "Jumps to previous error if at first error jump to last error instead.
+Prefix argument ARG says how many error messages to move backwards (or
+forwards, if negative)."
+  (interactive "P")
+  (condition-case nil
+      (if (compilation-buffer-p (current-buffer))
+          (compilation-previous-error 1)
+        (call-interactively 'previous-error))
+    ('user-error (progn
+                   (let ((error-buffer (next-error-find-buffer)))
+                     ;; If the buffer has an associated error buffer use it to
+                     ;; to move to last error
+                     (if (and (not (eq (current-buffer) error-buffer))
+                              (compilation-buffer-p error-buffer))
+                         (my-jump-to-last-error error-buffer)
+                       ;; Otherwise move to last point and invoke previous error
+                       (goto-char (point-max))
+                       (call-interactively 'previous-error))
+                     (my-indicate-error-nav-wrapped 'previous))))))
+
+(define-key evil-normal-state-map "]c" 'my-next-error-wrapped)
+(define-key evil-normal-state-map "[c" 'my-previous-error-wrapped)
+#+end_src
+
+*** Keybindings
+#+BEGIN_SRC emacs-lisp
+
+  ; Remap org-mode meta keys for convenience
+  (mapcar (lambda (state)
+      (evil-declare-key state org-mode-map
+        (kbd "M-l") 'org-metaright
+        (kbd "M-h") 'org-metaleft
+        (kbd "M-k") 'org-metaup
+        (kbd "M-j") 'org-metadown
+        (kbd "M-L") 'org-shiftmetaright
+        (kbd "M-H") 'org-shiftmetaleft
+        (kbd "M-K") 'org-shiftmetaup
+        (kbd "M-J") 'org-shiftmetadown))
+    '(normal insert))
+
+
+  ;;; esc quits
+  (define-key evil-normal-state-map [escape] 'keyboard-quit)
+  (define-key evil-visual-state-map [escape] 'keyboard-quit)
+   (define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+  ; (define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+  ; (define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+  ; (define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+  ; (define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+
+  ; j/k for wrapped line
+  (define-key evil-normal-state-map (kbd "j") 'evil-next-visual-line)
+  (define-key evil-normal-state-map (kbd "k") 'evil-previous-visual-line)
+
+  ;(require 'autopair)
+  ;(autopair-global-mode)
+#+END_SRC
+
+*** Create text objects for Evil
+
+#+BEGIN_SRC emacs-lisp
+
+;http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp#18688066
+(defmacro define-and-bind-text-object (key start-regex end-regex)
+  (let ((inner-name (make-symbol "inner-name"))
+        (outer-name (make-symbol "outer-name")))
+    `(progn
+       (evil-define-text-object ,inner-name (count &optional beg end type)
+         (evil-select-paren ,start-regex ,end-regex beg end type count nil))
+       (evil-define-text-object ,outer-name (count &optional beg end type)
+         (evil-select-paren ,start-regex ,end-regex beg end type count t))
+       (define-key evil-inner-text-objects-map ,key (quote ,inner-name))
+       (define-key evil-outer-text-objects-map ,key (quote ,outer-name)))))
+
+; between dollar signs:
+(define-and-bind-text-object "$" "\\$" "\\$")
+
+; between pipe characters:
+(define-and-bind-text-object "|" "|" "|")
+
+; from regex "b" up to regex "c", bound to k (invoke with "vik" or "vak"):
+;(define-and-bind-text-object "k" "b" "c")
+
+
+#+END_SRC
+
+*** Set evil-shift-witdth to buffer local indentation
+Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to-the-buffer-local-indentation-in-emacs]]
+#+begin_src emacs-lisp :results none
+(add-hook 'python-mode-hook
+  (function (lambda ()
+          (setq evil-shift-width python-indent))))
+(add-hook 'LaTeX-mode-hook
+  (function (lambda ()
+            (setq evil-shift-width tex-indent-basic))))
+(add-hook 'c-mode-common-hook
+  (function (lambda ()
+            (setq evil-shift-width c-basic-offset))))
+#+end_src
+
+** Some basic keybindings
+#+begin_src emacs-lisp :results none
+  (evil-leader/set-key "r" 'ido-recentf-open)
+  (evil-leader/set-key "b" 'ido-switch-buffer)
+  (evil-leader/set-key "f" 'find-file)
+#+end_src
+
+** Escape quits things
+Being a vim user, it's very non-intuitive when hitting =Esc= does weird stuff in emacs. =Esc= must quit things. 
+
+#+begin_src emacs-lisp :results none
+;; esc quits
+(defun minibuffer-keyboard-quit ()
+  "Abort recursive edit.
+In Delete Selection mode, if the mark is active, just deactivate it;
+then it takes a second \\[keyboard-quit] to abort the minibuffer."
+  (interactive)
+  (if (and delete-selection-mode transient-mark-mode mark-active)
+      (setq deactivate-mark  t)
+    (when (get-buffer "*Completions*") (delete-windows-on "*Completions*"))
+    (abort-recursive-edit)))
+
+(define-key evil-normal-state-map [escape] 'keyboard-quit)
+(define-key evil-visual-state-map [escape] 'keyboard-quit)
+(define-key minibuffer-local-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-ns-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-completion-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-must-match-map [escape] 'minibuffer-keyboard-quit)
+(define-key minibuffer-local-isearch-map [escape] 'minibuffer-keyboard-quit)
+(global-set-key [escape] 'evil-exit-emacs-state)
+
+#+end_src
+
+** Autocompletion using company
+#+BEGIN_SRC emacs-lisp
+    ; Company autocompletion
+  (use-package company
+    :ensure t
+    :defer t
+    :config (add-hook 'after-init-hook 'global-company-mode)
+    )
+
+#+END_SRC
+** Smooth scrolling
+#+BEGIN_SRC emacs-lisp
+  ;; Smooth-Scrolling
+  (use-package smooth-scrolling
+    :config
+    (setq scroll-margin 5
+          scroll-conservatively 9999
+          scroll-step 1)
+  )
+#+END_SRC
+
+** Smart-mode-line
+I subsituting this for powerline, after experiencing some rendering issues with powerline.
+#+BEGIN_SRC emacs-lisp
+  ; Smart-mode line
+  ;; (use-package smart-mode-line-powerline-theme)
+  (use-package smart-mode-line
+    :config
+      (display-time-mode)
+      ;; (setq powerline-arrow-shape 'curve)
+      ;; (setq powerline-default-separator-dir '(right . left))
+      ;; (setq sml/theme 'powerline)
+      ;; (setq sml/mode-width 0)
+      ;; (setq sml/name-width 20)
+      ;; (rich-minority-mode 1)
+      ;; (setf rm-blacklist "")
+      (sml/setup)
+    )
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** Yasnippet
+#+BEGIN_SRC emacs-lisp :results none
+(require 'yasnippet)
+
+; This must be set before enabling yas-global-mode
+(setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+
+(yas-global-mode 1)
+#+END_SRC
+
+*** Trigger key conflict with Company-mode
+=company= also uses =Tab= for completion, so this conflicts with Yasnippet. Until I find a better way, I am also binding yasnippet completion to =C-l=.
+#+begin_src emacs-lisp :results none
+(define-key yas-minor-mode-map (kbd "C-l") 'yas-expand-from-trigger-key)
+#+end_src
+
+*** Some tips for Yasnippet
+There are two ways to use snippets from another mode. One is to include a =.yas-parents= file in the =snippets/major-mode= directory, and the other is to simply use the =yas-activate-extra-mode= command. 
+** Nerd-commenter
+#+BEGIN_SRC emacs-lisp
+(use-package evil-nerd-commenter
+  :init
+  (evilnc-default-hotkeys)
+  )
+#+END_SRC
+
+** Windmove
+#+BEGIN_SRC emacs-lisp
+; (use-package windmove
+;   :ensure t
+;   :defer t
+;   :bind
+;   (("<f2> <right>" . windmove-right)
+;    ("<f2> <left>" . windmove-left)
+;    ("<f2> <up>" . windmove-up)
+;    ("<f2> <down>" . windmove-down)
+;    ))
+#+END_SRC
+** Backup/History
+
+#+BEGIN_SRC emacs-lisp :results none
+
+;disable backup
+;(setq backup-inhibited t)
+;disable auto save
+;(setq auto-save-default nil)
+
+; (setq backup-directory-alist
+        ; `((".*" . ,temporary-file-directory)))
+; (setq auto-save-file-name-transforms
+        ; `((".*" ,temporary-file-directory t)))
+
+;; SaveHistory for minibuffers
+(savehist-mode 1)
+
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+  backup-by-copying t    ; Don't delink hardlinks
+  version-control t      ; Use version numbers on backups
+  delete-old-versions t  ; Automatically delete excess backups
+  kept-new-versions 10   ; how many of the newest versions to keep
+  kept-old-versions 5    ; and how many of the old
+  )
+
+#+END_SRC
+
+** Prompt/popup menu
+
+#+BEGIN_SRC emacs-lisp
+
+(plist-put minibuffer-prompt-properties
+           'point-entered 'minibuffer-avoid-prompt)
+
+;;; use popup menu for yas-choose-value
+(require 'popup)
+
+;; add some shotcuts in popup menu mode
+(define-key popup-menu-keymap (kbd "M-n") 'popup-next)
+(define-key popup-menu-keymap (kbd "TAB") 'popup-next)
+(define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
+(define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
+(define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
+
+(defun yas-popup-isearch-prompt (prompt choices &optional display-fn)
+  (when (featurep 'popup)
+    (popup-menu*
+     (mapcar
+      (lambda (choice)
+        (popup-make-item
+         (or (and display-fn (funcall display-fn choice))
+             choice)
+         :value choice))
+      choices)
+     :prompt prompt
+     ;; start isearch mode immediately
+     :isearch t
+     )))
+
+;(setq yas-prompt-functions '(yas-popup-isearch-prompt yas-ido-prompt yas-no-prompt))
+(setq yas-prompt-functions '(yas-ido-prompt yas-no-prompt))
+
+#+END_SRC
+** Smex
+#+BEGIN_SRC emacs-lisp
+
+;;-----------------------------------------------------''
+(require 'smex) ; Not needed if you use package.el
+(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
+                  ; when Smex is auto-initialized on its first run.
+
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+
+#+END_SRC
+
+** Slime
+#+BEGIN_SRC emacs-lisp
+
+; SLIME
+(setq inferior-lisp-program "/usr/bin/ecl")
+
+#+END_SRC
+** Epresent
+#+BEGIN_SRC emacs-lisp
+; (use-package epresent
+;   :ensure t )
+#+END_SRC
+** Ledger
+Save dat money!
+#+BEGIN_SRC emacs-lisp
+
+       (use-package ledger-mode
+          :ensure t
+          ; Use :mode to set language modes to automatically activate on certain extensions
+          :mode ("\\.\\(ledger\\|ldg\\)\\'" . ledger-mode)
+          ; :defer t activates lazy loading which makes startup faster
+          :defer t
+          ; The code in :init is always run, use it to set up config vars and key bindings
+          :init
+          ; :init only takes one expression so use "progn" to combine multiple things
+          (progn 
+            ; You can configure package variables here
+            (setq ledger-post-amount-alignment-column 62)
+            ; Using evil-leader/set-key-for-mode adds bindings under SPC for a certain mode
+            ; Use evil-leader/set-key to create global SPC bindings
+            (evil-leader/set-key-for-mode 'ledger-mode
+                "ld"   'ledger-delete-current-transaction
+                "hd" 'ledger-delete-current-transaction
+                "la" 'ledger-add-transaction
+                "lb" 'ledger-post-edit-amount
+                "lc" 'ledger-toggle-current
+                "lC" 'ledger-mode-clean-buffer
+                "ll" 'ledger-display-ledger-stats
+                "lp" 'ledger-display-balance-at-point
+                "lq" 'ledger-post-align-xact
+                "lr" 'ledger-reconcile
+                "lR" 'ledger-report
+                "lt" 'ledger-insert-effective-date
+                "ly" 'ledger-set-year
+                "lm" 'ledger-set-month)
+            )
+          
+          ;If non-nil, then automatically align amounts to column specified in
+          ;ledger-post-amount-alignment-column.
+          (setq ledger-post-auto-adjust-amounts t)
+
+          ;Which completion engine to use: iswitchb, ido, or built-in.
+          (setq ledger-post-use-completion-engine :ido)
+          (setq ledger-post-use-ido t)
+
+          ; :config is called after the package is actually loaded with defer
+          :config 
+            ; You can put stuff that relies on the package like function calls here
+            (message "Ledger mode was actually loaded!")
+      )
+
+
+
+
+      ;; @see https://bitbucket.org/lyro/evil/issue/511/let-certain-minor-modes-key-bindings
+      ;; (eval-after-load 'ggtags
+      ;;   '(progn
+      ;;      (evil-make-overriding-map ggtags-mode-map 'normal)
+      ;;      ;; force update evil keymaps after ggtags-mode loaded
+      ;;      (add-hook 'ggtags-mode-hook #'evil-normalize-keymaps)))
+
+#+END_SRC
+
+#+RESULTS:
+
+** Volatile-highlights
+#+BEGIN_SRC emacs-lisp :results none
+  (use-package volatile-highlights
+     :ensure t
+     :config
+        (vhl/define-extension 'my-evil-highlights 'evil-yank 'evil-move 'evil-paste-after 'evil-paste-before 'evil-paste-pop 'evil-paste-from-register 'evil-paste-last-insertion)
+        (vhl/install-extension 'my-evil-highlights)
+  )
+#+END_SRC
+** Predictive-mode/Pabbrev
+Pabbrev mode and predictive-mode are similar. I am trying to test which one suits me. 
+#+begin_src emacs-lisp :results none
+(defun my/pabbrev-select-mode-settings()
+  (turn-off-evil-mode))
+
+(add-hook 'pabbrev-select-mode-hook 'my/pabbrev-select-mode-settings 'append)
+#+end_src
+
+#+begin_src emacs-lisp :results none
+(add-to-list 'load-path "/home/hersh/.emacs.d/predictive")
+(add-to-list 'load-path "/home/hersh/.emacs.d/predictive/misc")
+(add-to-list 'load-path "/home/hersh/.emacs.d/predictive/html")
+(add-to-list 'load-path "/home/hersh/.emacs.d/predictive/texinfo")
+(add-to-list 'load-path "/home/hersh/.emacs.d/predictive/latex")
+(require 'predictive)
+
+  ;; (add-to-list 'load-path "~/.emacs.d/lisp/predictive")
+  ;; ;; (require 'predictive)
+  ;; (autoload 'predictive-mode "predictive" "predictive" t)
+  ;; (set-default 'predictive-auto-add-to-dict t)
+  ;; (setq predictive-main-dict 'rpg-dictionary
+  ;;       predictive-auto-learn t
+  ;;       predictive-add-to-dict-ask nil
+  ;;       predictive-use-auto-learn-cache nil
+  ;;       predictive-which-dict t)
+#+end_src
+** Browse-kill-ring
+View the kill-ring
+#+begin_src emacs-lisp :results none
+(use-package browse-kill-ring+
+  :ensure t 
+)
+#+end_src
+
+** Flyspell mode
+#+begin_src emacs-lisp :results none
+#+end_src
+
+** Magit
+#+begin_src emacs-lisp :results none
+(use-package magit
+  :ensure t
+  :init
+  (evil-leader/set-key "g" 'magit-status)
+  )
+#+end_src
+
+*** Evil-Magit
+This configures Magit and Evil to play well with each other
+#+begin_src emacs-lisp :results none
+(use-package evil-magit
+  :ensure t)
+#+end_src
+
+** Hydra
+#+begin_src emacs-lisp :results none
+(use-package hydra
+  :ensure t)
+
+#+end_src
+
+*** Hydra for current major mode
+#+begin_src emacs-lisp :results none
+;; Calls the hydra for the current major mode.
+(defun my/hydra-major-mode()
+  (interactive)
+  (funcall (cdr (assoc major-mode hydra-major-mode-list)))
+)
+
+;; Show the hydra for the current major mode with "<Leader>m"
+(evil-leader/set-key "m" 'my/hydra-major-mode)
+
+
+;; Activate the following major mode hydras
+(setq hydra-major-mode-list
+      '(
+        (latex-mode . hydra-major-latex/body)
+        (org-mode . hydra-major-org/body)
+        (mu4e-compose-mode . hydra-major-mu4e-compose/body)
+        (c++-mode . hydra-major-c/body)
+        (c-mode . hydra-major-c/body)
+        ))
+
+#+end_src
+
+*** Define major mode hydras
+
+#+begin_src emacs-lisp :results none
+;; LaTeX mode
+(defhydra hydra-major-latex(:color blue :hint nil)
+  "^AucTeX shortcuts^"
+  ("l" reftex-label "Insert label")
+  ("c" reftex-citation "Insert Citation")
+  ("]" LaTeX-close-environment "Close environment")
+  ("c" TeX-command-master "Compile")
+  ("e" (LaTeX-environment 1) "Modify Current environment")
+  )
+
+;; org mode
+(defhydra hydra-major-org()
+  "^Org-mode shortcuts^"
+  )
+
+;; mu4e message compose mode
+(defhydra hydra-major-mu4e-compose(:color blue)
+  " ^mu4e compose mode^
+-------------------
+"
+  ("a" my/mu4e-deer-attachment "Add attachment using ranger")
+  ("c" my/ido-select-recipient "Select a contact using ido")
+  )
+
+;; C-mode
+(defhydra hydra-major-c(:color teal :hint nil)
+  "
+C/C++ Mode: 
+
+GGtags^                    ^Projectile^
+------------------------------------------------------------------------------------------
+find-_t_ag-dwim             [_c_]: projectile-compile-project
+find-_r_eference            [_C_]: compile
+find-_f_ile 
+[_gc_]: create-tags
+[_gu_]: update-tags
+[_go_]: find-other-symbol 
+[_gh_]: view-tag-history  
+"
+  ("t" ggtags-find-tag-dwim "ggtags-find-tag-dwim")
+  ("r" ggtags-find-reference "ggtags-find-reference")
+  ("f" ggtags-find-file "ggtags-find-file")
+  ("gc" ggtags-create-tags "ggtags-create-tags")
+  ("gu" ggtags-update-tags "ggtags-update-tags")
+  ("go" ggtags-find-other-symbol "ggtags-find-other-symbol")
+  ("gh" ggtags-view-tag-history  "ggtags-view-tag-history")
+
+  ("c" projectile-compile-project)
+  ("C" compile)
+  ("n" next-error)
+  ("p" previous-error)
+  )
+#+end_src
+
+*** Zoom 
+#+begin_src emacs-lisp :results none
+(evil-leader/set-key "z" 'hydra-zoom/body)
+(defhydra hydra-zoom ()
+  "zoom"
+  ("+" text-scale-increase "in")
+  ("-" text-scale-decrease "out"))
+#+end_src
+
+*** Main Menu
+#+begin_src emacs-lisp :results none
+(evil-leader/set-key "~" 'hydra-main/body)
+
+ (defhydra hydra-main (:color blue :hint nil)
+   "
+^Main Menu^
+------------------
+_m_u4e
+_r_anger
+"
+   ("m" mu4e)
+   ("r" ranger)
+)
+#+end_src
+
+*** Kill-ring
+#+begin_src emacs-lisp :results none
+;; Yank stuff
+ (evil-leader/set-key "y" 'hydra-paste/body)
+ (defhydra hydra-paste (:color blue :hint nil)
+   "
+^Paste Menu^
+------------------
+"
+   ("r" browse-kill-ring "Browse kill ring")
+)
+#+end_src
+
+*** Org-mode
+#+begin_src emacs-lisp :results none
+ (evil-leader/set-key "op" 'hydra-org-publish/body)
+ (defhydra hydra-org-publish (:color blue :hint nil)
+   "
+^Org Publish Menu^
+-----------------------------------------
+   org-_p_ublish
+   org-publish-_c_urrent-project
+   org-publish-current-_f_ile
+   org-publish-_a_ll
+      "
+   ("p" org-publish)
+   ("c" org-publish-current-project)
+   ("f" org-publish-current-file)
+   ("a" org-publish-all))
+#+end_src
+
+*** Org-clock
+[[https://github.com/abo-abo/hydra/wiki/Org-clock]]
+
+#+begin_src emacs-lisp :results none
+ (evil-leader/set-key "oc" 'hydra-org-clock/body)
+ (defhydra hydra-org-clock (:color blue :hint nil)
+   "
+Clock   In/out^     ^Edit^   ^Summary     (_?_)
+-----------------------------------------
+        _i_n         _e_dit   _g_oto entry
+        _c_ontinue   _q_uit   _d_isplay
+        _o_ut        ^ ^      _r_eport
+      "
+   ("i" org-clock-in)
+   ("o" org-clock-out)
+   ("c" org-clock-in-last)
+   ("e" org-clock-modify-effort-estimate)
+   ("q" org-clock-cancel)
+   ("g" org-clock-goto)
+   ("d" org-clock-display)
+   ("r" org-clock-report)
+   ("?" (org-info "Clocking commands")))
+#+end_src
+
+*** Projectile
+https://github.com/abo-abo/hydra/wiki/Projectile
+#+begin_src emacs-lisp :results none
+(defhydra hydra-projectile-other-window (:color teal)
+  "projectile-other-window"
+  ("f"  projectile-find-file-other-window        "file")
+  ("g"  projectile-find-file-dwim-other-window   "file dwim")
+  ("d"  projectile-find-dir-other-window         "dir")
+  ("b"  projectile-switch-to-buffer-other-window "buffer")
+  ("q"  nil                                      "cancel" :color blue))
+
+(defhydra hydra-projectile (:color teal
+                            :hint nil)
+  "
+     PROJECTILE: %(projectile-project-root)
+
+     Find File            Search/Tags          Buffers                Cache
+------------------------------------------------------------------------------------------
+_s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+ _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+ _fd_: file curr dir   _o_: multi-occur     _s-k_: Kill all buffers  _X_: cleanup non-existing
+  _r_: recent file                                               ^^^^_z_: cache current
+  _d_: dir
+
+"
+  ("a"   projectile-ag)
+  ("b"   projectile-switch-to-buffer)
+  ("c"   projectile-invalidate-cache)
+  ("d"   projectile-find-dir)
+  ("s-f" projectile-find-file)
+  ("ff"  projectile-find-file-dwim)
+  ("fd"  projectile-find-file-in-directory)
+  ("g"   ggtags-update-tags)
+  ("s-g" ggtags-update-tags)
+  ("i"   projectile-ibuffer)
+  ("K"   projectile-kill-buffers)
+  ("s-k" projectile-kill-buffers)
+  ("m"   projectile-multi-occur)
+  ("o"   projectile-multi-occur)
+  ("s-p" projectile-switch-project "switch project")
+  ("p"   projectile-switch-project)
+  ("s"   projectile-switch-project)
+  ("r"   projectile-recentf)
+  ("x"   projectile-remove-known-project)
+  ("X"   projectile-cleanup-known-projects)
+  ("z"   projectile-cache-current-file)
+  ("`"   hydra-projectile-other-window/body "other window")
+  ("q"   nil "cancel" :color blue))
+
+(evil-leader/set-key "p" 'hydra-projectile/body)
+(evil-leader/set-key "s" 'projectile-switch-to-buffer)
+#+end_src
+
+** Ansi-colors
+*** Make colors work in c/c++ compilation buffers
+Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
+#+begin_src emacs-lisp :results none
+(use-package ansi-color
+  :ensure t
+  :init
+  ; (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+  ;(add-hook 'compilation-mode-hook 'ansi-color-for-comint-mode-on)
+  ; (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+  (defun colorize-compilation-buffer ()
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+  (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+  )
+;(add-hook 'eshell-preoutput-filter-functions
+           ;'ansi-color-filter-apply)
+#+end_src
+
+** Projectile
+#+begin_src emacs-lisp :results none
+(use-package projectile
+  :ensure t
+)
+#+end_src
+
+** Diminish
+#+begin_src emacs-lisp :results none
+(use-package diminish
+  :ensure t
+  :init
+  (diminish 'yas-minor-mode)
+  (diminish 'undo-tree-mode)
+  (diminish 'org-indent-mode)
+  (diminish 'company-mode)
+  (diminish 'visual-line-mode)
+  (diminish 'abbrev-mode "Abv")
+  )
+#+end_src
+
+* mu4e
+mu4e might just be the email client I had been looking for. It has
+excellent search, unlike thunderbird. It's easy to use and setup,
+unlike mutt. And it can be configured to play nicely with =Evil=! 
+
+I am using =msmtp= to send email, and =offlineimap= to retrieve
+email. =mu= does the indexing and search, and =mu4e= provides a unifying
+interface for all of them. 
+
+** Basic Configuration
+#+BEGIN_SRC emacs-lisp :results none
+;; Checkout this for full html support in emacs 25
+    ;; https://groups.google.com/forum/#!topic/mu-discuss/JqHEGycEyKI
+
+(require 'mu4e)
+
+(setq mu4e-sent-folder   "/Sent")
+(setq mu4e-drafts-folder "/Drafts")
+(setq mu4e-trash-folder  "/Trash")
+
+;; http://www.djcbsoftware.nl/code/mu/mu4e/Attachments.html#Attachments
+(setq mu4e-attachment-dir  "~/attachments/")
+
+;; with Emacs 23.1, you have to set this explicitly (in MS Windows)
+;; otherwise it tries to send through OS associated mail client
+(setq message-send-mail-function 'message-send-mail-with-sendmail)
+;; we substitute sendmail with msmtp
+(setq sendmail-program "/usr/bin/msmtp")
+;;need to tell msmtp which account we're using
+(setq message-sendmail-extra-arguments '("-a" "default"))
+;; you might want to set the following too
+(setq mail-host-address "phy.duke.edu")
+(setq user-full-name "Hersh Singh")
+(setq user-mail-address "hersh@phy.duke.edu")
+
+(setq  mu4e-user-mail-address-list '("hersh@phy.duke.edu" "hersh.singh@duke.edu" "hs171@duke.edu"))
+;; smtp mail setting; these are the same that `gnus' uses. 
+(setq
+    message-send-mail-function   'smtpmail-send-it
+    smtpmail-default-smtp-server "mail.phy.duke.edu"
+    smtpmail-smtp-server         "mail.phy.duke.edu"
+    smtpmail-local-domain        "phy.duke.edu")
+
+;; allow for updating mail using 'U' in the main view:
+(setq mu4e-get-mail-command "offlineimap -o") ;; -o to run it only once
+;; (setq mu4e-update-interval 30)
+
+;; Message citation line
+(setq message-citation-line-function 'message-insert-formatted-citation-line)
+(setq message-citation-line-format "On %a, %b %d %Y at %r, %f wrote:")
+#+END_SRC
+
+** Interface and Usability Tweaks
+#+begin_src emacs-lisp :results none
+;; https://groups.google.com/forum/#!topic/mu-discuss/Xlihr_JrNwA
+;; http://www.djcbsoftware.nl/code/mu/mu4e/Fancy-characters-and-Inconsolata.html
+;; (if (equal window-system 'x)
+;;     (progn
+;;       (set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
+;;       (set-face-font 'default "Inconsolata-12")))
+(setq mu4e-use-fancy-chars t)
+(setq mu4e-headers-has-child-prefix    '("+"  . " ┬●")  ; Parent
+      mu4e-headers-empty-parent-prefix '("-"  . " ─●")  ; Orphan
+      mu4e-headers-first-child-prefix  '("\\" . "└─●")  ; First child
+      mu4e-headers-duplicate-prefix    '("="  . "└≡")   ; Duplicate
+      mu4e-headers-default-prefix      '("|"  . "  ●")) ; Default. 
+
+(setq mu4e-headers-unread-mark    '("u" . "✉ ")
+      mu4e-headers-passed-mark   '("P" . "→ ") ;; ↪
+      mu4e-headers-replied-mark  '("R" . "← ")
+      mu4e-headers-trashed-mark  '("T" . "✗ ") ;; 🗑
+    )
+;; (mu4e-headers-seen-mark . ("S" . "")) ;; ✓ 🗸 ✔
+;; (mu4e-headers-attach-mark . ("a" . ":paperclip: "))
+;; (mu4e-headers-encrypted-mark . ("x" . ":closed_lock_with_key: "))
+;; (mu4e-headers-signed-mark . ("s" . ":lock_with_ink_pen: "))
+;; (mu4e-headers-unread-mark . ("u" . "✉ "))
+
+
+; Ignore my email address when sending replies, looks at 'mu4e-user-mail-addresss-list'
+(setq mu4e-dont-compose-reply-to-self t)
+
+; Compose messages in a new frame
+(setq mu4e-compose-in-new-frame t)
+
+(setq mu4e-view-show-addresses t)
+
+(defun my/mu4e-headers-mode-settings() 
+    (nlinum-mode -1)
+    (visual-line-mode -1)
+    (auto-fill-mode -1)
+    (set-default 'truncate-lines -1)
+
+    )
+(add-hook 'mu4e-headers-mode-hook 'my/mu4e-headers-mode-settings 'append)
+
+(defun my/mu4e-view-mode-settings()
+  ;; Use a variable width font when reading messages
+  ;; I think it makes text easier on the eyes
+  (variable-pitch-mode)
+)
+
+(add-hook 'mu4e-view-mode-hook 'my/mu4e-view-mode-settings 'append)
+
+(defun my/mu4e-compose-mode-settings() 
+    ; Hard word wrapping makes the emails harder to read on mobile devices
+    (auto-fill-mode -1)
+    (visual-line-mode t)
+    (visual-fill-column-mode t)
+    (flyspell-mode t)
+)
+(add-hook 'mu4e-compose-mode-hook 'my/mu4e-compose-mode-settings 'append)
+
+;; the headers to show in the headers list -- a pair of a field
+;; and its width, with `nil' meaning 'unlimited'
+;; (better only use that for the last field.)
+(setq mu4e-headers-fields
+    '( (:human-date          .  12)
+        (:maildir         .   10)
+        (:flags         .   4)
+        (:from          .  22)
+        (:subject       .  nil)))
+
+(setq mu4e-headers-visible-columns 110)
+(setq mu4e-headers-include-related t)
+
+;(setq mu4e-html2text-command "html2text --unicode-snob -b 72")
+(require 'mu4e-contrib)
+
+;; Fix some colors for HTML rendering by shr2text
+;; Not sure if this makes any differnece though
+(setq shr-color-visible-luminance-min 40)
+(setq shr-color-visible-distance-min 100)
+
+(setq mu4e-html2text-command 'mu4e-shr2text)
+;; enable inline images
+
+(setq mu4e-view-show-images t)
+;; use imagemagick, if available
+(when (fboundp 'imagemagick-register-types)
+(imagemagick-register-types))
+
+(add-to-list 'mu4e-view-actions
+    '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+
+;; I find vertical splits better on a widescreen
+(setq mu4e-split-view 'vertical)
+
+;; Kill message buffer after sending a message
+(setq message-kill-buffer-on-exit t)
+
+;; Ask before sending a message. Very important! 
+(add-hook 'message-send-hook
+(lambda ()
+    (unless (yes-or-no-p "Sure you want to send this?")
+    (signal 'quit nil))))
+#+end_src
+
+** Don't let shr change the background color for HTML emails
+#+begin_src emacs-lisp :results none
+    (defadvice shr-color-check (before unfuck compile activate)
+      "Don't let stupid shr change background colors."
+      (setq bg (face-background 'default)))
+#+end_src
+
+** Use ranger (deer) for attachments
+This lets you attach a file in the current composition buffer by invoking the command =my/mu4-deer-attachment=, and hitting =ra= ('ranger-attach')on the selected files to attach them.
+#+begin_src emacs-lisp :results none
+(defun my/mu4e-deer-attachment ()
+  (interactive)
+  (turn-on-gnus-dired-mode)
+  (deer "~/"))
+(defun my/mu4e-deer-settings ()
+  (local-set-key "ra" 'gnus-dired-attach))
+(add-hook 'ranger-mode-hook 'my/mu4e-deer-settings)
+
+; (evil-define-key 'normal message-mode-map ",ra" 'my/mu4e-deer-attachment)
+#+end_src
+
+** mu4e-evil
+Evil keybindings for mu4e.
+#+begin_src emacs-lisp :results none
+(use-package evil-mu4e
+  :load-path "lisp/"   
+)
+#+end_src
+
+** Org-capture
+#+begin_src emacs-lisp :results none
+;;store org-mode links to messages
+(use-package org-mu4e)
+;; (require 'org-mu4e)
+;;store link to message if in header view, not to header query
+(setq org-mu4e-link-query-in-headers-mode nil)
+#+end_src
+
+** Email templates using YASnippet
+This little function is used in a snippet to figure out the first name of the recipient.
+#+begin_src emacs-lisp :results none
+;; http://blog.binchen.org/posts/how-to-use-yasnippets-to-produce-email-templates-in-emacs.html
+(defun my/yas-get-first-name-from-to-field ()
+  (let ((rlt "AGENT_NAME") str)
+    (save-excursion
+      (goto-char (point-min))
+      ;; first line in email could be some hidden line containing NO to field
+      (setq str (buffer-substring-no-properties (point-min) (point-max))))
+    (if (string-match "^To: \"?\\([^ ,]+\\)" str)
+        (setq rlt (match-string 1 str)))
+    (message "rlt=%s" rlt)
+    rlt))
+#+end_src
+
+** Address completion using Ido
+#+begin_src emacs-lisp :results none
+(defun my/ido-select-recipient ()
+  "Inserts a contact from the mu cache.
+Uses ido to select the contact from all those present in the database."
+  (interactive)
+  (insert
+   (ido-completing-read
+    "Recipient: "
+    (mapcar (lambda (contact-string)
+              (let* ((data (split-string contact-string ","))
+                     (name (when (> (length (car data)) 0)
+                             (car data)))
+                     (address (cadr data)))
+                (if name
+                    (format "%s <%s>" name address)
+                    address)))
+            (remove-if (lambda (string) (= 0 (length string)))
+             (split-string (shell-command-to-string "mu cfind --format=csv") "\n"))))))
+
+#+end_src
+* Programming Modes
+** General programming mode settings
+#+begin_src emacs-lisp :results none
+;; Enable fill column indicator for all programming modes
+(add-hook 'prog-mode-hook
+          '(lambda ()
+             (fci-mode) ; Fill-Column-Indicator
+             (linum-mode) ; Line numbers
+             ))
+#+end_src
+** C++ Mode
+*** Tips
+- =Imenu= provides a table of contents functionality for the current buffer. It can use =ido= for completion.
+- With =semantic-mode=
+  - =speedbar= gives a way to quickly jump to any part of the file
+  - =which-function= mode displays the current function in the mode-line
+
+*** Some settings
+#+begin_src emacs-lisp :results none
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (which-func-mode 1)))
+#+end_src
+    
+*** GGtags
+Reference: https://tuhdo.github.io/c-ide.html
+#+begin_src emacs-lisp :results none
+(use-package ggtags
+  :ensure t
+  :config
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+                (ggtags-mode 1))))
+
+  ;; Use ido for completion
+  (setq ggtags-completing-read-function
+        (lambda (&rest args)
+          (apply #'ido-completing-read
+                 (car args)
+                 (all-completions "" ggtags-completion-table)
+                 (cddr args))))
+  
+  )
+#+end_src
+
+** Send command to Eshell
+
+#+begin_src emacs-lisp :results none
+(defun my-eshell-execute (command)
+  "Insert text of current line in eshell and execute."
+  (interactive)
+  (require 'eshell)
+  (save-buffer)
+  (let ((buf (current-buffer)))
+      (unless (get-buffer eshell-buffer-name)
+      (eshell))
+      (display-buffer eshell-buffer-name t)
+      (switch-to-buffer-other-window eshell-buffer-name)
+      (end-of-buffer)
+      (eshell-kill-input)
+      (insert command)
+      (eshell-send-input)
+      (end-of-buffer)
+      (switch-to-buffer-other-window buf)
+      )
+  )
+
+(defun my-eshell-make-compile()
+  (interactive)
+  (my-eshell-execute "make && ./bin/diagmc")
+  )
+
+(evil-leader/set-key "cc" 'my-eshell-make-compile)
+#+end_src
+
+** Python-mode
+There are quite a few major modes for python out there, which confused me in the beginning. There's the native =python.el=, which ships with emacs, and there is a =python-mode.el=, which has to be installed explicitly. I am trying out =python.el= for now.
+
+#+BEGIN_SRC emacs-lisp :results silent
+    ;(use-package python-mode
+        ;:config
+        ; use IPython
+        ;(setq-default py-shell-name "ipython")
+        ;(setq-default py-which-bufname "IPython")
+        ; use the wx backend, for both mayavi and matplotlib
+        ;(setq py-python-command-args
+          ;'("--pylab=wx" "-colors" "Linux"))
+        ;(setq py-force-py-shell-name-p t)
+
+        ; switch to the interpreter after executing code
+        ;(setq py-shell-switch-buffers-on-execute-p t)
+        ;(setq py-switch-buffers-on-execute-p t)
+        ; don't split windows
+        ;(setq py-split-windows-on-execute-p nil)
+        ; try to automagically figure out indentation
+        ;(setq py-smart-indentation t)
+        ; (global-set-key (kbd "C-c C-l") 'py-execute-line)
+    ;)
+    (use-package python
+        :config
+        (setq python-shell-interpreter "ipython"
+            python-shell-interpreter-args "-i")
+        )
+#+END_SRC
+*** Send current paragraph to python 
+#+begin_src emacs-lisp :results none
+(define-key python-mode-map (kbd "<C-return>") 'python-shell-send-block)
+
+(defun python-shell-send-block (arg)
+  "Send the current block to inferior Python process."
+  (interactive "P")
+  (python-shell-send-region
+   (progn
+     (progn (backward-paragraph) (point-marker)))
+   (progn
+     (progn (forward-paragraph) (point-marker)))))
+
+#+end_src
+
+** Cython mode
+Need to make this behave nicely with =python.el=.
+#+begin_src emacs-lisp :results none :notangle
+;(use-package cython-mode
+  ;:ensure t)
+#+end_src
+
+** Ess
+Emacs speaks statistics!
+#+BEGIN_SRC emacs-lisp
+  (use-package ess
+    :ensure t
+    )
+#+END_SRC
+
+** Par-edit
+This is really cool major mode for writing Lisp.
+#+BEGIN_SRC emacs-lisp :results none
+(use-package paredit
+  :ensure t
+)
+#+END_SRC
+** Lua-mode
+#+begin_src emacs-lisp :results none
+(use-package lua-mode
+  :ensure t )
+#+end_src
+** Scheme
+#+begin_src emacs-lisp :results none
+(setq scheme-program-name "guile")
+#+end_src
+
+* Org-Mode
+** General
+#+BEGIN_SRC emacs-lisp
+
+(defun bh/hide-other ()
+  (interactive)
+  (save-excursion
+    ;; (org-back-to-heading 'invisible-ok)
+    (hide-other)
+    (org-cycle)
+    (org-cycle)
+    (org-cycle)))
+
+(defun bh/make-org-scratch ()
+  (interactive)
+  (find-file "/tmp/publish/scratch.org")
+  (gnus-make-directory "/tmp/publish"))
+
+;; The following lines are always needed.
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+#+END_SRC
+
+#+RESULTS:
+: org-iswitchb
+
+** LaTeX
+Enable =LaTeX-math-mode= when in org-mode.
+#+BEGIN_SRC emacs-lisp
+;; the usual auctex setup here...
+(autoload 'LaTeX-math-mode "latex")
+;(require 'latex)
+(add-hook 'org-mode-hook 'LaTeX-math-mode)
+#+END_SRC
+
+** Capture
+#+begin_src emacs-lisp :results none
+
+  (setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/org/private/todo.org" "Tasks")
+             "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree "~/org/private/journal.org")
+             "* %?\nEntered on %U\n  %i\n  %a")
+       ("m" "Email todo" entry (file+headline "~/org/private/todo.org" "Tasks")
+         "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
+))
+#+end_src
+
+** Lots of keybindings
+I am yet to use all of these, but I have them here as a reference for now.
+
+#+BEGIN_SRC emacs-lisp
+
+  ;; From http://doc.norang.ca/org-mode.html
+  ;; Custom Key Bindings
+  ;; (define-key evil-normal-state-map "\\oa" 'org-agenda)
+  ;; (define-key evil-normal-state-map "\\ot" 'org-todo)
+  ;(define-key evil-normal-state-map "\\oc" 'calendar)
+  ;; (define-key evil-normal-state-map "\\occ" 'org-capture)
+  ;; (define-key evil-normal-state-map "\\op" 'org-publish-current-project)
+  ;; (define-key evil-normal-state-map "\\oci" 'org-clock-in)
+  ;; (define-key evil-normal-state-map "\\oco" 'org-clock-out)
+
+  ;(global-set-key (kbd "C-c c") 'org-capture)
+
+  ; (global-set-key (kbd "<f12>") 'org-agenda)
+  ; (global-set-key (kbd "<f5>") 'bh/org-todo)
+  ;; (global-set-key (kbd "<S-f5>") 'bh/widen)
+  ;; (global-set-key (kbd "<f7>") 'bh/set-truncate-lines)
+  ;; (global-set-key (kbd "<f8>") 'org-cycle-agenda-files)
+  ;; (global-set-key (kbd "<f9> <f9>") 'bh/show-org-agenda)
+  ;; (global-set-key (kbd "<f9> b") 'bbdb)
+  ;; (global-set-key (kbd "<f9> c") 'calendar)
+  ;; (global-set-key (kbd "<f9> f") 'boxquote-insert-file)
+  ;; (global-set-key (kbd "<f9> g") 'gnus)
+  ;; (global-set-key (kbd "<f9> h") 'bh/hide-other)
+  ;; (global-set-key (kbd "<f9> n") 'bh/toggle-next-task-display)
+
+  ;; (global-set-key (kbd "<f9> I") 'bh/punch-in)
+  ;; (global-set-key (kbd "<f9> O") 'bh/punch-out)
+
+  ;; (global-set-key (kbd "<f9> o") 'bh/make-org-scratch)
+
+  ;; (global-set-key (kbd "<f9> r") 'boxquote-region)
+  ;; (global-set-key (kbd "<f9> s") 'bh/switch-to-scratch)
+
+  ;; (global-set-key (kbd "<f9> t") 'bh/insert-inactive-timestamp)
+  ;; (global-set-key (kbd "<f9> T") 'bh/toggle-insert-inactive-timestamp)
+
+  ;; (global-set-key (kbd "<f9> v") 'visible-mode)
+  ;; (global-set-key (kbd "<f9> l") 'org-toggle-link-display)
+  ;; (global-set-key (kbd "<f9> SPC") 'bh/clock-in-last-task)
+  ;; (global-set-key (kbd "C-<f9>") 'previous-buffer)
+  ;; (global-set-key (kbd "M-<f9>") 'org-toggle-inline-images)
+  ;; (global-set-key (kbd "C-x n r") 'narrow-to-region)
+  ;; (global-set-key (kbd "C-<f10>") 'next-buffer)
+  ;; (global-set-key (kbd "<f11>") 'org-clock-goto)
+  ;; (global-set-key (kbd "C-<f11>") 'org-clock-in)
+  ;; (global-set-key (kbd "C-s-<f12>") 'bh/save-then-publish)
+#+END_SRC
+
+#+RESULTS:
+
+#+BEGIN_SRC emacs-lisp
+
+;;--------------------------------------------------;; 
+;; org-mode
+;(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+
+
+(setq org-log-done 'time)
+;(setq org-log-done 'note)
+
+
+;; -------------------------------------------------- ;;
+;; Org-mode settings
+
+;; (setq org-agenda-files (quote ("~/org/today.org")))
+
+#+END_SRC
+
+#+RESULTS:
+: time
+
+** Agenda
+#+begin_src emacs-lisp :results none
+(setq org-agenda-files (quote ("~/org/private/todo.org")))
+#+end_src
+
+** Source Blocks
+#+BEGIN_SRC emacs-lisp
+; Syntax highlighting of code blocks
+(setq org-src-fontify-natively t)
+
+;; Fontify the whole line for headings (with a background color).
+(setq org-fontify-whole-heading-line t)
+; Highlight LaTeX 
+(eval-after-load 'org
+    '(setf org-highlight-latex-and-related '(latex)))
+
+; Code eblocks
+(setq org-src-fontify-natively t
+    org-src-window-setup 'current-window
+    org-src-strip-leading-and-trailing-blank-lines t
+    org-src-preserve-indentation t
+    org-src-tab-acts-natively t)
+#+END_SRC
+
+#+RESULTS:
+: t
+
+*** Background for code blocks
+This makes the code blocks stand out, with a slighly darker background than rest of the buffer. But this needs to be called before org-mode loads. So this is present in my =~/.emacs.d/init.el= as well, which loads this =.org= file. I am just including it here for reference.
+#+BEGIN_SRC emacs-lisp
+;(defface org-block-begin-line
+  ;'((t (:underline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF")))
+  ;"Face used for the line delimiting the begin of source blocks.")
+
+(defface org-block-background
+  '((t (:background "#FFFFEA")))
+  "Face used for the source block background.")
+
+;; (defface org-block-end-line
+;;   '((t (:overline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF")))
+;;   "Face used for the line delimiting the end of source blocks.")
+#+END_SRC
+
+#+RESULTS:
+: org-block-background
+
+** IPython notebook in Org-mode!
+This is definitely one of the coolest things that show off the power of org-mode.
+#+BEGIN_SRC emacs-lisp
+(use-package ob-ipython)
+#+END_SRC
+** Babel
+#+BEGIN_SRC emacs-lisp
+  ;; active Babel languages
+  (use-package org
+    :config
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+        '((sh         . t)
+          (emacs-lisp . t)
+          (lisp       . t)
+          (scheme     . t)
+          (python     . t)
+          (ruby       . t)
+          (dot        . t)
+          (css        . t)
+          (ledger        . t)
+          (R        . t)
+          (C        . t)
+          )
+     )
+
+     ;don't prompt me to confirm everytime I want to evaluate a block
+     (setq org-confirm-babel-evaluate nil)   
+
+     ; display/update images in the buffer after I evaluate
+     (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+
+     ; Pretty source code blocks
+     (setq org-src-tab-acts-natively t)
+    )
+
+#+END_SRC
+
+#+RESULTS:
+: t
+
+** More org mode
+#+BEGIN_SRC emacs-lisp
+
+; utf-8 bullets for org-mode 
+(use-package org-bullets
+   :ensure t
+   :init (add-hook 'org-mode-hook 'org-bullets-mode))
+#+END_SRC
+
+** Exporting
+#+begin_src emacs-lisp :results none
+(setq org-html-html5-fancy t)
+(setq org-html-doctype "html5")
+#+end_src
+
+** Publishing
+This is to publish my org mode files as html. I may decide to use some setup like this for my website.
+
+#+BEGIN_SRC emacs-lisp
+
+;; Org-mode Projects
+(require 'ox-publish)
+
+(defun my-publishing-function () 
+    ;(setq org-html-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
+    (setq org-twbs-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
+
+    ; Fix some of the default CSS 
+    (setq org-twbs-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org.css\"/>")
+
+
+)
+
+    ; Fix some default javascript to include an offset for the scrollspy
+    (defconst org-twbs-scripts
+    "<script type=\"text/javascript\">
+    $(function() {
+        'use strict';
+        $('.bs-docs-sidebar li').first().addClass('active');
+        $(document.body).scrollspy({target: '.bs-docs-sidebar', offset:100});
+        $('.bs-docs-sidebar').affix();
+    });</script>"
+    "Basic JavaScript that is needed by HTML files produced by Org mode.")
+(setq org-publish-project-alist
+      '(
+        ("org-notes"
+            :base-directory "~/org/"
+            :base-extension "org"
+            :publishing-directory "~/public_html/org/"
+            :preparation-function my-publishing-function
+            :publishing-function org-twbs-publish-to-html
+            :org-publish-use-timestamps-flag nil
+            :exclude ".*no-export.*"
+            :headline-levels 4
+            :section-numbers t
+            :with-toc t
+            :make-index t
+            :recursive t
+            :sitemap-filename "private/sitemap.org"
+            :sitemap-sans-extension t ; Useful for cool URIs
+            :auto-sitemap t
+            )
+        ("org-static"
+            :base-directory "~/org/"
+            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+            :publishing-directory "~/org_html/"
+            :recursive t
+            :publishing-function org-publish-attachment
+        )
+        ("org"
+            :components ("org-notes" "org-static")
+        )
+    ))
+
+
+#+END_SRC
+
+#+RESULTS:
+| org-notes  | :base-directory | ~/org/                 | :base-extension | org  | :publishing-directory | ~/public_html/org/ | :preparation-function | my-publishing-function | :publishing-function | org-twbs-publish-to-html | :org-publish-use-timestamps-flag | nil | :exclude              | .*no-export.* | :headline-levels | 4 | :section-numbers     | t                      | :with-toc | t | :make-index | t | :recursive | t | :sitemap-filename | private/sitemap.org | :sitemap-sans-extension | t | :auto-sitemap | t |
+| org-static | :base-directory | ~/org/                 | :base-extension | css\ | js\                   | png\               | jpg\                  | gif\                   | pdf\                 | mp3\                     | ogg\                             | swf | :publishing-directory | ~/org_html/   | :recursive       | t | :publishing-function | org-publish-attachment |           |   |             |   |            |   |                   |                     |                         |   |               |   |
+| org        | :components     | (org-notes org-static) |                 |      |                       |                    |                       |                        |                      |                          |                                  |     |                       |               |                  |   |                      |                        |           |   |             |   |            |   |                   |                     |                         |   |               |   |
+
+* LaTeX
+I need to find a way to use features of auctex in org-mode.
+** My Evil+AucTeX+YASnippet workflow
+I am still trying to grok all the features in AucTeX. Eventually, I would like to have more vim-like keys for my most used functions, since I still think that is superior to emacs-style keys. Meanwhile, this is really useful: [[ftp://ftp.gnu.org/gnu/auctex/11.86-extra/tex-ref.pdf]]
+- Use =\== (the '=' key) key to properly re-indent a selection.
+- I have a bunch of snippets defined in the =~/.emacs.d/snippets/latex-mode= directory.
+- Use =C-c ]= to close an environment.
+- Set the auctex math-mode prefix key to =;=, which is much easier to reach than anything else. 
+- =C-c .= selects the current environment, and expands it if pressed again.
+- =C-c )= to insert a reference.
+- =C-c [= to insert a citation.
+- How to move to next environment? Should bind that something like =]]=
+  A set of keys like this should be nice
+  | Next/Prev Section        | ]s, [s |
+  | Next/Prev Equation/Align | ]e, [e |
+  
+** AucTeX
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq LaTeX-math-abbrev-prefix ";")
+(setq LaTeX-math-list '(
+    (?8 "infty" nil)))
+
+(evil-define-key 'insert LaTeX-mode-map (kbd "==") (lambda () (interactive) (insert "&=")))
+(evil-define-key 'insert LaTeX-mode-map (kbd "= SPC") (lambda () (interactive) (insert "= ")))
+
+(defun my/latex-settings()
+
+  (setq-default TeX-engine 'luatex)
+
+  ;; Make Auctex aware of multidoc structure
+  (setq-default TeX-master nil)
+
+  ;; Don't ask to save when compiling
+  (setq TeX-save-query nil)
+
+  ;; Don't ask the command
+  (setq TeX-command-force "LaTeX")  
+  
+  ;; Enable parsing
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+
+  (setq TeX-source-correlate-mode t)
+  (setq TeX-quote-after-quote t)
+
+
+  (add-to-list 'TeX-view-program-list
+               '("Zathura" ("zathura " (mode-io-correlate " --synctex-forward %n:0:%b -x \"emacsclient +%{line} %{input}\" ") " %o") "zathura"))
+  ;; Once Giordano's change makes it into the next release of AUCTeX, then the you will only need to add Zathura to the view program selection:
+  (add-to-list 'TeX-view-program-selection
+               '(output-pdf "Zathura"))
+
+  ;; (add-to-list 'TeX-view-program-list '("zathura" zathura-forward-search))
+  ;; (setq TeX-view-program-selection '((output-pdf "zathura") (output-dvi "xdvi")))
+
+  ;; Shortcuts for typing math
+  (define-key LaTeX-mode-map (kbd "]=")
+    '(lambda () (interactive) (insert "&=")))
+  )
+
+
+(defun my/latex-math-mode-settings()
+  ;; AUCTeX can help you write subscripts and superscripts in math
+  ;; constructs by automatically inserting a pair of braces after
+  ;; typing <_> or <^> respectively and putting point between the
+  ;; braces.
+
+  ;;(setq-default TeX-electric-sub-and-superscript nil)
+  (setq-default LaTeX-electric-left-right-brace t)
+  (setq TeX-electric-math (cons "$" "$"))
+
+  ;; To enable LaTeX Math mode by default, 
+  ;; Set prefix for math mode abbreviations. Default is '
+  (setq LaTeX-math-abbrev-prefix ";")
+  )
+
+(my/latex-math-mode-settings)
+
+(add-hook 'LaTeX-mode-hook 'my/latex-settings)
+
+(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+
+;; RefTex
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
+
+
+    ;; ============ Latexmk setup ==============                                        
+    (defun run-latexmk ()
+      (interactive)
+      (let ((TeX-save-query nil)
+            (TeX-process-asynchronous nil)
+            (master-file (TeX-master-file)))
+        (TeX-save-document "")
+        (TeX-run-TeX "latexmk"
+                     (TeX-command-expand "latexmk -pdf %s" 'TeX-master-file)
+                     master-file))
+        (if (plist-get TeX-error-report-switches (intern master-file))
+            (TeX-next-error t)
+          (progn
+            (demolish-tex-help)
+            (minibuffer-message "latexmk: done."))))
+
+    (add-hook 'LaTeX-mode-hook (lambda ()
+        (push
+         '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+           :help "Run Latexmk on file")
+         TeX-command-list)))
+
+
+;; (use-package auctex-latexmk
+;;   :ensure t
+;;   :config
+;;   (auctex-latexmk-setup)
+;;   )
+#+END_SRC
+
+#+RESULTS:
+| (lambda nil (push (quote (Latexmk latexmk -pdf %s TeX-run-TeX nil t :help Run Latexmk on file)) TeX-command-list)) | preview-mode-setup | (lambda nil (setq TeX-command-list (cons (quote (Latexmk latexmk -pdf %s TeX-run-TeX nil t :help Run Latexmk on file)) TeX-command-list))) | turn-on-reftex | LaTeX-math-mode | my/latex-settings | (lambda nil (setq evil-shift-width tex-indent-basic)) |
+
+** Company-AucTeX
+Autocompletion in latex. 
+#+begin_src emacs-lisp :results none
+(use-package company-auctex
+  :ensure t
+  :init
+  ;; Set the delay before autcompletion activates to be 0.1
+  (setq company-idle-delay 0.05)
+  (company-auctex-init)
+)
+#+end_src
+
+* Customizations
+** Cycle the theme
+#+begin_src emacs-lisp :results none
+;; Cycle through this set of themes
+;; http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters
+
+(setq my-themes '(solarized-dark plan9))
+
+(setq my-cur-theme nil)
+(defun cycle-my-theme ()
+  "Cycle through a list of themes, my-themes"
+  (interactive)
+  (when my-cur-theme
+    (disable-theme my-cur-theme)
+    (setq my-themes (append my-themes (list my-cur-theme))))
+  (setq my-cur-theme (pop my-themes))
+  (load-theme my-cur-theme t))
+
+;; Switch to the first theme in the list above
+(cycle-my-theme)
+
+;; Bind this to C-t
+;; (global-set-key (kbd "C-t") 'cycle-my-theme)
+#+end_src
+
+** Adding date with command "C-c t"
+#+begin_src emacs-lisp :results none
+  (global-set-key (kbd "C-c t") 'insert-time-date)
+  (defun insert-time-date (prefix)
+      "Insert the current date. With prefix-argument, use ISO format. With
+     two prefix arguments, write out the day and month name."
+      (interactive "P")
+      (let ((format (cond
+                     ((not prefix) "[%B %d, %Y, %A]")
+                     ((t) "[%H:%M:%S; %d.%m.%Y]")
+                     ;; ((equal prefix '(4)) "[%H:%M:%S; %Y-%m-%d]"))))
+                    )))
+        (insert (format-time-string format))))
+#+end_src
+
+* Random
+#+begin_src emacs-lisp :results none
+(defun my/compile-run ()
+ (interactive)
+ (save-buffer)
+ (shell-command "make build && make run")
+ ;; (shell-command "make run")
+ )
+#+end_src
+
+
+
