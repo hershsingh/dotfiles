@@ -109,3 +109,6 @@ function wakeat() {
 #   $ wakeat 'tomorrow 6:30'
     sudo rtcwake --mode no --local --time $(date +%s -d "$1")
 }
+
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
