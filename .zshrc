@@ -41,3 +41,14 @@ zle -N zle-line-init
 if [ -z "$TMUX" ]; then
     tmux
 fi                     
+
+AIS_USER="hersh"
+mount_internal_ntfs_partition() {
+    # This needs to be executed as root, but will allow $AIS_USER to read/write.
+    gpasswd -a $AIS_USER disk
+    mkdir -p /mnt/c /mnt/d
+    chown $AIS_USER:$AIS_USER /mnt/c /mnt/d
+    mount -t ntfs-3g -o uid=$AIS_USER,gid=$AIS_USER,umask=0022 /dev/sda3
+}
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
