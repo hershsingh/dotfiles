@@ -1,2 +1,6 @@
 map d scroll half-down
 map u scroll half-up
+
+map \<Enter> :nohlsearch<CR>
+
+
