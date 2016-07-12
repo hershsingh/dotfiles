@@ -1087,108 +1087,111 @@ interface for all of them.
 
 ** Interface and Usability Tweaks
 #+begin_src emacs-lisp :results none
-;; https://groups.google.com/forum/#!topic/mu-discuss/Xlihr_JrNwA
-;; http://www.djcbsoftware.nl/code/mu/mu4e/Fancy-characters-and-Inconsolata.html
-;; (if (equal window-system 'x)
-;;     (progn
-;;       (set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
-;;       (set-face-font 'default "Inconsolata-12")))
-(setq mu4e-use-fancy-chars t)
-(setq mu4e-headers-has-child-prefix    '("+"  . " ┬●")  ; Parent
-      mu4e-headers-empty-parent-prefix '("-"  . " ─●")  ; Orphan
-      mu4e-headers-first-child-prefix  '("\\" . "└─●")  ; First child
-      mu4e-headers-duplicate-prefix    '("="  . "└≡")   ; Duplicate
-      mu4e-headers-default-prefix      '("|"  . "  ●")) ; Default. 
-
-(setq mu4e-headers-unread-mark    '("u" . "✉ ")
-      mu4e-headers-passed-mark   '("P" . "→ ") ;; ↪
-      mu4e-headers-replied-mark  '("R" . "← ")
-      mu4e-headers-trashed-mark  '("T" . "✗ ") ;; 🗑
-    )
-;; (mu4e-headers-seen-mark . ("S" . "")) ;; ✓ 🗸 ✔
-;; (mu4e-headers-attach-mark . ("a" . ":paperclip: "))
-;; (mu4e-headers-encrypted-mark . ("x" . ":closed_lock_with_key: "))
-;; (mu4e-headers-signed-mark . ("s" . ":lock_with_ink_pen: "))
-;; (mu4e-headers-unread-mark . ("u" . "✉ "))
-
-
-; Ignore my email address when sending replies, looks at 'mu4e-user-mail-addresss-list'
-(setq mu4e-dont-compose-reply-to-self t)
-
-; Compose messages in a new frame
-(setq mu4e-compose-in-new-frame t)
-
-(setq mu4e-view-show-addresses t)
-
-(defun my/mu4e-headers-mode-settings() 
-    (nlinum-mode -1)
-    (visual-line-mode -1)
-    (auto-fill-mode -1)
-    (set-default 'truncate-lines -1)
-
-    )
-(add-hook 'mu4e-headers-mode-hook 'my/mu4e-headers-mode-settings 'append)
-
-(defun my/mu4e-view-mode-settings()
-  ;; Use a variable width font when reading messages
-  ;; I think it makes text easier on the eyes
-  (variable-pitch-mode)
-)
-
-(add-hook 'mu4e-view-mode-hook 'my/mu4e-view-mode-settings 'append)
-
-(defun my/mu4e-compose-mode-settings() 
-    ; Hard word wrapping makes the emails harder to read on mobile devices
-    (auto-fill-mode -1)
-    (visual-line-mode t)
-    (visual-fill-column-mode t)
-    (flyspell-mode t)
-)
-(add-hook 'mu4e-compose-mode-hook 'my/mu4e-compose-mode-settings 'append)
-
-;; the headers to show in the headers list -- a pair of a field
-;; and its width, with `nil' meaning 'unlimited'
-;; (better only use that for the last field.)
-(setq mu4e-headers-fields
-    '( (:human-date          .  12)
-        (:maildir         .   10)
-        (:flags         .   4)
-        (:from          .  22)
-        (:subject       .  nil)))
-
-(setq mu4e-headers-visible-columns 110)
-(setq mu4e-headers-include-related t)
-
-;(setq mu4e-html2text-command "html2text --unicode-snob -b 72")
-(use-package mu4e-contrib)
-
-;; Fix some colors for HTML rendering by shr2text
-;; Not sure if this makes any differnece though
-(setq shr-color-visible-luminance-min 40)
-(setq shr-color-visible-distance-min 100)
-
-(setq mu4e-html2text-command 'mu4e-shr2text)
-;; enable inline images
-
-(setq mu4e-view-show-images t)
-;; use imagemagick, if available
-(when (fboundp 'imagemagick-register-types)
-(imagemagick-register-types))
-
-(add-to-list 'mu4e-view-actions
-    '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-
-;; I find vertical splits better on a widescreen
-(setq mu4e-split-view 'vertical)
-
-;; Kill message buffer after sending a message
-(setq message-kill-buffer-on-exit t)
-
-;; Ask before sending a message. Very important! 
-(add-hook 'message-send-hook
-(lambda ()
-    (unless (yes-or-no-p "Sure you want to send this?")
-    (signal 'quit nil))))
+(use-package mu4e
+  :config
+  ;; https://groups.google.com/forum/#!topic/mu-discuss/Xlihr_JrNwA
+  ;; http://www.djcbsoftware.nl/code/mu/mu4e/Fancy-characters-and-Inconsolata.html
+  ;; (if (equal window-system 'x)
+  ;;     (progn
+  ;;       (set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
+  ;;       (set-face-font 'default "Inconsolata-12")))
+  (setq mu4e-use-fancy-chars t)
+  (setq mu4e-headers-has-child-prefix    '("+"  . " ┬●")  ; Parent
+        mu4e-headers-empty-parent-prefix '("-"  . " ─●")  ; Orphan
+        mu4e-headers-first-child-prefix  '("\\" . "└─●")  ; First child
+        mu4e-headers-duplicate-prefix    '("="  . "└≡")   ; Duplicate
+        mu4e-headers-default-prefix      '("|"  . "  ●")) ; Default. 
+  
+  (setq mu4e-headers-unread-mark    '("u" . "✉ ")
+        mu4e-headers-passed-mark   '("P" . "→ ") ;; ↪
+        mu4e-headers-replied-mark  '("R" . "← ")
+        mu4e-headers-trashed-mark  '("T" . "✗ ") ;; 🗑
+      )
+  ;; (mu4e-headers-seen-mark . ("S" . "")) ;; ✓ 🗸 ✔
+  ;; (mu4e-headers-attach-mark . ("a" . ":paperclip: "))
+  ;; (mu4e-headers-encrypted-mark . ("x" . ":closed_lock_with_key: "))
+  ;; (mu4e-headers-signed-mark . ("s" . ":lock_with_ink_pen: "))
+  ;; (mu4e-headers-unread-mark . ("u" . "✉ "))
+  
+  
+  ; Ignore my email address when sending replies, looks at 'mu4e-user-mail-addresss-list'
+  (setq mu4e-dont-compose-reply-to-self t)
+  
+  ; Compose messages in a new frame
+  (setq mu4e-compose-in-new-frame t)
+  
+  (setq mu4e-view-show-addresses t)
+  
+  (defun my/mu4e-headers-mode-settings() 
+      (nlinum-mode -1)
+      (visual-line-mode -1)
+      (auto-fill-mode -1)
+      (set-default 'truncate-lines -1)
+  
+      )
+  (add-hook 'mu4e-headers-mode-hook 'my/mu4e-headers-mode-settings 'append)
+  
+  (defun my/mu4e-view-mode-settings()
+    ;; Use a variable width font when reading messages
+    ;; I think it makes text easier on the eyes
+    (variable-pitch-mode)
+  )
+  
+  (add-hook 'mu4e-view-mode-hook 'my/mu4e-view-mode-settings 'append)
+  
+  (defun my/mu4e-compose-mode-settings() 
+      ; Hard word wrapping makes the emails harder to read on mobile devices
+      (auto-fill-mode -1)
+      (visual-line-mode t)
+      (visual-fill-column-mode t)
+      (flyspell-mode t)
+  )
+  (add-hook 'mu4e-compose-mode-hook 'my/mu4e-compose-mode-settings 'append)
+  
+  ;; the headers to show in the headers list -- a pair of a field
+  ;; and its width, with `nil' meaning 'unlimited'
+  ;; (better only use that for the last field.)
+  (setq mu4e-headers-fields
+      '( (:human-date          .  12)
+          (:maildir         .   10)
+          (:flags         .   4)
+          (:from          .  22)
+          (:subject       .  nil)))
+  
+  (setq mu4e-headers-visible-columns 110)
+  (setq mu4e-headers-include-related t)
+  
+  ;(setq mu4e-html2text-command "html2text --unicode-snob -b 72")
+  (use-package mu4e-contrib)
+  
+  ;; Fix some colors for HTML rendering by shr2text
+  ;; Not sure if this makes any differnece though
+  (setq shr-color-visible-luminance-min 40)
+  (setq shr-color-visible-distance-min 100)
+  
+  (setq mu4e-html2text-command 'mu4e-shr2text)
+  ;; enable inline images
+  
+  (setq mu4e-view-show-images t)
+  ;; use imagemagick, if available
+  (when (fboundp 'imagemagick-register-types)
+  (imagemagick-register-types))
+  
+  (add-to-list 'mu4e-view-actions
+      '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+  
+  ;; I find vertical splits better on a widescreen
+  (setq mu4e-split-view 'vertical)
+  
+  ;; Kill message buffer after sending a message
+  (setq message-kill-buffer-on-exit t)
+  
+  ;; Ask before sending a message. Very important! 
+  (add-hook 'message-send-hook
+  (lambda ()
+      (unless (yes-or-no-p "Sure you want to send this?")
+      (signal 'quit nil))))
+  )
 #+end_src
 
 ** Don't let shr change the background color for HTML emails
