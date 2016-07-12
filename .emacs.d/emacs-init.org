@@ -546,7 +546,7 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
 ** Nerd-commenter
 #+BEGIN_SRC emacs-lisp
 (use-package evil-nerd-commenter
-  :init
+  :config
   (evilnc-default-hotkeys)
   )
 #+END_SRC
