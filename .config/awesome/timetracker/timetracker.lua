@@ -1,6 +1,6 @@
 -- Parameters
-filename_timetracker = homedir .. '/timetracker.txt'
---filename_tracker_result = homedir .. '/timetracker_result.txt'
+filename_timetracker = homedir .. '/.timetracker/timetracker.txt'
+filename_tracker_result = homedir .. '/.timetracker/timetracker_result.txt'
 local timetracker_lastenter = 0
 local timetracker_lastexit = 0
 local timetracker_result=0
