@@ -1067,7 +1067,7 @@ interface for all of them.
   (setq user-full-name "Hersh Singh")
   (setq user-mail-address "hersh@phy.duke.edu")
   
-  (setq  mu4e-user-mail-address-list '("hersh@phy.duke.edu" "hersh.singh@duke.edu" "hs171@duke.edu"))
+  (setq  mu4e-user-mail-address-list '("hersh@phy.duke.edu"  "hs171@phy.duke.edu" "hersh.singh@duke.edu" "hs171@duke.edu"))
   ;; smtp mail setting; these are the same that `gnus' uses. 
   (setq
       message-send-mail-function   'smtpmail-send-it
