@@ -504,20 +504,21 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 ** Smart-mode-line
 I subsituting this for powerline, after experiencing some rendering issues with powerline.
 #+BEGIN_SRC emacs-lisp
-  ; Smart-mode line
-  ;; (use-package smart-mode-line-powerline-theme)
-  (use-package smart-mode-line
-    :config
-      (display-time-mode)
-      ;; (setq powerline-arrow-shape 'curve)
-      ;; (setq powerline-default-separator-dir '(right . left))
-      ;; (setq sml/theme 'powerline)
-      ;; (setq sml/mode-width 0)
-      ;; (setq sml/name-width 20)
-      ;; (rich-minority-mode 1)
-      ;; (setf rm-blacklist "")
-      (sml/setup)
-    )
+;; Smart-mode line
+;; (use-package smart-mode-line-powerline-theme)
+(use-package smart-mode-line
+  :ensure t
+  :config
+  (display-time-mode)
+  (setq powerline-arrow-shape 'curve)
+  ;; (setq powerline-default-separator-dir '(right . left))
+  ;; (setq sml/theme 'powerline)
+  ;; (setq sml/mode-width 0)
+  ;; (setq sml/name-width 20)
+  ;; (rich-minority-mode 1)
+  ;; (setf rm-blacklist "")
+  (sml/setup)
+  )
 #+END_SRC
 
 #+RESULTS:
@@ -546,6 +547,7 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
 ** Nerd-commenter
 #+BEGIN_SRC emacs-lisp :results none
 (use-package evil-nerd-commenter
+  :ensure t
   :config
   ;; Emacs key bindings
   (global-set-key (kbd "M-;") 'evilnc-comment-or-uncomment-lines)
@@ -554,8 +556,6 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
   (global-set-key (kbd "C-c p") 'evilnc-comment-or-uncomment-paragraphs)
 
   ;; Vim key bindings
-  (require 'evil-leader)
-  (global-evil-leader-mode)
   (evil-leader/set-key
     "ci" 'evilnc-comment-or-uncomment-lines
     "cl" 'evilnc-quick-comment-or-uncomment-to-the-line
@@ -1048,6 +1048,7 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   (diminish 'company-mode)
   (diminish 'visual-line-mode)
   (diminish 'abbrev-mode "Abv")
+  (diminish 'evil-mode)
   )
 #+end_src
 
@@ -1449,7 +1450,6 @@ This is really cool major mode for writing Lisp.
   :ensure t
   )
 #+end_src
-
 
 * Org-Mode
 ** General
