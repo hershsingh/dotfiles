@@ -787,7 +787,10 @@ View the kill-ring
 This configures Magit and Evil to play well with each other
 #+begin_src emacs-lisp :results none
 (use-package evil-magit
-  :ensure t)
+  :ensure t
+  :init
+  (evil-magit-init)
+)
 #+end_src
 
 ** Hydra
@@ -1293,7 +1296,7 @@ Uses ido to select the contact from all those present in the database."
 
 #+end_src
 * Programming Modes
-** General programming mode settings
+* General programming mode settings
 #+begin_src emacs-lisp :results none
 ;; Enable fill column indicator for all programming modes
 (add-hook 'prog-mode-hook
@@ -1301,6 +1304,7 @@ Uses ido to select the contact from all those present in the database."
              (fci-mode) ; Fill-Column-Indicator
              (linum-mode) ; Line numbers
              ))
+(evil-leader/set-key "i" 'imenu)
 #+end_src
 ** C++ Mode
 *** Tips
@@ -1369,7 +1373,7 @@ Reference: https://tuhdo.github.io/c-ide.html
 #+end_src
 
 ** Python-mode
-There are quite a few major modes for python out there, which confused me in the beginning. There's the native =python.el=, which ships with emacs, and there is a =python-mode.el=, which has to be installed explicitly. I am trying out =python.el= for now.
+There are quite a fewamajor modes for python out there, which confused me in the beginning. There's the native =python.el=, which ships with emacs, and there is a =python-mode.el=, which has to be installed explicitly. I am trying out =python.el= for now.
 
 #+BEGIN_SRC emacs-lisp :results silent
     ;(use-package python-mode
