@@ -66,7 +66,8 @@ Plugin 'lervag/vimtex'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/syntastic'
 Plugin 'jamessan/vim-gnupg'
-Plugin 'w0ng/vim-hybrid'
+"Plugin 'w0ng/vim-hybrid'
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'bling/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'tpope/vim-surround'
@@ -168,9 +169,15 @@ endfunction
 " }}}
 
 " Plugin: Colorscheme Hybrid"{{{
+    "let g:hybrid_use_Xresources = 1 
+    "set background=dark 
+    "colorscheme hybrid
+"}}}
+
+" Plugin: Colorscheme Solarized"{{{
     let g:hybrid_use_Xresources = 1 
     set background=dark 
-    colorscheme hybrid
+    colorscheme solarized
 "}}}
 
 " Plugin: Gundo {{{
