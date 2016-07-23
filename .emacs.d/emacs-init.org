@@ -815,6 +815,7 @@ This configures Magit and Evil to play well with each other
         (latex-mode . hydra-major-latex/body)
         (org-mode . hydra-major-org/body)
         (mu4e-compose-mode . hydra-major-mu4e-compose/body)
+        (mu4e-view-mode . hydra-major-mu4e-view/body)
         (c++-mode . hydra-major-c/body)
         (c-mode . hydra-major-c/body)
         ))
@@ -846,6 +847,13 @@ This configures Magit and Evil to play well with each other
 "
   ("a" my/mu4e-deer-attachment "Add attachment using ranger")
   ("c" my/ido-select-recipient "Select a contact using ido")
+  )
+
+(defhydra hydra-major-mu4e-view(:color blue)
+  " ^mu4e compose mode^
+-------------------
+"
+  ("l" my/mu4e-view-preview-latex "Preview LaTeX fragments")
   )
 
 ;; C-mode
@@ -1292,6 +1300,34 @@ Uses ido to select the contact from all those present in the database."
              (split-string (shell-command-to-string "mu cfind --format=csv") "\n"))))))
 
 #+end_src
+** Preview LaTeX in mu4e-view window
+This function copies the current text into a temporary =org= file, and then uses =org-preview-latex-fragment= to display the LaTeX formula in the current mail.
+
+#+begin_src emacs-lisp :results none
+(defun my/mu4e-view-preview-latex()
+  (interactive)
+  (with-current-buffer (find-file-noselect "/tmp/_mu4e-view_.org")
+    (read-only-mode -1)
+    ;; (erase-buffer)
+    (delete-region (point-min) (point-max))
+    (insert-buffer "*mu4e-view*")
+    ;; (mu4e~delete-all-overlays)
+    ;; (insert (mu4e-view-message-text msg))
+    (goto-char (point-min))
+    (mu4e~fontify-cited)
+    (mu4e~fontify-signature)
+    (mu4e~view-make-urls-clickable)
+    (with-temp-message "Writing file..."
+      (save-buffer))
+    (message "Writing file...done")
+    ;; Preview latex code
+    (switch-to-buffer "_mu4e-view_.org")
+    (org-preview-latex-fragment)
+    (mu4e-view-mode)
+    )
+  )
+#+end_src
+
 * Programming Modes
 ** General programming mode settings
 #+begin_src emacs-lisp :results none
