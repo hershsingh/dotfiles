@@ -22,11 +22,53 @@ naughty = require("naughty")
 
 -- Dynamic Tagging
 -- eminent = require("eminent")
+local assault = require('assault')
+myassault = assault({
+  battery = "BAT0", -- battery ID to get data from
+   font = "Droid Sans 8",
+   adapter = "AC", -- ID of the AC adapter to get data from
+   width = 20, -- width of battery
+   height = 12, -- height of battery
+   bolt_width = 15, -- width of charging bolt
+   bolt_height = 6, -- height of charging bolt
+   stroke_width = 2, -- width of battery border
+   peg_top = (calculated), -- distance from the top of the battery to the start of the peg
+   --peg_height = (height / 3), -- height of the peg
+   peg_width = 2, -- width of the peg
+   font = beautiful.font, -- font to use
+   critical_level = 0.20, -- battery percentage to mark as critical (between 0 and 1, default is 10%)
+   normal_color = beautiful.fg_normal, -- color to draw the battery when it's discharging
+   critical_color = "#ff0000", -- color to draw the battery when it's at critical level
+   charging_color = "#00ff00" -- color to draw the battery when it's charging
+})
 
+myassault2 = assault({
+  battery = "BAT1", -- battery ID to get data from
+   --font = beautiful.font, -- font to use
+   adapter = "AC", -- ID of the AC adapter to get data from
+   width = 20, -- width of battery
+   height = 12, -- height of battery
+   bolt_width = 15, -- width of charging bolt
+   bolt_height = 6, -- height of charging bolt
+   stroke_width = 2, -- width of battery border
+   peg_top = (calculated), -- distance from the top of the battery to the start of the peg
+   --peg_height = (height / 3), -- height of the peg
+   peg_width = 2, -- width of the peg
+   --font = beautiful.font, -- font to use
+   critical_level = 0.20, -- battery percentage to mark as critical (between -1 and 1, default is 10%)
+   normal_color = beautiful.fg_normal, -- color to draw the battery when it's discharging
+   critical_color = "#ff0000", -- color to draw the battery when it's at critical level
+   charging_color = "#00ff00" -- color to draw the battery when it's charging
+})
 
+-- Battery widget
 --------------- Naughty notification properties -------------
 naughty.config.defaults.font             = "Droid Sans 8"
 ---------------------------------------------------------------
+--local lgi = require("lgi")
+--local cairo = lgi.cairo
+--local Pango = lgi.Pango
+--naughty.notify({text = Pango.FontDescription.from_string("Iosevka 8")})
 
 -- {{{ ERROR HANDLING
 -- Check if awesome encountered an error during startup and fell back to
@@ -63,9 +105,9 @@ end
 -- {{{ Variable definitions
 homedir = os.getenv('HOME')
 -- Themes define colours, icons, and wallpapers
-beautiful.init(homedir .. "/.config/awesome/themes/dust/theme.lua")
+beautiful.init(homedir .. "/.config/awesome/themes/zenburn-custom/theme.lua")
 --beautiful.init("/usr/share/awesome/themes/zenburn/theme.lua")
-wallpaper_vertical = theme.wallpaper
+--wallpaper_vertical = theme.wallpaper
 
 -- Set the ~/background as the wallpaper if it exists
 function file_exists(name)
@@ -77,6 +119,7 @@ if file_exists(homedir .. "/background") then
 end
 
 theme.font = "Droid Sans 8"
+--theme.tasklist_font = "Iosevka Bold 10"
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt -e tmux"
@@ -153,6 +196,7 @@ mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
 -- {{{ Wibox
 -- Create a textclock widget
 mytextclock = awful.widget.textclock()
+mytextclock:set_font("Iosevka Bold 8")
 
 -- CUSTOM: Create an empty wibox to place the conky bar
 --mystatusbar = awful.wibox({ position = "bottom", screen = 1, ontop = false, width = 1, height = 16 })
@@ -226,10 +270,32 @@ volume_bar:set_value(0.5)
 
 volume_tooltip = awful.tooltip({ objects = { volume_bar }})
 
+-- 
+vpnwidget = wibox.widget.textbox()
+vpnwidget:set_text(" VPN: N/A ")
+vpnwidget:set_font("Iosevka Bold 8")
+vpnwidgettimer = timer({ timeout = 5 })
+vpnwidgettimer:connect_signal("timeout",
+  function()
+    status = io.popen("pgrep openvpn", "r")
+    if status:read() == nil then
+        vpnwidget:set_markup(" <span color='#FF2A2A'>VPN: OFF</span> ")
+    else
+        vpnwidget:set_markup(" <span color='#00FF00'>VPN: ON</span> ")
+    end
+    status:close()    
+  end    
+)    
+vpnwidgettimer:start()
 --Example with cpu_graph created previously with default color :
 --blingbling.popups.htop(cpu_graph, { terminal =  terminal })
 
+mail_icon = wibox.widget.imagebox()
+mail_icon:set_image(awful.util.getdir("config") .. "/email-closed.png")
+
+mail_widget_container = wibox.widget
 mail_widget = wibox.widget.textbox()
+mail_widget:set_font("Iosevka Bold 8")
 function mail_update(widget)
         local fd = io.popen("ls ~/Maildir/INBOX/new | wc -w | tr -d '\n'")
         local mail_new = fd:read("*all")
@@ -242,7 +308,7 @@ mail_widget_timer = timer({timeout = 1})
 mail_widget_timer:connect_signal(
         "timeout",
         function()
-                mail_widget:set_text(" ✉ " .. (mail_update()) .. " ")
+                mail_widget:set_text(" " .. (mail_update()) .. " ")
                 --stuff = " [Unread mail: " .. (mail_update()) .. " ]"
                 --naughty.notify({text=stuff})
         end
@@ -261,7 +327,8 @@ for s = 1, screen.count() do
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
+    --mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.all, mytaglist.buttons)
+    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.filter.noempty, mytaglist.buttons)
 
     -- Create a tasklist widget
     mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
@@ -284,13 +351,15 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
     if s == 1 then right_layout:add(wibox.widget.systray()) end
+    right_layout:add(mail_icon)
     right_layout:add(mail_widget)
     right_layout:add(volume_bar)
+    right_layout:add(cores_graphs[2])
+    right_layout:add(vpnwidget)
+    right_layout:add(myassault)
+    right_layout:add(myassault2)
     right_layout:add(mytextclock)
     right_layout:add(mylayoutbox[s])
-    right_layout:add(cores_graphs[2])
-    --right_layout:add(powerline_widget)
-
 
     -- Now bring it all together (with the tasklist in the middle)
     local layout = wibox.layout.align.horizontal()
@@ -913,6 +982,9 @@ mytimer:connect_signal("timeout",
         end)
 
 -----------------------------------------------------
+
+--
+--
 -- Startup Stuff
 
 -- Composite Manager - required for transparency effects
