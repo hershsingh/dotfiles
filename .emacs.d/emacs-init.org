@@ -530,7 +530,7 @@ I subsituting this for powerline, after experiencing some rendering issues with 
   :ensure t
   :init
   ;; This must be set before enabling yas-global-mode
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets") yas-installed-snippets-dir)
   :config
   (yas-global-mode 1)
   )
