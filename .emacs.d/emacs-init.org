@@ -1430,7 +1430,7 @@ There are quite a few major modes for python out there, which confused me in the
     (use-package python
         :config
         (setq python-shell-interpreter "ipython"
-            python-shell-interpreter-args "-i")
+            python-shell-interpreter-args "-i --simple-prompt")
         )
 #+END_SRC
 *** Send current paragraph to python 
