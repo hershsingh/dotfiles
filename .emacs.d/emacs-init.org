@@ -1916,6 +1916,14 @@ Autocompletion in latex.
 )
 #+end_src
 
+** magic-latex-buffer
+#+begin_src emacs-lisp :results none
+(use-package magic-latex-buffer
+  :ensure t
+  :config
+    (add-hook 'latex-mode-hook 'magic-latex-buffer)
+  )
+#+end_src
 * Customizations
 ** Cycle the theme
 #+begin_src emacs-lisp :results none
