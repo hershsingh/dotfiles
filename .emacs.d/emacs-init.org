@@ -1924,6 +1924,14 @@ Autocompletion in latex.
     (add-hook 'latex-mode-hook 'magic-latex-buffer)
   )
 #+end_src
+
+** Outline Minor Mode
+#+begin_src emacs-lisp :results none
+(add-hook 'LaTeX-mode-hook 'outline-minor-mode)
+
+(evil-leader/set-key "ot" 'outline-toggle-children)
+#+end_src
+
 * Customizations
 ** Cycle the theme
 #+begin_src emacs-lisp :results none
