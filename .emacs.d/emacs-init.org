@@ -1947,6 +1947,18 @@ Autocompletion in latex.
 (evil-leader/set-key "ot" 'outline-toggle-children)
 #+end_src
 
+** Prettify-symbols
+#+begin_src emacs-lisp :results none
+(add-hook 'LaTeX-mode-hook 'prettify-symbols-mode)
+
+(add-hook 'LaTeX-mode-hook
+        (lambda ()
+            (push '("\\>" . ?⟩) prettify-symbols-alist)
+            (push '("\\<" . ?⟨) prettify-symbols-alist)
+            )
+        )
+#+end_src
+
 * Customizations
 ** Cycle the theme
 #+begin_src emacs-lisp :results none
