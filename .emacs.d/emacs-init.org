@@ -1505,7 +1505,6 @@ This is really cool major mode for writing Lisp.
 * Org-Mode
 ** General
 #+BEGIN_SRC emacs-lisp
-
 (defun bh/hide-other ()
   (interactive)
   (save-excursion
@@ -1525,7 +1524,6 @@ This is really cool major mode for writing Lisp.
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
-
 #+END_SRC
 
 #+RESULTS:
@@ -1542,15 +1540,14 @@ Enable =LaTeX-math-mode= when in org-mode.
 
 ** Capture
 #+begin_src emacs-lisp :results none
-
-  (setq org-capture-templates
+(setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/org/private/todo.org" "Tasks")
-             "* TODO %?\n  %i\n  %a")
+         "* TODO %?\n  %i\n  %a")
         ("j" "Journal" entry (file+datetree "~/org/private/journal.org")
-             "* %?\nEntered on %U\n  %i\n  %a")
-       ("m" "Email todo" entry (file+headline "~/org/private/todo.org" "Tasks")
+         "* %?\nEntered on %U\n  %i\n  %a")
+        ("m" "Email todo" entry (file+headline "~/org/private/todo.org" "Tasks")
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
-))
+        ))
 #+end_src
 
 ** Lots of keybindings
@@ -1735,62 +1732,59 @@ This is definitely one of the coolest things that show off the power of org-mode
 This is to publish my org mode files as html. I may decide to use some setup like this for my website.
 
 #+BEGIN_SRC emacs-lisp
-
 ;; Org-mode Projects
 (use-package ox-publish) 
 
 (defun my-publishing-function () 
-    ;(setq org-html-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
-    (setq org-twbs-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
+  ;;(setq org-html-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
+  (setq org-twbs-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
 
-    ; Fix some of the default CSS 
-    (setq org-twbs-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org.css\"/>")
+  ;; Fix some of the default CSS 
+  (setq org-twbs-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org.css\"/>")
 
 
-)
+  )
 
-    ; Fix some default javascript to include an offset for the scrollspy
-    (defconst org-twbs-scripts
-    "<script type=\"text/javascript\">
+;; Fix some default javascript to include an offset for the scrollspy
+(defconst org-twbs-scripts
+  "<script type=\"text/javascript\">
     $(function() {
         'use strict';
         $('.bs-docs-sidebar li').first().addClass('active');
         $(document.body).scrollspy({target: '.bs-docs-sidebar', offset:100});
         $('.bs-docs-sidebar').affix();
     });</script>"
-    "Basic JavaScript that is needed by HTML files produced by Org mode.")
+  "Basic JavaScript that is needed by HTML files produced by Org mode.")
 (setq org-publish-project-alist
       '(
         ("org-notes"
-            :base-directory "~/org/"
-            :base-extension "org"
-            :publishing-directory "~/public_html/org/"
-            :preparation-function my-publishing-function
-            :publishing-function org-twbs-publish-to-html
-            :org-publish-use-timestamps-flag nil
-            :exclude ".*no-export.*"
-            :headline-levels 4
-            :section-numbers t
-            :with-toc t
-            :make-index t
-            :recursive t
-            :sitemap-filename "private/sitemap.org"
-            :sitemap-sans-extension t ; Useful for cool URIs
-            :auto-sitemap t
-            )
+         :base-directory "~/org/"
+         :base-extension "org"
+         :publishing-directory "~/public_html/org/"
+         :preparation-function my-publishing-function
+         :publishing-function org-twbs-publish-to-html
+         :org-publish-use-timestamps-flag nil
+         :exclude ".*no-export.*"
+         :headline-levels 4
+         :section-numbers t
+         :with-toc t
+         :make-index t
+         :recursive t
+         :sitemap-filename "private/sitemap.org"
+         :sitemap-sans-extension t ; Useful for cool URIs
+         :auto-sitemap t
+         )
         ("org-static"
-            :base-directory "~/org/"
-            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-            :publishing-directory "~/org_html/"
-            :recursive t
-            :publishing-function org-publish-attachment
-        )
+         :base-directory "~/org/"
+         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+         :publishing-directory "~/org_html/"
+         :recursive t
+         :publishing-function org-publish-attachment
+         )
         ("org"
-            :components ("org-notes" "org-static")
-        )
-    ))
-
-
+         :components ("org-notes" "org-static")
+         )
+        ))
 #+END_SRC
 
 #+RESULTS:
