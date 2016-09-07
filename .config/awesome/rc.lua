@@ -546,7 +546,7 @@ globalkeys = awful.util.table.join(
             showCurrentSong() 
         end),
     -- Screenshot for PrintScreen Key
-    awful.key({modkey, }, "Print",function () awful.util.spawn( "import -window root " .. homedir ..  "/screenshot" .. os.date("_%y-%m-%d_%H-%M-%S").. ".png" ) end),
+    awful.key({modkey, }, "Print",function () awful.util.spawn( "import " .. homedir ..  "/screenshot" .. os.date("_%y-%m-%d_%H-%M-%S").. ".png" ) end),
 
      -- Brightness
     awful.key({ }, "XF86MonBrightnessDown", function ()
