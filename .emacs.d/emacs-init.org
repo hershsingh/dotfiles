@@ -854,7 +854,7 @@ This configures Magit and Evil to play well with each other
   )
 
 (defhydra hydra-major-mu4e-view(:color blue)
-  " ^mu4e compose mode^
+  " ^mu4e major mode^
 -------------------
 "
   ("l" my/mu4e-view-preview-latex "Preview LaTeX fragments")
