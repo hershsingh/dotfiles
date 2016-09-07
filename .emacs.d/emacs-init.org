@@ -827,11 +827,15 @@ This configures Magit and Evil to play well with each other
 #+begin_src emacs-lisp :results none
 ;; LaTeX mode
 (defhydra hydra-major-latex(:color blue :hint nil)
-  "^AucTeX shortcuts^"
+  "^AucTeX shortcuts^
+  ----------------
+  "
   ("l" reftex-label "Insert label")
-  ("c" reftex-citation "Insert Citation")
-  ("]" LaTeX-close-environment "Close environment")
+  ("(" reftex-citation "Insert Citation")
   ("c" TeX-command-master "Compile")
+  ("v" TeX-view "View")
+  ("f" outline-toggle-children "Toggle fold")
+  ("]" LaTeX-close-environment "Close environment")
   ("e" (LaTeX-environment 1) "Modify Current environment")
   )
 
