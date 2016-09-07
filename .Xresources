@@ -132,6 +132,7 @@ URxvt*color15: S_base3
 ! ROFI Color theme
 ! User: Rasi
 ! ------------------------------------------------------------------------------
+rofi.font: Iosevka 14
 rofi.color-enabled: true
 rofi.color-window: #002b37, #002b37, #003642
 rofi.color-normal: #002b37, #819396, #003643, #008ed4, #ffffff
