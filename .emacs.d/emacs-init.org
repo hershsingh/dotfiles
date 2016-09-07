@@ -1268,7 +1268,7 @@ Evil keybindings for mu4e.
 #+end_src
 
 ** Email templates using YASnippet
-This little function is used in a snippet to figure out the first name of the recipient.
+These little functions are used in snippets to figure out the name of the recipient.
 #+begin_src emacs-lisp :results none
 ;; http://blog.binchen.org/posts/how-to-use-yasnippets-to-produce-email-templates-in-emacs.html
 (defun my/yas-get-first-name-from-to-field ()
@@ -1278,6 +1278,17 @@ This little function is used in a snippet to figure out the first name of the re
       ;; first line in email could be some hidden line containing NO to field
       (setq str (buffer-substring-no-properties (point-min) (point-max))))
     (if (string-match "^To: \"?\\([^ ,]+\\)" str)
+        (setq rlt (match-string 1 str)))
+    (message "rlt=%s" rlt)
+    rlt))
+
+(defun my/yas-get-last-name-from-to-field ()
+  (let ((rlt "AGENT_NAME") str)
+    (save-excursion
+      (goto-char (point-min))
+      ;; first line in email could be some hidden line containing NO to field
+      (setq str (buffer-substring-no-properties (point-min) (point-max))))
+    (if (string-match "^To: \"?[^ ,]+[ ,]+\\([^ ]+\\)" str)
         (setq rlt (match-string 1 str)))
     (message "rlt=%s" rlt)
     rlt))
