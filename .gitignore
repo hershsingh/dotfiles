@@ -1,1 +1,3 @@
+*.zsh/cache/
+**/.yas-compiled-snippets.el
 *.un~
