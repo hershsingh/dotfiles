@@ -1735,9 +1735,14 @@ This makes the code blocks stand out, with a slighly darker background than rest
 
 ** IPython notebook in Org-mode!
 This is definitely one of the coolest things that show off the power of org-mode.
-#+BEGIN_SRC emacs-lisp
-(use-package ob-ipython)
+#+BEGIN_SRC emacs-lisp :result none
+(use-package ob-ipython
+  :ensure t
+  )
 #+END_SRC
+
+#+RESULTS:
+
 ** Babel
 #+BEGIN_SRC emacs-lisp
 ;; active Babel languages
