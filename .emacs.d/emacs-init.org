@@ -1056,13 +1056,17 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 (use-package diminish
   :ensure t
   :init
+  (diminish 'abbrev-mode)
+  (diminish 'evil-mode)
+  (diminish 'company-mode)
+  (diminish 'org-mode)
+  (diminish 'auto-revert-mode)
   (diminish 'yas-minor-mode)
   (diminish 'undo-tree-mode)
   (diminish 'org-indent-mode)
   (diminish 'company-mode)
   (diminish 'visual-line-mode)
   (diminish 'abbrev-mode "Abv")
-  (diminish 'evil-mode)
   )
 #+end_src
 
