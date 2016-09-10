@@ -1735,35 +1735,34 @@ This is definitely one of the coolest things that show off the power of org-mode
 #+END_SRC
 ** Babel
 #+BEGIN_SRC emacs-lisp
-  ;; active Babel languages
-  (use-package org
-    :config
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-        '((sh         . t)
-          (emacs-lisp . t)
-          (lisp       . t)
-          (scheme     . t)
-          (python     . t)
-          (ruby       . t)
-          (dot        . t)
-          (css        . t)
-          (ledger        . t)
-          (R        . t)
-          (C        . t)
-          )
+;; active Babel languages
+(use-package org
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((sh         . t)
+     (emacs-lisp . t)
+     (lisp       . t)
+     (scheme     . t)
+     (python     . t)
+     (ruby       . t)
+     (dot        . t)
+     (css        . t)
+     (ledger        . t)
+     (R        . t)
+     (C        . t)
      )
+   )
 
-     ;don't prompt me to confirm everytime I want to evaluate a block
-     (setq org-confirm-babel-evaluate nil)   
+                                        ;don't prompt me to confirm everytime I want to evaluate a block
+  (setq org-confirm-babel-evaluate nil)   
 
-     ; display/update images in the buffer after I evaluate
-     (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+                                        ; display/update images in the buffer after I evaluate
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
-     ; Pretty source code blocks
-     (setq org-src-tab-acts-natively t)
-    )
-
+                                        ; Pretty source code blocks
+  (setq org-src-tab-acts-natively t)
+  )
 #+END_SRC
 
 #+RESULTS:
