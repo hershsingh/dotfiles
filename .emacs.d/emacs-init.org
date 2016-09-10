@@ -1122,7 +1122,19 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
       helm-imenu-fuzzy-match    t)
 
 (evil-leader/set-key "i" 'helm-semantic-or-imenu)
-
+#+end_src
+** Helm-flyspell
+#+begin_src emacs-lisp :results none
+(use-package helm-flyspell
+  :ensure t
+  :config
+    (define-key evil-normal-state-map "z=" 'helm-flyspell-correct)
+)
+#+end_src
+** Helm-unicode
+#+begin_src emacs-lisp :results none
+(use-package helm-unicode
+  :ensure t)
 #+end_src
 
 * mu4e
