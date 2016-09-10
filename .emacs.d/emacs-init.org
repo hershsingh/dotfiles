@@ -514,7 +514,7 @@ I subsituting this for powerline, after experiencing some rendering issues with 
 (use-package smart-mode-line
   :ensure t
   :config
-  (display-time-mode)
+  ;; (display-time-mode)
   (setq powerline-arrow-shape 'curve)
   ;; (setq powerline-default-separator-dir '(right . left))
   ;; (setq sml/theme 'powerline)
@@ -765,7 +765,7 @@ Pabbrev mode and predictive-mode are similar. I am trying to test which one suit
 #+end_src
 
 #+begin_src emacs-lisp :results none
-(use-package "~/.emacs.d/predictive")
+;; (use-package "~/.emacs.d/predictive")
 #+end_src
 ** Browse-kill-ring
 View the kill-ring
