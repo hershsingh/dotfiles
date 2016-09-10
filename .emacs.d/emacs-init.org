@@ -498,6 +498,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 #+BEGIN_SRC emacs-lisp
   ;; Smooth-Scrolling
   (use-package smooth-scrolling
+    :ensure t
     :config
     (setq scroll-margin 5
           scroll-conservatively 9999
