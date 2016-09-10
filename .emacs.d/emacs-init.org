@@ -195,7 +195,7 @@ Can't live without this.
   ;; Ido-mode
   (setq ido-enable-flex-matching t)
   (setq ido-everywhere t)
-  (ido-mode 1)
+  ;; (ido-mode 1)
   (use-package ido-ubiquitous
     :ensure t
     :init
@@ -260,7 +260,6 @@ This fixes some issues with the ordering of matches by =ido=.
     ; (setq flx-ido-use-faces nil)
 )
 #+end_src
-
 ** Evil-mode
 To make emacs into a good text editor :-)
 
@@ -446,12 +445,13 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
   (function (lambda ()
             (setq evil-shift-width c-basic-offset))))
 #+end_src
-
 ** Some basic keybindings
 #+begin_src emacs-lisp :results none
   (evil-leader/set-key "r" 'ido-recentf-open)
-  (evil-leader/set-key "b" 'ido-switch-buffer)
-  (evil-leader/set-key "f" 'find-file)
+  ;; (evil-leader/set-key "b" 'ido-switch-buffer)
+  (evil-leader/set-key "b" 'helm-mini)
+  ;; (evil-leader/set-key "f" 'find-file)
+  (evil-leader/set-key "f" 'helm-find-files)
 #+end_src
 
 ** Escape quits things
@@ -481,15 +481,19 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 #+end_src
 
 ** Autocompletion using company
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results none
     ; Company autocompletion
   (use-package company
     :ensure t
     :defer t
+    :diminish
     :config (add-hook 'after-init-hook 'global-company-mode)
     )
-
 #+END_SRC
+
+#+RESULTS:
+: t
+
 ** Smooth scrolling
 #+BEGIN_SRC emacs-lisp
   ;; Smooth-Scrolling
@@ -789,7 +793,6 @@ This configures Magit and Evil to play well with each other
 (use-package evil-magit
   :ensure t)
 #+end_src
-
 ** Hydra
 #+begin_src emacs-lisp :results none
 (use-package hydra
@@ -1022,7 +1025,6 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 (evil-leader/set-key "p" 'hydra-projectile/body)
 (evil-leader/set-key "s" 'projectile-switch-to-buffer)
 #+end_src
-
 ** Ansi-colors
 *** Make colors work in c/c++ compilation buffers
 Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
@@ -1041,7 +1043,6 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 ;(add-hook 'eshell-preoutput-filter-functions
            ;'ansi-color-filter-apply)
 #+end_src
-
 ** Projectile
 #+begin_src emacs-lisp :results none
 (use-package projectile
@@ -1062,6 +1063,58 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   (diminish 'abbrev-mode "Abv")
   (diminish 'evil-mode)
   )
+#+end_src
+
+* Helm
+#+begin_src emacs-lisp :results none
+(use-package helm
+  :ensure t
+  :config
+  (require 'helm-config)
+  ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+  ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+  ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c"))
+
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+  (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+  (when (executable-find "curl")
+    (setq helm-google-suggest-use-curl-p t))
+
+  (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+        helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+        helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+        helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+        helm-ff-file-name-history-use-recentf t)
+
+  (helm-mode 1)
+
+  (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+  ;; Helm-mini
+  ;; No default key binding. We should give it one:
+
+  (global-set-key (kbd "C-x b") 'helm-mini)
+
+  ;;To enable fuzzy matching, add the following settings:
+
+  (setq helm-buffers-fuzzy-matching t
+        helm-recentf-fuzzy-match    t)
+  )
+#+end_src
+** Helm-imenu
+#+begin_src emacs-lisp :results none
+(setq helm-semantic-fuzzy-match t
+      helm-imenu-fuzzy-match    t)
+
+(evil-leader/set-key "i" 'helm-semantic-or-imenu)
+
 #+end_src
 
 * mu4e
@@ -1341,6 +1394,9 @@ This function copies the current text into a temporary =org= file, and then uses
     (mu4e-view-mode)
     )
   )
+#+end_src
+** Helm-mu
+#+begin_src emacs-lisp :results none
 #+end_src
 
 * Programming Modes
@@ -1715,7 +1771,6 @@ This is definitely one of the coolest things that show off the power of org-mode
 
 ** More org mode
 #+BEGIN_SRC emacs-lisp
-
 ; utf-8 bullets for org-mode 
 (use-package org-bullets
    :ensure t
