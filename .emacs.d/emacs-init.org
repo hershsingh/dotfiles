@@ -195,7 +195,7 @@ Can't live without this.
   ;; Ido-mode
   (setq ido-enable-flex-matching t)
   (setq ido-everywhere t)
-  (ido-mode 1)
+  ;; (ido-mode 1)
   (use-package ido-ubiquitous
     :ensure t
     :init
@@ -260,7 +260,6 @@ This fixes some issues with the ordering of matches by =ido=.
     ; (setq flx-ido-use-faces nil)
 )
 #+end_src
-
 ** Evil-mode
 To make emacs into a good text editor :-)
 
@@ -446,12 +445,13 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
   (function (lambda ()
             (setq evil-shift-width c-basic-offset))))
 #+end_src
-
 ** Some basic keybindings
 #+begin_src emacs-lisp :results none
   (evil-leader/set-key "r" 'ido-recentf-open)
-  (evil-leader/set-key "b" 'ido-switch-buffer)
-  (evil-leader/set-key "f" 'find-file)
+  ;; (evil-leader/set-key "b" 'ido-switch-buffer)
+  (evil-leader/set-key "b" 'helm-mini)
+  ;; (evil-leader/set-key "f" 'find-file)
+  (evil-leader/set-key "f" 'helm-find-files)
 #+end_src
 
 ** Escape quits things
@@ -481,19 +481,24 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 #+end_src
 
 ** Autocompletion using company
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results none
     ; Company autocompletion
   (use-package company
     :ensure t
     :defer t
+    :diminish
     :config (add-hook 'after-init-hook 'global-company-mode)
     )
-
 #+END_SRC
+
+#+RESULTS:
+: t
+
 ** Smooth scrolling
 #+BEGIN_SRC emacs-lisp
   ;; Smooth-Scrolling
   (use-package smooth-scrolling
+    :ensure t
     :config
     (setq scroll-margin 5
           scroll-conservatively 9999
@@ -509,7 +514,7 @@ I subsituting this for powerline, after experiencing some rendering issues with 
 (use-package smart-mode-line
   :ensure t
   :config
-  (display-time-mode)
+  ;; (display-time-mode)
   (setq powerline-arrow-shape 'curve)
   ;; (setq powerline-default-separator-dir '(right . left))
   ;; (setq sml/theme 'powerline)
@@ -760,7 +765,7 @@ Pabbrev mode and predictive-mode are similar. I am trying to test which one suit
 #+end_src
 
 #+begin_src emacs-lisp :results none
-(use-package "~/.emacs.d/predictive")
+;; (use-package "~/.emacs.d/predictive")
 #+end_src
 ** Browse-kill-ring
 View the kill-ring
@@ -792,7 +797,6 @@ This configures Magit and Evil to play well with each other
   (evil-magit-init)
 )
 #+end_src
-
 ** Hydra
 #+begin_src emacs-lisp :results none
 (use-package hydra
@@ -830,11 +834,15 @@ This configures Magit and Evil to play well with each other
 #+begin_src emacs-lisp :results none
 ;; LaTeX mode
 (defhydra hydra-major-latex(:color blue :hint nil)
-  "^AucTeX shortcuts^"
+  "^AucTeX shortcuts^
+  ----------------
+  "
   ("l" reftex-label "Insert label")
-  ("c" reftex-citation "Insert Citation")
-  ("]" LaTeX-close-environment "Close environment")
+  ("(" reftex-citation "Insert Citation")
   ("c" TeX-command-master "Compile")
+  ("v" TeX-view "View")
+  ("f" outline-toggle-children "Toggle fold")
+  ("]" LaTeX-close-environment "Close environment")
   ("e" (LaTeX-environment 1) "Modify Current environment")
   )
 
@@ -853,7 +861,7 @@ This configures Magit and Evil to play well with each other
   )
 
 (defhydra hydra-major-mu4e-view(:color blue)
-  " ^mu4e compose mode^
+  " ^mu4e major mode^
 -------------------
 "
   ("l" my/mu4e-view-preview-latex "Preview LaTeX fragments")
@@ -1021,7 +1029,6 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 (evil-leader/set-key "p" 'hydra-projectile/body)
 (evil-leader/set-key "s" 'projectile-switch-to-buffer)
 #+end_src
-
 ** Ansi-colors
 *** Make colors work in c/c++ compilation buffers
 Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
@@ -1040,7 +1047,6 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 ;(add-hook 'eshell-preoutput-filter-functions
            ;'ansi-color-filter-apply)
 #+end_src
-
 ** Projectile
 #+begin_src emacs-lisp :results none
 (use-package projectile
@@ -1053,14 +1059,70 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 (use-package diminish
   :ensure t
   :init
+  (diminish 'abbrev-mode)
+  (diminish 'evil-mode)
+  (diminish 'company-mode)
+  (diminish 'org-mode)
+  (diminish 'auto-revert-mode)
   (diminish 'yas-minor-mode)
   (diminish 'undo-tree-mode)
   (diminish 'org-indent-mode)
   (diminish 'company-mode)
   (diminish 'visual-line-mode)
   (diminish 'abbrev-mode "Abv")
-  (diminish 'evil-mode)
   )
+#+end_src
+
+* Helm
+#+begin_src emacs-lisp :results none
+(use-package helm
+  :ensure t
+  :config
+  (require 'helm-config)
+  ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+  ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+  ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-unset-key (kbd "C-x c"))
+
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+  (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+  (when (executable-find "curl")
+    (setq helm-google-suggest-use-curl-p t))
+
+  (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+        helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+        helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+        helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+        helm-ff-file-name-history-use-recentf t)
+
+  (helm-mode 1)
+
+  (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+  ;; Helm-mini
+  ;; No default key binding. We should give it one:
+
+  (global-set-key (kbd "C-x b") 'helm-mini)
+
+  ;;To enable fuzzy matching, add the following settings:
+
+  (setq helm-buffers-fuzzy-matching t
+        helm-recentf-fuzzy-match    t)
+  )
+#+end_src
+** Helm-imenu
+#+begin_src emacs-lisp :results none
+(setq helm-semantic-fuzzy-match t
+      helm-imenu-fuzzy-match    t)
+
+(evil-leader/set-key "i" 'helm-semantic-or-imenu)
+
 #+end_src
 
 * mu4e
@@ -1267,7 +1329,7 @@ Evil keybindings for mu4e.
 #+end_src
 
 ** Email templates using YASnippet
-This little function is used in a snippet to figure out the first name of the recipient.
+These little functions are used in snippets to figure out the name of the recipient.
 #+begin_src emacs-lisp :results none
 ;; http://blog.binchen.org/posts/how-to-use-yasnippets-to-produce-email-templates-in-emacs.html
 (defun my/yas-get-first-name-from-to-field ()
@@ -1277,6 +1339,17 @@ This little function is used in a snippet to figure out the first name of the re
       ;; first line in email could be some hidden line containing NO to field
       (setq str (buffer-substring-no-properties (point-min) (point-max))))
     (if (string-match "^To: \"?\\([^ ,]+\\)" str)
+        (setq rlt (match-string 1 str)))
+    (message "rlt=%s" rlt)
+    rlt))
+
+(defun my/yas-get-last-name-from-to-field ()
+  (let ((rlt "AGENT_NAME") str)
+    (save-excursion
+      (goto-char (point-min))
+      ;; first line in email could be some hidden line containing NO to field
+      (setq str (buffer-substring-no-properties (point-min) (point-max))))
+    (if (string-match "^To: \"?[^ ,]+[ ,]+\\([^ ]+\\)" str)
         (setq rlt (match-string 1 str)))
     (message "rlt=%s" rlt)
     rlt))
@@ -1329,6 +1402,9 @@ This function copies the current text into a temporary =org= file, and then uses
     (mu4e-view-mode)
     )
   )
+#+end_src
+** Helm-mu
+#+begin_src emacs-lisp :results none
 #+end_src
 
 * Programming Modes
@@ -1434,7 +1510,7 @@ There are quite a fewamajor modes for python out there, which confused me in the
     (use-package python
         :config
         (setq python-shell-interpreter "ipython"
-            python-shell-interpreter-args "-i")
+            python-shell-interpreter-args "-i --simple-prompt")
         )
 #+END_SRC
 *** Send current paragraph to python 
@@ -1494,7 +1570,6 @@ This is really cool major mode for writing Lisp.
 * Org-Mode
 ** General
 #+BEGIN_SRC emacs-lisp
-
 (defun bh/hide-other ()
   (interactive)
   (save-excursion
@@ -1514,7 +1589,6 @@ This is really cool major mode for writing Lisp.
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
-
 #+END_SRC
 
 #+RESULTS:
@@ -1531,15 +1605,14 @@ Enable =LaTeX-math-mode= when in org-mode.
 
 ** Capture
 #+begin_src emacs-lisp :results none
-
-  (setq org-capture-templates
+(setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/org/private/todo.org" "Tasks")
-             "* TODO %?\n  %i\n  %a")
+         "* TODO %?\n  %i\n  %a")
         ("j" "Journal" entry (file+datetree "~/org/private/journal.org")
-             "* %?\nEntered on %U\n  %i\n  %a")
-       ("m" "Email todo" entry (file+headline "~/org/private/todo.org" "Tasks")
+         "* %?\nEntered on %U\n  %i\n  %a")
+        ("m" "Email todo" entry (file+headline "~/org/private/todo.org" "Tasks")
          "* TODO [#A] %?\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n%a\n")
-))
+        ))
 #+end_src
 
 ** Lots of keybindings
@@ -1666,40 +1739,44 @@ This makes the code blocks stand out, with a slighly darker background than rest
 
 ** IPython notebook in Org-mode!
 This is definitely one of the coolest things that show off the power of org-mode.
-#+BEGIN_SRC emacs-lisp
-(use-package ob-ipython)
+#+BEGIN_SRC emacs-lisp :result none
+(use-package ob-ipython
+  :ensure t
+  )
 #+END_SRC
+
+#+RESULTS:
+
 ** Babel
 #+BEGIN_SRC emacs-lisp
-  ;; active Babel languages
-  (use-package org
-    :config
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-        '((sh         . t)
-          (emacs-lisp . t)
-          (lisp       . t)
-          (scheme     . t)
-          (python     . t)
-          (ruby       . t)
-          (dot        . t)
-          (css        . t)
-          (ledger        . t)
-          (R        . t)
-          (C        . t)
-          )
+;; active Babel languages
+(use-package org
+  :config
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((sh         . t)
+     (emacs-lisp . t)
+     (lisp       . t)
+     (scheme     . t)
+     (python     . t)
+     (ruby       . t)
+     (dot        . t)
+     (css        . t)
+     (ledger        . t)
+     (R        . t)
+     (C        . t)
      )
+   )
 
-     ;don't prompt me to confirm everytime I want to evaluate a block
-     (setq org-confirm-babel-evaluate nil)   
+                                        ;don't prompt me to confirm everytime I want to evaluate a block
+  (setq org-confirm-babel-evaluate nil)   
 
-     ; display/update images in the buffer after I evaluate
-     (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+                                        ; display/update images in the buffer after I evaluate
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
 
-     ; Pretty source code blocks
-     (setq org-src-tab-acts-natively t)
-    )
-
+                                        ; Pretty source code blocks
+  (setq org-src-tab-acts-natively t)
+  )
 #+END_SRC
 
 #+RESULTS:
@@ -1707,7 +1784,6 @@ This is definitely one of the coolest things that show off the power of org-mode
 
 ** More org mode
 #+BEGIN_SRC emacs-lisp
-
 ; utf-8 bullets for org-mode 
 (use-package org-bullets
    :ensure t
@@ -1724,62 +1800,59 @@ This is definitely one of the coolest things that show off the power of org-mode
 This is to publish my org mode files as html. I may decide to use some setup like this for my website.
 
 #+BEGIN_SRC emacs-lisp
-
 ;; Org-mode Projects
 (use-package ox-publish) 
 
 (defun my-publishing-function () 
-    ;(setq org-html-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
-    (setq org-twbs-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
+  ;;(setq org-html-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
+  (setq org-twbs-preamble (with-temp-buffer (insert-file-contents "~/org/preamble.html") (buffer-string)))
 
-    ; Fix some of the default CSS 
-    (setq org-twbs-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org.css\"/>")
+  ;; Fix some of the default CSS 
+  (setq org-twbs-head-extra "<link rel=\"stylesheet\" type=\"text/css\" href=\"/css/org.css\"/>")
 
 
-)
+  )
 
-    ; Fix some default javascript to include an offset for the scrollspy
-    (defconst org-twbs-scripts
-    "<script type=\"text/javascript\">
+;; Fix some default javascript to include an offset for the scrollspy
+(defconst org-twbs-scripts
+  "<script type=\"text/javascript\">
     $(function() {
         'use strict';
         $('.bs-docs-sidebar li').first().addClass('active');
         $(document.body).scrollspy({target: '.bs-docs-sidebar', offset:100});
         $('.bs-docs-sidebar').affix();
     });</script>"
-    "Basic JavaScript that is needed by HTML files produced by Org mode.")
+  "Basic JavaScript that is needed by HTML files produced by Org mode.")
 (setq org-publish-project-alist
       '(
         ("org-notes"
-            :base-directory "~/org/"
-            :base-extension "org"
-            :publishing-directory "~/public_html/org/"
-            :preparation-function my-publishing-function
-            :publishing-function org-twbs-publish-to-html
-            :org-publish-use-timestamps-flag nil
-            :exclude ".*no-export.*"
-            :headline-levels 4
-            :section-numbers t
-            :with-toc t
-            :make-index t
-            :recursive t
-            :sitemap-filename "private/sitemap.org"
-            :sitemap-sans-extension t ; Useful for cool URIs
-            :auto-sitemap t
-            )
+         :base-directory "~/org/"
+         :base-extension "org"
+         :publishing-directory "~/public_html/org/"
+         :preparation-function my-publishing-function
+         :publishing-function org-twbs-publish-to-html
+         :org-publish-use-timestamps-flag nil
+         :exclude ".*no-export.*"
+         :headline-levels 4
+         :section-numbers t
+         :with-toc t
+         :make-index t
+         :recursive t
+         :sitemap-filename "private/sitemap.org"
+         :sitemap-sans-extension t ; Useful for cool URIs
+         :auto-sitemap t
+         )
         ("org-static"
-            :base-directory "~/org/"
-            :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-            :publishing-directory "~/org_html/"
-            :recursive t
-            :publishing-function org-publish-attachment
-        )
+         :base-directory "~/org/"
+         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+         :publishing-directory "~/org_html/"
+         :recursive t
+         :publishing-function org-publish-attachment
+         )
         ("org"
-            :components ("org-notes" "org-static")
-        )
-    ))
-
-
+         :components ("org-notes" "org-static")
+         )
+        ))
 #+END_SRC
 
 #+RESULTS:
@@ -1802,6 +1875,15 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   A set of keys like this should be nice
   | Next/Prev Section        | ]s, [s |
   | Next/Prev Equation/Align | ]e, [e |
+
+** magic-latex-buffer
+#+begin_src emacs-lisp :results none
+(use-package magic-latex-buffer
+  :ensure t
+  :config
+    (add-hook 'LaTeX-mode-hook 'magic-latex-buffer)
+  )
+#+end_src
   
 ** AucTeX
 
@@ -1918,6 +2000,25 @@ Autocompletion in latex.
   (setq company-idle-delay 0.05)
   (company-auctex-init)
 )
+#+end_src
+
+** Outline Minor Mode
+#+begin_src emacs-lisp :results none
+(add-hook 'LaTeX-mode-hook 'outline-minor-mode)
+
+(evil-leader/set-key "ot" 'outline-toggle-children)
+#+end_src
+
+** Prettify-symbols
+#+begin_src emacs-lisp :results none
+(add-hook 'LaTeX-mode-hook 'prettify-symbols-mode)
+
+(add-hook 'LaTeX-mode-hook
+        (lambda ()
+            (push '("\\>" . ?⟩) prettify-symbols-alist)
+            (push '("\\<" . ?⟨) prettify-symbols-alist)
+            )
+        )
 #+end_src
 
 * Customizations

@@ -25,9 +25,9 @@ naughty = require("naughty")
 local assault = require('assault')
 myassault = assault({
   battery = "BAT0", -- battery ID to get data from
-   font = "Droid Sans 8",
+   font = "Droid Sans 6",
    adapter = "AC", -- ID of the AC adapter to get data from
-   width = 20, -- width of battery
+   width = 23, -- width of battery
    height = 12, -- height of battery
    bolt_width = 15, -- width of charging bolt
    bolt_height = 6, -- height of charging bolt
@@ -37,16 +37,17 @@ myassault = assault({
    peg_width = 2, -- width of the peg
    font = beautiful.font, -- font to use
    critical_level = 0.20, -- battery percentage to mark as critical (between 0 and 1, default is 10%)
-   normal_color = beautiful.fg_normal, -- color to draw the battery when it's discharging
+   --normal_color = beautiful.fg_normal, -- color to draw the battery when it's discharging
+   normal_color = "#bbbbbb", -- color to draw the battery when it's discharging
    critical_color = "#ff0000", -- color to draw the battery when it's at critical level
-   charging_color = "#00ff00" -- color to draw the battery when it's charging
+   charging_color = "#00cc00" -- color to draw the battery when it's charging
 })
 
 myassault2 = assault({
   battery = "BAT1", -- battery ID to get data from
    --font = beautiful.font, -- font to use
    adapter = "AC", -- ID of the AC adapter to get data from
-   width = 20, -- width of battery
+   width = 23, -- width of battery
    height = 12, -- height of battery
    bolt_width = 15, -- width of charging bolt
    bolt_height = 6, -- height of charging bolt
@@ -56,9 +57,10 @@ myassault2 = assault({
    peg_width = 2, -- width of the peg
    --font = beautiful.font, -- font to use
    critical_level = 0.20, -- battery percentage to mark as critical (between -1 and 1, default is 10%)
-   normal_color = beautiful.fg_normal, -- color to draw the battery when it's discharging
+   --normal_color = beautiful.fg_normal, -- color to draw the battery when it's discharging
+   normal_color = "#bbbbbb", -- color to draw the battery when it's discharging
    critical_color = "#ff0000", -- color to draw the battery when it's at critical level
-   charging_color = "#00ff00" -- color to draw the battery when it's charging
+   charging_color = "#00cc00" -- color to draw the battery when it's charging
 })
 
 -- Battery widget
@@ -544,7 +546,7 @@ globalkeys = awful.util.table.join(
             showCurrentSong() 
         end),
     -- Screenshot for PrintScreen Key
-    awful.key({modkey, }, "Print",function () awful.util.spawn( "import -window root " .. homedir ..  "/screenshot" .. os.date("_%y-%m-%d_%H-%M-%S").. ".png" ) end),
+    awful.key({modkey, }, "Print",function () awful.util.spawn( "import " .. homedir ..  "/screenshot" .. os.date("_%y-%m-%d_%H-%M-%S").. ".png" ) end),
 
      -- Brightness
     awful.key({ }, "XF86MonBrightnessDown", function ()
