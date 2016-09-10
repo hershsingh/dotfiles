@@ -1861,6 +1861,15 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   A set of keys like this should be nice
   | Next/Prev Section        | ]s, [s |
   | Next/Prev Equation/Align | ]e, [e |
+
+** magic-latex-buffer
+#+begin_src emacs-lisp :results none
+(use-package magic-latex-buffer
+  :ensure t
+  :config
+    (add-hook 'LaTeX-mode-hook 'magic-latex-buffer)
+  )
+#+end_src
   
 ** AucTeX
 
@@ -1977,15 +1986,6 @@ Autocompletion in latex.
   (setq company-idle-delay 0.05)
   (company-auctex-init)
 )
-#+end_src
-
-** magic-latex-buffer
-#+begin_src emacs-lisp :results none
-(use-package magic-latex-buffer
-  :ensure t
-  :config
-    (add-hook 'latex-mode-hook 'magic-latex-buffer)
-  )
 #+end_src
 
 ** Outline Minor Mode
