@@ -1077,7 +1077,9 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 #+begin_src emacs-lisp :results none
 (use-package which-key 
   :ensure t
-  )
+  :config
+  (which-key-mode 1)
+)
 #+end_src
 
 * Helm
