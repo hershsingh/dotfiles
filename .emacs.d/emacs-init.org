@@ -16,7 +16,7 @@ You need to load this =.org= file from your =~/.emacs.d/init.el= file. Here is m
 * Packages
 We add some package repos here. 
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (require 'package)
 
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
@@ -35,27 +35,24 @@ We add some package repos here.
 (package-initialize)
 #+END_SRC
 
-#+RESULTS:
-: t
-
 I need to expand this include a list of packages that can be automatically downloaded if not present. As of now, I just install packages using =M-x package-install= which isn't very portable.
 
 ** use-package
 This is a nice package to keep the package configs tidy.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (setq use-package-verbose t)
 (require 'use-package)
 #+END_SRC
 
 * Config
 ** Fix shell in emacs
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (setq system-uses-terminfo nil)
 #+end_src
 
 ** Theme
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
   ;; Load theme
   (use-package solarized-theme
     :ensure t
@@ -64,12 +61,9 @@ This is a nice package to keep the package configs tidy.
 )
 #+END_SRC
 
-#+RESULTS:
-: t
-
 ** General Settings
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 
   ;Let’s start out by getting rid of the “yes or no” prompt and replace it with “y or n”
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -146,13 +140,10 @@ This is a nice package to keep the package configs tidy.
     (switch-to-buffer "*scratch*"))
 #+END_SRC
 
-#+RESULTS:
-: bh/switch-to-scratch
-
 ** Line numbers
 =linum-mode= makes Emacs really sluggish. A much better alternative is =nlinum=.
 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; (setq linum-format "%4d \u2502 ")
 ;; (global-linum-mode 1)
 (use-package linum
@@ -166,19 +157,19 @@ This is a nice package to keep the package configs tidy.
 
 ** Electric Pair
 I think at some point I'll replace all =electric= things with something like =smartparens=. It's more configurable, and can deal with more complex things like =\begin... \end = in LaTeX.
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (electric-pair-mode 1)
 #+end_src
 
 ** Fill-column indicator
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package fill-column-indicator
   :ensure t)
 #+end_src
 
 ** Recentf
 Keeps a track of recently used files.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ;; Find files faster with the recent files package
 (use-package recentf
   :ensure t
@@ -190,7 +181,7 @@ Keeps a track of recently used files.
 ** Ido-mode
 Can't live without this.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
   ;;--------------------------------------------------;; 
   ;; Ido-mode
   (setq ido-enable-flex-matching t)
@@ -236,13 +227,10 @@ Can't live without this.
       (message "Aborting")))
 #+END_SRC
 
-#+RESULTS:
-: ido-recentf-open
-
 *** flx: Better fuzzy matching for ido 
 This fixes some issues with the ordering of matches by =ido=.
 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package flx-ido
   :ensure t
   :init
@@ -264,7 +252,7 @@ This fixes some issues with the ordering of matches by =ido=.
 To make emacs into a good text editor :-)
 
 *** Init
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ;;--------------------------------------------------;; 
 ;; Evil Mode
 (use-package evil
@@ -282,11 +270,8 @@ To make emacs into a good text editor :-)
   )
 #+END_SRC
 
-#+RESULTS:
-: t
-
 *** Evil-surround
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package evil-surround
   :ensure t
   :config
@@ -295,7 +280,7 @@ To make emacs into a good text editor :-)
 #+end_src
 
 *** Evil-leader
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
   (use-package evil-leader
     :ensure t
     :init
@@ -305,15 +290,12 @@ To make emacs into a good text editor :-)
     )
 #+END_SRC
 
-#+RESULTS:
-: t
-
 *** Evil-Unimpaired
 **** Move between compilation error messages
 Particularly useful for c/c++ modes.
 
 Reference:http://stackoverflow.com/questions/21125015/cycle-through-results-using-next-error-previous-error
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 
 (defvar my-modeline-flash-color "#af00d7")
 
@@ -371,7 +353,7 @@ forwards, if negative)."
 #+end_src
 
 *** Keybindings
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 
   ; Remap org-mode meta keys for convenience
   (mapcar (lambda (state)
@@ -406,7 +388,7 @@ forwards, if negative)."
 
 *** Create text objects for Evil
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 
 ;http://stackoverflow.com/questions/18102004/emacs-evil-mode-how-to-create-a-new-text-object-to-select-words-with-any-non-sp#18688066
 (defmacro define-and-bind-text-object (key start-regex end-regex)
@@ -434,7 +416,7 @@ forwards, if negative)."
 
 *** Set evil-shift-witdth to buffer local indentation
 Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to-the-buffer-local-indentation-in-emacs]]
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (add-hook 'python-mode-hook
   (function (lambda ()
           (setq evil-shift-width python-indent))))
@@ -446,7 +428,7 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
             (setq evil-shift-width c-basic-offset))))
 #+end_src
 ** Some basic keybindings
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
   (evil-leader/set-key "r" 'ido-recentf-open)
   ;; (evil-leader/set-key "b" 'ido-switch-buffer)
   (evil-leader/set-key "b" 'helm-mini)
@@ -457,7 +439,7 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
 ** Escape quits things
 Being a vim user, it's very non-intuitive when hitting =Esc= does weird stuff in emacs. =Esc= must quit things. 
 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; esc quits
 (defun minibuffer-keyboard-quit ()
   "Abort recursive edit.
@@ -481,7 +463,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 #+end_src
 
 ** Autocompletion using company
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
     ; Company autocompletion
   (use-package company
     :ensure t
@@ -491,11 +473,8 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
     )
 #+END_SRC
 
-#+RESULTS:
-: t
-
 ** Smooth scrolling
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
   ;; Smooth-Scrolling
   (use-package smooth-scrolling
     :ensure t
@@ -508,7 +487,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 ** Smart-mode-line
 I subsituting this for powerline, after experiencing some rendering issues with powerline.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ;; Smart-mode line
 ;; (use-package smart-mode-line-powerline-theme)
 (use-package smart-mode-line
@@ -526,11 +505,8 @@ I subsituting this for powerline, after experiencing some rendering issues with 
   )
 #+END_SRC
 
-#+RESULTS:
-: t
-
 ** Yasnippet
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
 (use-package yasnippet
   :ensure t
   :init
@@ -543,14 +519,14 @@ I subsituting this for powerline, after experiencing some rendering issues with 
 
 *** Trigger key conflict with Company-mode
 =company= also uses =Tab= for completion, so this conflicts with Yasnippet. Until I find a better way, I am also binding yasnippet completion to =C-l=.
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (define-key yas-minor-mode-map (kbd "C-l") 'yas-expand-from-trigger-key)
 #+end_src
 
 *** Some tips for Yasnippet
 There are two ways to use snippets from another mode. One is to include a =.yas-parents= file in the =snippets/major-mode= directory, and the other is to simply use the =yas-activate-extra-mode= command. 
 ** Nerd-commenter
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
 (use-package evil-nerd-commenter
   :ensure t
   :config
@@ -574,10 +550,8 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
   )
 #+END_SRC
 
-#+RESULTS:
-
 ** Windmove
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ; (use-package windmove
 ;   :ensure t
 ;   :defer t
@@ -590,7 +564,7 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
 #+END_SRC
 ** Backup/History
 
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
 
 ;disable backup
 ;(setq backup-inhibited t)
@@ -616,7 +590,7 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
 #+END_SRC
 
 ** Prompt/popup menu
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
 (plist-put minibuffer-prompt-properties
            'point-entered 'minibuffer-avoid-prompt)
 
@@ -651,11 +625,8 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
 )
 #+END_SRC
 
-#+RESULTS:
-: t
-
 ** Smex
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (use-package smex
   :ensure t
   :init
@@ -668,24 +639,21 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
   )
 #+END_SRC
 
-#+RESULTS:
-: t
-
 ** Slime
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 
 ; SLIME
 (setq inferior-lisp-program "/usr/bin/ecl")
 
 #+END_SRC
 ** Epresent
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ; (use-package epresent
 ;   :ensure t )
 #+END_SRC
 ** Ledger
 Save dat money!
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 
        (use-package ledger-mode
           :ensure t
@@ -744,10 +712,8 @@ Save dat money!
 
 #+END_SRC
 
-#+RESULTS:
-
 ** Volatile-highlights
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
   (use-package volatile-highlights
      :ensure t
      :config
@@ -757,30 +723,30 @@ Save dat money!
 #+END_SRC
 ** Predictive-mode/Pabbrev
 Pabbrev mode and predictive-mode are similar. I am trying to test which one suits me. 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (defun my/pabbrev-select-mode-settings()
   (turn-off-evil-mode))
 
 (add-hook 'pabbrev-select-mode-hook 'my/pabbrev-select-mode-settings 'append)
 #+end_src
 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; (use-package "~/.emacs.d/predictive")
 #+end_src
 ** Browse-kill-ring
 View the kill-ring
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package browse-kill-ring+
   :ensure t 
 )
 #+end_src
 
 ** Flyspell mode
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 #+end_src
 
 ** Magit
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package magit
   :ensure t
   :init
@@ -790,7 +756,7 @@ View the kill-ring
 
 *** Evil-Magit
 This configures Magit and Evil to play well with each other
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package evil-magit
   :ensure t
   :init
@@ -798,14 +764,14 @@ This configures Magit and Evil to play well with each other
 )
 #+end_src
 ** Hydra
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package hydra
   :ensure t)
 
 #+end_src
 
 *** Hydra for current major mode
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; Calls the hydra for the current major mode.
 (defun my/hydra-major-mode()
   (interactive)
@@ -831,7 +797,7 @@ This configures Magit and Evil to play well with each other
 
 *** Define major mode hydras
 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; LaTeX mode
 (defhydra hydra-major-latex(:color blue :hint nil)
   "^AucTeX shortcuts^
@@ -898,7 +864,7 @@ find-_f_ile
 #+end_src
 
 *** Zoom 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (evil-leader/set-key "z" 'hydra-zoom/body)
 (defhydra hydra-zoom ()
   "zoom"
@@ -907,7 +873,7 @@ find-_f_ile
 #+end_src
 
 *** Main Menu
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (evil-leader/set-key "~" 'hydra-main/body)
 
  (defhydra hydra-main (:color blue :hint nil)
@@ -923,7 +889,7 @@ _r_anger
 #+end_src
 
 *** Kill-ring
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; Yank stuff
  (evil-leader/set-key "y" 'hydra-paste/body)
  (defhydra hydra-paste (:color blue :hint nil)
@@ -936,7 +902,7 @@ _r_anger
 #+end_src
 
 *** Org-mode
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
  (evil-leader/set-key "op" 'hydra-org-publish/body)
  (defhydra hydra-org-publish (:color blue :hint nil)
    "
@@ -956,7 +922,7 @@ _r_anger
 *** Org-clock
 [[https://github.com/abo-abo/hydra/wiki/Org-clock]]
 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
  (evil-leader/set-key "oc" 'hydra-org-clock/body)
  (defhydra hydra-org-clock (:color blue :hint nil)
    "
@@ -979,7 +945,7 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
 
 *** Projectile
 https://github.com/abo-abo/hydra/wiki/Projectile
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (defhydra hydra-projectile-other-window (:color teal)
   "projectile-other-window"
   ("f"  projectile-find-file-other-window        "file")
@@ -1032,7 +998,7 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 ** Ansi-colors
 *** Make colors work in c/c++ compilation buffers
 Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package ansi-color
   :ensure t
   :init
@@ -1048,14 +1014,14 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
            ;'ansi-color-filter-apply)
 #+end_src
 ** Projectile
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package projectile
   :ensure t
 )
 #+end_src
 
 ** Diminish
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package diminish
   :ensure t
   :init
@@ -1074,7 +1040,7 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 #+end_src
 
 ** Which-Key
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package which-key 
   :ensure t
   :config
@@ -1083,7 +1049,7 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 #+end_src
 
 * Helm
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package helm
   :ensure t
   :config
@@ -1126,14 +1092,14 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   )
 #+end_src
 ** Helm-imenu
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (setq helm-semantic-fuzzy-match t
       helm-imenu-fuzzy-match    t)
 
 (evil-leader/set-key "i" 'helm-semantic-or-imenu)
 #+end_src
 ** Helm-flyspell
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package helm-flyspell
   :ensure t
   :config
@@ -1141,7 +1107,7 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 )
 #+end_src
 ** Helm-unicode
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package helm-unicode
   :ensure t)
 #+end_src
@@ -1156,7 +1122,7 @@ email. =mu= does the indexing and search, and =mu4e= provides a unifying
 interface for all of them. 
 
 ** Basic Configuration
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
 ;; Checkout this for full html support in emacs 25
     ;; https://groups.google.com/forum/#!topic/mu-discuss/JqHEGycEyKI
 
@@ -1201,7 +1167,7 @@ interface for all of them.
 #+END_SRC
 
 ** Interface and Usability Tweaks
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package mu4e
   :config
   ;; https://groups.google.com/forum/#!topic/mu-discuss/Xlihr_JrNwA
@@ -1310,7 +1276,7 @@ interface for all of them.
 #+end_src
 
 ** Don't let shr change the background color for HTML emails
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
     (defadvice shr-color-check (before unfuck compile activate)
       "Don't let stupid shr change background colors."
       (setq bg (face-background 'default)))
@@ -1318,7 +1284,7 @@ interface for all of them.
 
 ** Use ranger (deer) for attachments
 This lets you attach a file in the current composition buffer by invoking the command =my/mu4-deer-attachment=, and hitting =ra= ('ranger-attach')on the selected files to attach them.
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (defun my/mu4e-deer-attachment ()
   (interactive)
   (turn-on-gnus-dired-mode)
@@ -1332,7 +1298,7 @@ This lets you attach a file in the current composition buffer by invoking the co
 
 ** mu4e-evil
 Evil keybindings for mu4e.
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package mu4e
     :config
     (use-package evil-mu4e
@@ -1342,7 +1308,7 @@ Evil keybindings for mu4e.
 #+end_src
 
 ** Org-capture
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;;store org-mode links to messages
 (use-package org-mu4e)
 ;;store link to message if in header view, not to header query
@@ -1351,7 +1317,7 @@ Evil keybindings for mu4e.
 
 ** Email templates using YASnippet
 These little functions are used in snippets to figure out the name of the recipient.
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; http://blog.binchen.org/posts/how-to-use-yasnippets-to-produce-email-templates-in-emacs.html
 (defun my/yas-get-first-name-from-to-field ()
   (let ((rlt "AGENT_NAME") str)
@@ -1377,7 +1343,7 @@ These little functions are used in snippets to figure out the name of the recipi
 #+end_src
 
 ** Address completion using Ido
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (defun my/ido-select-recipient ()
   "Inserts a contact from the mu cache.
 Uses ido to select the contact from all those present in the database."
@@ -1400,7 +1366,7 @@ Uses ido to select the contact from all those present in the database."
 ** Preview LaTeX in mu4e-view window
 This function copies the current text into a temporary =org= file, and then uses =org-preview-latex-fragment= to display the LaTeX formula in the current mail.
 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (defun my/mu4e-view-preview-latex()
   (interactive)
   (with-current-buffer (find-file-noselect "/tmp/_mu4e-view_.org")
@@ -1425,12 +1391,12 @@ This function copies the current text into a temporary =org= file, and then uses
   )
 #+end_src
 ** Helm-mu
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 #+end_src
 
 * Programming Modes
 * General programming mode settings
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; Enable fill column indicator for all programming modes
 (add-hook 'prog-mode-hook
           '(lambda ()
@@ -1447,7 +1413,7 @@ This function copies the current text into a temporary =org= file, and then uses
   - =which-function= mode displays the current function in the mode-line
 
 *** Some settings
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (add-hook 'c-mode-common-hook
           (lambda ()
             (which-func-mode 1)))
@@ -1455,7 +1421,7 @@ This function copies the current text into a temporary =org= file, and then uses
     
 *** GGtags
 Reference: https://tuhdo.github.io/c-ide.html
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package ggtags
   :ensure t
   :config
@@ -1477,7 +1443,7 @@ Reference: https://tuhdo.github.io/c-ide.html
 
 ** Send command to Eshell
 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (defun my-eshell-execute (command)
   "Insert text of current line in eshell and execute."
   (interactive)
@@ -1535,7 +1501,7 @@ There are quite a fewamajor modes for python out there, which confused me in the
         )
 #+END_SRC
 *** Send current paragraph to python 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (define-key python-mode-map (kbd "<C-return>") 'python-shell-send-block)
 
 (defun python-shell-send-block (arg)
@@ -1551,14 +1517,14 @@ There are quite a fewamajor modes for python out there, which confused me in the
 
 ** Cython mode
 Need to make this behave nicely with =python.el=.
-#+begin_src emacs-lisp :results none :notangle
+#+begin_src emacs-lisp :results silent :notangle
 ;(use-package cython-mode
   ;:ensure t)
 #+end_src
 
 ** Ess
 Emacs speaks statistics!
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
   (use-package ess
     :ensure t
     )
@@ -1566,23 +1532,23 @@ Emacs speaks statistics!
 
 ** Par-edit
 This is really cool major mode for writing Lisp.
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
 (use-package paredit
   :ensure t
 )
 #+END_SRC
 ** Lua-mode
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package lua-mode
   :ensure t )
 #+end_src
 ** Scheme
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (setq scheme-program-name "guile")
 #+end_src
 
 ** Flycheck
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package flycheck
   :ensure t
   )
@@ -1590,7 +1556,7 @@ This is really cool major mode for writing Lisp.
 
 * Org-Mode
 ** General
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 (defun bh/hide-other ()
   (interactive)
   (save-excursion
@@ -1612,12 +1578,9 @@ This is really cool major mode for writing Lisp.
 (global-set-key "\C-cb" 'org-iswitchb)
 #+END_SRC
 
-#+RESULTS:
-: org-iswitchb
-
 ** LaTeX
 Enable =LaTeX-math-mode= when in org-mode.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ;; the usual auctex setup here...
 (autoload 'LaTeX-math-mode "latex")
 ;(require 'latex)
@@ -1625,7 +1588,7 @@ Enable =LaTeX-math-mode= when in org-mode.
 #+END_SRC
 
 ** Capture
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (setq org-capture-templates
       '(("t" "Todo" entry (file+headline "~/org/private/todo.org" "Tasks")
          "* TODO %?\n  %i\n  %a")
@@ -1639,7 +1602,7 @@ Enable =LaTeX-math-mode= when in org-mode.
 ** Lots of keybindings
 I am yet to use all of these, but I have them here as a reference for now.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 
   ;; From http://doc.norang.ca/org-mode.html
   ;; Custom Key Bindings
@@ -1689,9 +1652,7 @@ I am yet to use all of these, but I have them here as a reference for now.
   ;; (global-set-key (kbd "C-s-<f12>") 'bh/save-then-publish)
 #+END_SRC
 
-#+RESULTS:
-
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 
 ;;--------------------------------------------------;; 
 ;; org-mode
@@ -1709,16 +1670,13 @@ I am yet to use all of these, but I have them here as a reference for now.
 
 #+END_SRC
 
-#+RESULTS:
-: time
-
 ** Agenda
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (setq org-agenda-files (quote ("~/org/private/todo.org")))
 #+end_src
 
 ** Source Blocks
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ; Syntax highlighting of code blocks
 (setq org-src-fontify-natively t)
 
@@ -1736,12 +1694,9 @@ I am yet to use all of these, but I have them here as a reference for now.
     org-src-tab-acts-natively t)
 #+END_SRC
 
-#+RESULTS:
-: t
-
 *** Background for code blocks
 This makes the code blocks stand out, with a slighly darker background than rest of the buffer. But this needs to be called before org-mode loads. So this is present in my =~/.emacs.d/init.el= as well, which loads this =.org= file. I am just including it here for reference.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ;(defface org-block-begin-line
   ;'((t (:underline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF")))
   ;"Face used for the line delimiting the begin of source blocks.")
@@ -1755,21 +1710,16 @@ This makes the code blocks stand out, with a slighly darker background than rest
 ;;   "Face used for the line delimiting the end of source blocks.")
 #+END_SRC
 
-#+RESULTS:
-: org-block-background
-
 ** IPython notebook in Org-mode!
 This is definitely one of the coolest things that show off the power of org-mode.
-#+BEGIN_SRC emacs-lisp :result none
+#+BEGIN_SRC emacs-lisp :result silent
 (use-package ob-ipython
   :ensure t
   )
 #+END_SRC
 
-#+RESULTS:
-
 ** Babel
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ;; active Babel languages
 (use-package org
   :config
@@ -1800,11 +1750,8 @@ This is definitely one of the coolest things that show off the power of org-mode
   )
 #+END_SRC
 
-#+RESULTS:
-: t
-
 ** More org mode
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ; utf-8 bullets for org-mode 
 (use-package org-bullets
    :ensure t
@@ -1812,7 +1759,7 @@ This is definitely one of the coolest things that show off the power of org-mode
 #+END_SRC
 
 ** Exporting
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (setq org-html-html5-fancy t)
 (setq org-html-doctype "html5")
 #+end_src
@@ -1820,7 +1767,7 @@ This is definitely one of the coolest things that show off the power of org-mode
 ** Publishing
 This is to publish my org mode files as html. I may decide to use some setup like this for my website.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results silent
 ;; Org-mode Projects
 (use-package ox-publish) 
 
@@ -1876,11 +1823,6 @@ This is to publish my org mode files as html. I may decide to use some setup lik
         ))
 #+END_SRC
 
-#+RESULTS:
-| org-notes  | :base-directory | ~/org/                 | :base-extension | org  | :publishing-directory | ~/public_html/org/ | :preparation-function | my-publishing-function | :publishing-function | org-twbs-publish-to-html | :org-publish-use-timestamps-flag | nil | :exclude              | .*no-export.* | :headline-levels | 4 | :section-numbers     | t                      | :with-toc | t | :make-index | t | :recursive | t | :sitemap-filename | private/sitemap.org | :sitemap-sans-extension | t | :auto-sitemap | t |
-| org-static | :base-directory | ~/org/                 | :base-extension | css\ | js\                   | png\               | jpg\                  | gif\                   | pdf\                 | mp3\                     | ogg\                             | swf | :publishing-directory | ~/org_html/   | :recursive       | t | :publishing-function | org-publish-attachment |           |   |             |   |            |   |                   |                     |                         |   |               |   |
-| org        | :components     | (org-notes org-static) |                 |      |                       |                    |                       |                        |                      |                          |                                  |     |                       |               |                  |   |                      |                        |           |   |             |   |            |   |                   |                     |                         |   |               |   |
-
 * LaTeX
 I need to find a way to use features of auctex in org-mode.
 ** My Evil+AucTeX+YASnippet workflow
@@ -1898,7 +1840,7 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   | Next/Prev Equation/Align | ]e, [e |
 
 ** magic-latex-buffer
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package magic-latex-buffer
   :ensure t
   :config
@@ -1908,7 +1850,7 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   
 ** AucTeX
 
-#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results silent
 (setq LaTeX-math-abbrev-prefix ";")
 (setq LaTeX-math-list '(
     (?8 "infty" nil)))
@@ -2008,12 +1950,9 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
 ;;   )
 #+END_SRC
 
-#+RESULTS:
-| (lambda nil (push (quote (Latexmk latexmk -pdf %s TeX-run-TeX nil t :help Run Latexmk on file)) TeX-command-list)) | preview-mode-setup | (lambda nil (setq TeX-command-list (cons (quote (Latexmk latexmk -pdf %s TeX-run-TeX nil t :help Run Latexmk on file)) TeX-command-list))) | turn-on-reftex | LaTeX-math-mode | my/latex-settings | (lambda nil (setq evil-shift-width tex-indent-basic)) |
-
 ** Company-AucTeX
 Autocompletion in latex. 
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (use-package company-auctex
   :ensure t
   :init
@@ -2024,14 +1963,14 @@ Autocompletion in latex.
 #+end_src
 
 ** Outline Minor Mode
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
 
 (evil-leader/set-key "ot" 'outline-toggle-children)
 #+end_src
 
 ** Prettify-symbols
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (add-hook 'LaTeX-mode-hook 'prettify-symbols-mode)
 
 (add-hook 'LaTeX-mode-hook
@@ -2044,7 +1983,7 @@ Autocompletion in latex.
 
 * Customizations
 ** Cycle the theme
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 ;; Cycle through this set of themes
 ;; http://stackoverflow.com/questions/9900232/changing-color-themes-emacs-24-order-matters
 
@@ -2068,7 +2007,7 @@ Autocompletion in latex.
 #+end_src
 
 ** Adding date with command "C-c t"
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
   (global-set-key (kbd "C-c t") 'insert-time-date)
   (defun insert-time-date (prefix)
       "Insert the current date. With prefix-argument, use ISO format. With
@@ -2083,7 +2022,7 @@ Autocompletion in latex.
 #+end_src
 
 * Random
-#+begin_src emacs-lisp :results none
+#+begin_src emacs-lisp :results silent
 (defun my/compile-run ()
  (interactive)
  (save-buffer)
