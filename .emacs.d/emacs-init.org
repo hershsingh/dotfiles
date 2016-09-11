@@ -823,7 +823,7 @@ This configures Magit and Evil to play well with each other
 -------------------
 "
   ("a" my/mu4e-deer-attachment "Add attachment using ranger")
-  ("c" my/ido-select-recipient "Select a contact using ido")
+  ("c" helm-mu-contacts "Select a contact using helm")
   )
 
 (defhydra hydra-major-mu4e-view(:color blue)
@@ -897,7 +897,7 @@ _r_anger
 ^Paste Menu^
 ------------------
 "
-   ("r" browse-kill-ring "Browse kill ring")
+   ("r" helm-show-kill-ring "Browse kill ring")
 )
 #+end_src
 
