@@ -1,3 +1,6 @@
+## Plugins
+source ~/.zsh/antigen-hs/init.zsh
+
 source ~/.zsh/colors.zsh
 source ~/.zsh/setopt.zsh
 source ~/.zsh/exports.zsh
@@ -8,9 +11,6 @@ source ~/.zsh/bindkeys.zsh
 source ~/.zsh/functions.zsh
 source ~/.zsh/history.zsh
 
-## Plugins
-source ~/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 bindkey -v
 export KEYTIMEOUT=1
@@ -52,3 +52,4 @@ mount_internal_ntfs_partition() {
 }
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
