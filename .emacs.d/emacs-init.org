@@ -468,7 +468,7 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   (use-package company
     :ensure t
     :defer t
-    :diminish
+    :diminish company-mode
     :config (add-hook 'after-init-hook 'global-company-mode)
     )
 #+END_SRC
