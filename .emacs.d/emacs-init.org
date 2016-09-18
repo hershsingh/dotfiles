@@ -485,25 +485,18 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
   )
 #+END_SRC
 
-** Smart-mode-line
-I subsituting this for powerline, after experiencing some rendering issues with powerline.
-#+BEGIN_SRC emacs-lisp :results silent
-;; Smart-mode line
-;; (use-package smart-mode-line-powerline-theme)
-(use-package smart-mode-line
-  :ensure t
+** Spaceline
+This is the modeline from Spacemacs.
+#+begin_src emacs-lisp :results none
+(use-package spaceline-config
+  :ensure spaceline
   :config
-  ;; (display-time-mode)
-  (setq powerline-arrow-shape 'curve)
-  ;; (setq powerline-default-separator-dir '(right . left))
-  ;; (setq sml/theme 'powerline)
-  ;; (setq sml/mode-width 0)
-  ;; (setq sml/name-width 20)
-  ;; (rich-minority-mode 1)
-  ;; (setf rm-blacklist "")
-  (sml/setup)
-  )
-#+END_SRC
+  (setq powerline-default-separator 'wave)
+  (setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  (spaceline-spacemacs-theme)
+  (spaceline-helm-mode)
+)
+#+end_src
 
 ** Yasnippet
 #+BEGIN_SRC emacs-lisp :results silent
