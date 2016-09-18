@@ -1015,11 +1015,20 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 )
 #+end_src
 
+** Which-Key
+#+begin_src emacs-lisp :results silent
+(use-package which-key 
+  :ensure t
+  :diminish which-key-mode
+  :config
+  (which-key-mode 1)
+)
+#+end_src
 ** Diminish
 #+begin_src emacs-lisp :results silent
 (use-package diminish
   :ensure t
-  :init
+  :config
   (diminish 'abbrev-mode)
   (diminish 'evil-mode)
   (diminish 'company-mode)
