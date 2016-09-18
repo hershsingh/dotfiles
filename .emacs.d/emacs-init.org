@@ -1060,11 +1060,17 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
   (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 
+  ;; Vim keybindings
+  (define-key helm-map (kbd "C-j") 'helm-next-line) ; rebind tab to run persistent action
+  (define-key helm-map (kbd "C-k") 'helm-previous-line) ; make TAB work in terminal
+  (define-key helm-map (kbd "C-l") 'helm-next-source) ; make TAB work in terminal
+  (define-key helm-map (kbd "C-h") 'helm-previous-source) ; make TAB work in terminal
+
   (when (executable-find "curl")
     (setq helm-google-suggest-use-curl-p t))
 
   (setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
-        helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+        helm-move-to-line-cycle-in-source     nil ; move to end or beginning of source when reaching top or bottom of source.
         helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
         helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
         helm-ff-file-name-history-use-recentf t)
@@ -1085,14 +1091,13 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 
   (setq helm-buffers-fuzzy-matching t
         helm-recentf-fuzzy-match    t)
-  )
-#+end_src
-** Helm-imenu
-#+begin_src emacs-lisp :results silent
-(setq helm-semantic-fuzzy-match t
-      helm-imenu-fuzzy-match    t)
 
-(evil-leader/set-key "i" 'helm-semantic-or-imenu)
+  ;; Helm-imenu
+  (setq helm-semantic-fuzzy-match t
+        helm-imenu-fuzzy-match    t)
+  (evil-leader/set-key "i" 'helm-semantic-or-imenu)
+
+  )
 #+end_src
 ** Helm-flyspell
 #+begin_src emacs-lisp :results silent
