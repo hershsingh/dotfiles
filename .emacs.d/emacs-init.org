@@ -1404,7 +1404,6 @@ This function copies the current text into a temporary =org= file, and then uses
              (fci-mode) ; Fill-Column-Indicator
              (linum-mode) ; Line numbers
              ))
-(evil-leader/set-key "i" 'imenu)
 #+end_src
 ** C++ Mode
 *** Tips
