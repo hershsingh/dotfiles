@@ -916,7 +916,9 @@ _r_anger
 [[https://github.com/abo-abo/hydra/wiki/Org-clock]]
 
 #+begin_src emacs-lisp :results silent
- (evil-leader/set-key "oc" 'hydra-org-clock/body)
+ (evil-leader/set-key "oc" 'helm-org-capture-templates)
+
+ (evil-leader/set-key "oC" 'hydra-org-clock/body)
  (defhydra hydra-org-clock (:color blue :hint nil)
    "
 Clock   In/out^     ^Edit^   ^Summary     (_?_)
