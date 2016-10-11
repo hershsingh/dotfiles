@@ -2094,10 +2094,13 @@ Autocompletion in latex.
 
 (add-hook 'LaTeX-mode-hook
         (lambda ()
+          (progn
             (push '("\\>" . ?⟩) prettify-symbols-alist)
             (push '("\\<" . ?⟨) prettify-symbols-alist)
+            (push '("\\del" . ?∇) prettify-symbols-alist)
+            (push '("\\dotsc" . ?…) prettify-symbols-alist)
             )
-        )
+          ))
 #+end_src
 
 * Customizations
