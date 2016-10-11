@@ -815,7 +815,8 @@ This configures Magit and Evil to play well with each other
 -------------------
 "
   ("a" my/mu4e-deer-attachment "Add attachment using ranger")
-  ("c" helm-mu-contacts "Select a contact using helm")
+  ("C" helm-mu-contacts "helm-mu-contacts")
+  ("c" my/mu4e-select-contact "Contact autocompletion")
   )
 
 (defhydra hydra-major-mu4e-view(:color blue)
@@ -1363,6 +1364,33 @@ Uses ido to select the contact from all those present in the database."
              (split-string (shell-command-to-string "mu cfind --format=csv") "\n"))))))
 
 #+end_src
+
+#+begin_src emacs-lisp :results none
+(defun my/mu4e-select-contact()
+  (interactive)
+
+  ;; Get current line
+  (setq myLine
+        (buffer-substring-no-properties
+         (line-beginning-position)
+         (line-end-position)
+         ))
+
+  ;; Check if there is no address yet
+  (if
+      (not (or (string-match "To:\s\+$" myLine) (string-match ",\s*$" myLine)))
+      (progn
+        (delete-trailing-whitespace (line-beginning-position) (line-end-position))
+        (insert ", ")
+        )
+    )
+
+  (message-tab)
+  (delete-trailing-whitespace (line-beginning-position) (line-end-position))
+
+  )
+#+end_src
+
 ** Preview LaTeX in mu4e-view window
 This function copies the current text into a temporary =org= file, and then uses =org-preview-latex-fragment= to display the LaTeX formula in the current mail.
 
