@@ -1539,8 +1539,6 @@ There are quite a fewamajor modes for python out there, which confused me in the
 #+END_SRC
 *** Send current paragraph to python 
 #+begin_src emacs-lisp :results silent
-(define-key python-mode-map (kbd "<C-return>") 'python-shell-send-block)
-
 (defun python-shell-send-block (arg)
   "Send the current block to inferior Python process."
   (interactive "P")
@@ -1550,6 +1548,38 @@ There are quite a fewamajor modes for python out there, which confused me in the
    (progn
      (progn (forward-paragraph) (point-marker)))))
 
+#+end_src
+
+*** MATLAB like cells in python
+Python code between =###= is treated as a "cell". If you press =C-Ret=, the current cell is sent to the python inferior shell. This behaves like MATLAB cells. Very useful for writing and testing parts of scripts.
+
+#+begin_src emacs-lisp :results none
+(defun my/python-inside-comment-p ()
+  (save-excursion
+    (beginning-of-line 1)
+    (looking-at "^#")))
+
+(defun my/python-shell-send-cell ()
+  "Send the current python cell (delimited by ###) to the python inferior shell"
+  (interactive)
+
+  (python-shell-send-region
+   (progn
+     (goto-char
+      (if (re-search-backward "^\\s-*###[^#]" nil t)
+          (match-end 0)
+        (point-min)))
+     (while (and (python-inside-comment-p)
+                 (eq 0 (forward-line 1)))
+       nil)
+     (setq python-cell-beg (point))
+     (point-marker))
+   (goto-char
+    (if (re-search-forward "^\\s-*\\(###[^#]\\)" nil t)
+        (- (match-beginning 1) 2)
+      (point-max)))))
+
+(define-key python-mode-map (kbd "<C-return>") 'my/python-shell-send-cell)
 #+end_src
 
 ** Cython mode
