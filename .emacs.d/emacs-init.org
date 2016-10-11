@@ -1621,6 +1621,17 @@ This is really cool major mode for writing Lisp.
   )
 #+end_src
 
+** Lisp
+*** Evil-cleverparens
+#+begin_src emacs-lisp :results none
+(use-package evil-cleverparens
+  :ensure t
+  :init
+  (add-hook 'lisp-interaction-mode-hook #'evil-cleverparens-mode)
+  (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
+  )
+#+end_src
+
 * Org-Mode
 ** General
 #+BEGIN_SRC emacs-lisp :results silent
