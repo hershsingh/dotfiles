@@ -1568,7 +1568,7 @@ Python code between =###= is treated as a "cell". If you press =C-Ret=, the curr
       (if (re-search-backward "^\\s-*###[^#]" nil t)
           (match-end 0)
         (point-min)))
-     (while (and (python-inside-comment-p)
+     (while (and (my/python-inside-comment-p)
                  (eq 0 (forward-line 1)))
        nil)
      (setq python-cell-beg (point))
