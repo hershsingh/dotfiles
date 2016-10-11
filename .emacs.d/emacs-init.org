@@ -8,7 +8,6 @@
 #+EXPORT_EXCLUDE_TAGS: noexport
 
 #+LANGUAGE: en
-#+TAGS: LUKA(L) ARNAUD(A) WEB(W) noexporT(n)
 
 * Initialization
 You need to load this =.org= file from your =~/.emacs.d/init.el= file. Here is my current =init.el= file
