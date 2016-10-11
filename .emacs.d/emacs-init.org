@@ -1043,6 +1043,15 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   )
 #+end_src
 
+** Ranger
+#+begin_src emacs-lisp :results none
+(use-package ranger
+  :ensure t
+  :config
+  (ranger-override-dired-mode t)
+  )
+#+end_src
+
 * Helm
 #+begin_src emacs-lisp :results silent
 (use-package helm
