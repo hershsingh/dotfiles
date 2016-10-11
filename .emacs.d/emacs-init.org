@@ -1539,7 +1539,7 @@ There are quite a fewamajor modes for python out there, which confused me in the
 #+END_SRC
 *** Send current paragraph to python 
 #+begin_src emacs-lisp :results silent
-(defun python-shell-send-block (arg)
+(defun my/python-shell-send-block (arg)
   "Send the current block to inferior Python process."
   (interactive "P")
   (python-shell-send-region
@@ -1547,7 +1547,6 @@ There are quite a fewamajor modes for python out there, which confused me in the
      (progn (backward-paragraph) (point-marker)))
    (progn
      (progn (forward-paragraph) (point-marker)))))
-
 #+end_src
 
 *** MATLAB like cells in python
@@ -1580,6 +1579,7 @@ Python code between =###= is treated as a "cell". If you press =C-Ret=, the curr
       (point-max)))))
 
 (define-key python-mode-map (kbd "<C-return>") 'my/python-shell-send-cell)
+(define-key python-mode-map (kbd "<M-return>") 'my/python-shell-send-block)
 #+end_src
 
 ** Cython mode
