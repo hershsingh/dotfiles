@@ -11,6 +11,9 @@ source ~/.zsh/bindkeys.zsh
 source ~/.zsh/functions.zsh
 source ~/.zsh/history.zsh
 
+if [ -f ~/.zsh/local.zsh ]; then
+    source ~/.zsh/local.zsh
+fi
 
 bindkey -v
 export KEYTIMEOUT=1
@@ -52,4 +55,3 @@ mount_internal_ntfs_partition() {
 }
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
