@@ -1163,7 +1163,8 @@ interface for all of them.
   
   ;; Message citation line
   (setq message-citation-line-function 'message-insert-formatted-citation-line)
-  (setq message-citation-line-format "On %a, %b %d %Y at %r, %f wrote:")
+  ;(setq message-citation-line-format "On %a, %b %d %Y at %r, %f wrote:")
+  (setq message-citation-line-format "On %a, %b %d %Y at %R %Z, %f wrote:")
   )
 #+END_SRC
 
