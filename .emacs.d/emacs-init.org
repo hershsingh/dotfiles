@@ -1472,7 +1472,7 @@ Reference: https://tuhdo.github.io/c-ide.html
 ** Send command to Eshell
 
 #+begin_src emacs-lisp :results silent
-(defun my-eshell-execute (command)
+(defun my/eshell-execute (command)
   "Insert text of current line in eshell and execute."
   (interactive)
   (require 'eshell)
@@ -1491,12 +1491,12 @@ Reference: https://tuhdo.github.io/c-ide.html
       )
   )
 
-(defun my-eshell-make-compile()
+(defun my/eshell-make-compile()
   (interactive)
   (my-eshell-execute "make && ./bin/diagmc")
   )
 
-(evil-leader/set-key "cc" 'my-eshell-make-compile)
+(evil-leader/set-key "cc" 'my/eshell-make-compile)
 #+end_src
 
 ** Python-mode
