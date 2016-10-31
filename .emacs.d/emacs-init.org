@@ -2038,12 +2038,7 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   (setq TeX-source-correlate-mode t)
   (setq TeX-quote-after-quote t)
 
-
-  (add-to-list 'TeX-view-program-list
-               '("Zathura" ("zathura " (mode-io-correlate " --synctex-forward %n:0:%b -x \"emacsclient +%{line} %{input}\" ") " %o") "zathura"))
-  ;; Once Giordano's change makes it into the next release of AUCTeX, then the you will only need to add Zathura to the view program selection:
-  (add-to-list 'TeX-view-program-selection
-               '(output-pdf "Zathura"))
+  (add-to-list 'TeX-view-program-selection '(output-pdf "Zathura"))
 
   ;; (add-to-list 'TeX-view-program-list '("zathura" zathura-forward-search))
   ;; (setq TeX-view-program-selection '((output-pdf "zathura") (output-dvi "xdvi")))
@@ -2052,7 +2047,6 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   (define-key LaTeX-mode-map (kbd "]=")
     '(lambda () (interactive) (insert "&=")))
   )
-
 
 (defun my/latex-math-mode-settings()
   ;; AUCTeX can help you write subscripts and superscripts in math
