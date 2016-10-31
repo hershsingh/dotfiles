@@ -818,8 +818,9 @@ This configures Magit and Evil to play well with each other
 
 ;; org mode
 (defhydra hydra-major-org()
-  "^Org-mode shortcuts^"
-  )
+  "^Org-mode shortcuts"
+  ("r" org-refile "Refile")
+)
 
 ;; mu4e message compose mode
 (defhydra hydra-major-mu4e-compose(:color blue)
@@ -889,15 +890,11 @@ find-_f_ile
 #+begin_src emacs-lisp :results silent
 (evil-leader/set-key "~" 'hydra-main/body)
 
- (defhydra hydra-main (:color blue :hint nil)
-   "
-^Main Menu^
-------------------
-_m_u4e
-_r_anger
-"
-   ("m" mu4e)
-   ("r" ranger)
+ (defhydra hydra-main (:color blue);  :hint nil)
+   "Main Menu"
+   ("m" mu4e "mu4e")
+   ("r" ranger "ranger")
+   ("a" org-agenda "org-agenda")
 )
 #+end_src
 
