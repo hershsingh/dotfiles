@@ -2004,7 +2004,7 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
 (use-package magic-latex-buffer
   :ensure t
   :config
-    (add-hook 'LaTeX-mode-hook 'magic-latex-buffer)
+    ;; (add-hook 'LaTeX-mode-hook 'magic-latex-buffer)
   )
 #+end_src
   
