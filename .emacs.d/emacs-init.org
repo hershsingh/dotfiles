@@ -792,6 +792,7 @@ This configures Magit and Evil to play well with each other
         (org-mode . hydra-major-org/body)
         (mu4e-compose-mode . hydra-major-mu4e-compose/body)
         (mu4e-view-mode . hydra-major-mu4e-view/body)
+        (mu4e-headers-mode . hydra-major-mu4e-headers/body)
         (c++-mode . hydra-major-c/body)
         (c-mode . hydra-major-c/body)
         ))
@@ -828,6 +829,7 @@ This configures Magit and Evil to play well with each other
   ("a" my/mu4e-deer-attachment "Add attachment using ranger")
   ("C" helm-mu-contacts "helm-mu-contacts")
   ("c" my/mu4e-select-contact "Contact autocompletion")
+  ("r" (progn (mu4e~request-contacts)) "Refresh contacts")
   )
 
 (defhydra hydra-major-mu4e-view(:color blue)
@@ -835,6 +837,13 @@ This configures Magit and Evil to play well with each other
 -------------------
 "
   ("l" my/mu4e-view-preview-latex "Preview LaTeX fragments")
+  )
+
+(defhydra hydra-major-mu4e-headers(:color blue)
+  " ^mu4e major mode^
+-------------------
+"
+  ("m" helm-mu "Helm-mu")
   )
 
 ;; C-mode
