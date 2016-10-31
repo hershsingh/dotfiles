@@ -513,7 +513,8 @@ This is the modeline from Spacemacs.
   :ensure t
   :init
   ;; This must be set before enabling yas-global-mode
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets") yas-installed-snippets-dir)
+  ;; (setq yas-snippet-dirs '("~/.emacs.d/snippets") yas-installed-snippets-dir)
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
   (yas-global-mode 1)
   )
