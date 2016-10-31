@@ -1451,6 +1451,27 @@ This function copies the current text into a temporary =org= file, and then uses
 ** Helm-mu
 #+begin_src emacs-lisp :results silent
 #+end_src
+** Compose mode settings
+#+begin_src emacs-lisp :results none
+(use-package mu4e
+  :config
+  (add-hook 'mu4e-compose-mode-hook 'typo-mode)
+  (add-hook 'mu4e-compose-mode-hook 'sentence-highlight-mode))
+#+end_src
+
+* Writing
+** Typo Mode
+#+begin_src emacs-lisp :results none
+(use-package typo
+  :ensure t
+  :init
+  (setq typo-language "English"))
+#+end_src
+** Sentence Highlight
+#+begin_src emacs-lisp :results none
+(use-package sentence-highlight
+  :ensure t)
+#+end_src
 
 * Programming Modes
 * General programming mode settings
