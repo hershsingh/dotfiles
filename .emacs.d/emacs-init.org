@@ -1194,6 +1194,9 @@ interface for all of them.
   (setq message-citation-line-function 'message-insert-formatted-citation-line)
   ;(setq message-citation-line-format "On %a, %b %d %Y at %r, %f wrote:")
   (setq message-citation-line-format "On %a, %b %d %Y at %R %Z, %f wrote:")
+
+  ;; Line wrapping for cited messages
+  (setq message-fill-column nil)
   )
 #+END_SRC
 
