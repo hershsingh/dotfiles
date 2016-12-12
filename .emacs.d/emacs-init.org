@@ -1031,6 +1031,11 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   :ensure t
 )
 #+end_src
+** Helm-projectile
+#+begin_src emacs-lisp :results none
+(use-package helm-projectile
+  :ensure t)
+#+end_src
 
 ** Which-Key
 #+begin_src emacs-lisp :results silent
