@@ -1689,6 +1689,12 @@ This is really cool major mode for writing Lisp.
 * Org-Mode
 ** General
 #+BEGIN_SRC emacs-lisp :results silent
+(use-package org
+  :ensure t)
+#+end_src
+
+#+begin_src emacs-lisp :results none
+
 (defun bh/hide-other ()
   (interactive)
   (save-excursion
