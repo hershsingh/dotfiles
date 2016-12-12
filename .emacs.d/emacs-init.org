@@ -2189,8 +2189,8 @@ Autocompletion in latex.
      two prefix arguments, write out the day and month name."
       (interactive "P")
       (let ((format (cond
-                     ((not prefix) "[%B %d, %Y, %A]")
-                     ((t) "[%H:%M:%S; %d.%m.%Y]")
+                     ((not prefix) "%B %d, %Y, %A")
+                     ((t) "%H:%M:%S; %d.%m.%Y")
                      ;; ((equal prefix '(4)) "[%H:%M:%S; %Y-%m-%d]"))))
                     )))
         (insert (format-time-string format))))
