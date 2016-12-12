@@ -11,16 +11,16 @@
 
 * Initialization
 You need to load this =.org= file from your =~/.emacs.d/init.el= file. Here is my current =init.el= file
-#+INCLUDE: "~/.emacs.d/init.el" src emacs-lisp
+#+INCLUDE: "~/.emacs.d/init.el" export emacs-lisp
 * Packages
 We add some package repos here. 
 
 #+BEGIN_SRC emacs-lisp :results silent
 (require 'package)
 
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 
 ;(unless package-archive-contents    ;; Refresh the packages descriptions
   ;(package-refresh-contents))
