@@ -1634,6 +1634,21 @@ Python code between =###= is treated as a "cell". If you press =C-Ret=, the curr
 
 (define-key python-mode-map (kbd "<C-return>") 'my/python-shell-send-cell)
 (define-key python-mode-map (kbd "<M-return>") 'my/python-shell-send-block)
+
+#+end_src
+
+**** Define faces
+#+begin_src emacs-lisp :results none
+(defface python-cell/header-face
+  '((t (:overline t :inherit font-lock-comment-face :height 1.05
+                  :family "Sans Serif")))
+  "Face for python cell headers")
+(defvar python-cell/header-face 'python-cell/header-face)
+
+(font-lock-add-keywords 'python-mode
+                        '(
+                          ("\\(###.*\\)$" 1 python-cell/header-face prepend)))
+;;("###\\(.*\\)###$" 1 python-cell/header-face prepend)))
 #+end_src
 
 ** Cython mode
