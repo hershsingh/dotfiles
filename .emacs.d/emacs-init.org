@@ -1872,7 +1872,6 @@ This is definitely one of the coolest things that show off the power of org-mode
      (dot        . t)
      (css        . t)
      (ledger        . t)
-     (R        . t)
      (C        . t)
      )
    )
