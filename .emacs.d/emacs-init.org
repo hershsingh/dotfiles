@@ -1460,8 +1460,9 @@ This function copies the current text into a temporary =org= file, and then uses
 Load the =mu4e-contact-rewrite-function= from an external file.  This rewrites some of the contacts to fix problems with names, etc.
 
 #+begin_src emacs-lisp :results none
-(load "~/.emacs.d/lisp/mu4e-fix-contacts.el")
-(setq mu4e-contact-rewrite-function 'my-rewrite-function)
+(if (load "~/.emacs.d/lisp/mu4e-fix-contacts.el" t)
+    (progn
+      (setq mu4e-contact-rewrite-function 'my-rewrite-function)))
 #+end_src
 
 ** Compose mode settings
