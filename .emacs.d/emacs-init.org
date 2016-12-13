@@ -1495,7 +1495,8 @@ Load the =mu4e-contact-rewrite-function= from an external file.  This rewrites s
           '(lambda ()
              (fci-mode) ; Fill-Column-Indicator
              (linum-mode) ; Line numbers
-             (visual-line-mode -1) ; Line numbers
+             (visual-line-mode -1) ; Disable line wrapping at 80 chars
+             (toggle-truncate-lines 1) ; Disable line wrapping at window boundary
              ))
 #+end_src
 ** C++ Mode
