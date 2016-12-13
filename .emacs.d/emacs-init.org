@@ -1647,9 +1647,7 @@ Python code between =###= is treated as a "cell". If you press =C-Ret=, the curr
 (defvar python-cell/header-face 'python-cell/header-face)
 
 (font-lock-add-keywords 'python-mode
-                        '(
-                          ("\\(###.*\\)$" 1 python-cell/header-face prepend)))
-;;("###\\(.*\\)###$" 1 python-cell/header-face prepend)))
+                        '(("^###\s\+\\(.*\\)$" 1 python-cell/header-face prepend)))
 #+end_src
 
 ** Cython mode
