@@ -1,6 +1,9 @@
 !# Emacs
 Emacs.font: Iosevka-12
 
+!# Xft
+Xft.dpi:96
+
 !# URxvt
 URxvt*loginShell:true
 URxvt*transparent:false
