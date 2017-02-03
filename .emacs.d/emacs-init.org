@@ -427,6 +427,12 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
             (setq evil-shift-width c-basic-offset))))
 #+end_src
 
+*** Disable evil mode for specific modes
+#+begin_src emacs-lisp :results none
+(add-to-list 'evil-emacs-state-modes 'calc-mode)
+(add-hook 'calc-mode-hook 'turn-off-evil-mode)
+#+end_src
+
 ** Avy-mode
 #+begin_src emacs-lisp :results none
 (use-package avy
