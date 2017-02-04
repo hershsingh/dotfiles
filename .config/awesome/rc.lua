@@ -359,7 +359,7 @@ global_mode_modal_keybinds = {
     ["s"] = function () awful.util.spawn(homedir .. '/scripts/getQuote/save_current_quote.sh') end,
     ["q"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/scripts/getQuote/quotesdb.txt"') end,
     -- Config Files
-    ["l"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/.config/awesome/rc.lua"') end,
+    ["l"] = function () awful.util.spawn(editor_cmd .. " ~/.config/awesome/rc.lua") end,
     ["v"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/.vimrc"') end,
     -- Netctl 
     ["e"] = function () awful.util.spawn(homedir .. '/scripts/netctlpanel.sh connect ethernet-dhcp') end,
