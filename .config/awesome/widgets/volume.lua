@@ -32,7 +32,6 @@ local function getVolume()
     local vol_num = (tonumber(vol)/100)
     volume_widget_progressbar:set_value(vol_num)
     volume_tooltip:set_text("Volume: " .. vol)
-    
 end
 
 local function getWidget()
@@ -41,5 +40,7 @@ end
 
 volume.getWidget = getWidget
 volume.getVolume = getVolume
+
+getVolume()
 
 return volume
