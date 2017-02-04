@@ -59,7 +59,7 @@ local battery_widget = wibox.widget {
 local function read_file(path)
     local file = io.open(path, "rb") -- r read mode and b binary mode
     if not file then return nil end
-    local content = file:read "*a" -- *a or *all reads the whole file
+    local content = file:read("*all") -- *a or *all reads the whole file
     file:close()
     return content
 end
@@ -78,6 +78,16 @@ local battery_timer = gears.timer.start_new(10,
        return true
     end
 )
+
+local function show_battery_status()
+   local fd = io.popen("acpi")
+   local acpi_output = fd:read("*all")
+   fd:close()
+   return acpi_output
+end
+
+local battery_tooltip = awful.tooltip({ objects = { battery_widget },
+                                        timer_function = show_battery_status})
 
 get_battery_status()
 return battery_widget
