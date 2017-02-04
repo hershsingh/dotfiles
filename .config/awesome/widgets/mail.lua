@@ -38,19 +38,18 @@ local current_status = 0
 
 local function update_mail_status()
    local mail_new = mail_update()
-   mail_textbox:set_text("(" .. mail_new .. ")") -- .. mail_new)
+   mail_textbox:set_text("[" .. mail_new .. "]") -- .. mail_new)
    if tonumber(mail_new) == 0 then
       mail_icon:set_image(path_to_icons .. "/mail-mark-read.png")
    else
       mail_icon:set_image(path_to_icons .. "/mail-mark-unread.png")
    end
+   return true
 end
 
-local mail_widget_timer = gears.timer({timeout = 1})
-mail_widget_timer:connect_signal("timeout", update_mail_status)
-
+local mail_widget_timer = gears.timer.start_new(1, update_mail_status)
+-- mail_widget_timer:connect_signal("timeout", update_mail_status)
 
 update_mail_status()
-
 
 return mail_widget
