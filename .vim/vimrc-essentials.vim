@@ -71,6 +71,11 @@ set backspace=eol,start,indent
 "set whichwrap+=<,>,h,l      "wraps h,l keys 
 "}}}
 
+" {{{ Leader Key
+nnoremap <Space> <nop>
+let mapleader=" "
+" }}}
+
 " LaTex Settings {{{
 let g:tex_flavor = "latex"
 " }}}
