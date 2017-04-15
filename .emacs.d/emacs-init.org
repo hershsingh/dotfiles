@@ -70,8 +70,8 @@ This is a nice package to keep the package configs tidy.
   (defalias 'yes-or-no-p 'y-or-n-p)
 
   ; Remember last position of a file. Super useful! 
-  (setq-default save-place t)
   (setq save-place-file "~/.emacs.d/etc/saveplace")
+  (save-place-mode 1)
 
   ; If you type part of keybind, Emacs will display this part in the echo area after a timeout
   (setq echo-keystrokes 0.1)
