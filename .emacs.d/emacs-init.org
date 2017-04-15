@@ -1282,6 +1282,7 @@ interface for all of them.
   (setq mu4e-sent-folder   "/Sent")
   (setq mu4e-drafts-folder "/Drafts")
   (setq mu4e-trash-folder  "/Trash")
+  (setq mu4e-refile-folder  "/Archive")
   
   ;; http://www.djcbsoftware.nl/code/mu/mu4e/Attachments.html#Attachments
   (setq mu4e-attachment-dir  "~/attachments/")
