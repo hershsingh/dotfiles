@@ -1175,6 +1175,12 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   )
 #+end_src
 
+** Evil-lion
+#+begin_src emacs-lisp :results none
+(use-package evil-lion
+  :ensure t)
+#+end_src
+
 * Helm
 #+begin_src emacs-lisp :results silent
 (use-package helm
