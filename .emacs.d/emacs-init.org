@@ -1389,11 +1389,11 @@ interface for all of them.
   ;; and its width, with `nil' meaning 'unlimited'
   ;; (better only use that for the last field.)
   (setq mu4e-headers-fields
-      '( (:human-date          .  12)
-          (:maildir         .   10)
-          (:flags         .   4)
-          (:from          .  22)
-          (:subject       .  nil)))
+      '((:human-date    .  12)
+        (:maildir       .  10)
+        (:flags         .   4)
+        (:from          .  22)
+        (:subject       .  nil)))
   
   (setq mu4e-headers-visible-columns 110)
   (setq mu4e-headers-include-related t)
@@ -1598,13 +1598,15 @@ Load the =mu4e-contact-rewrite-function= from an external file.  This rewrites s
 #+begin_src emacs-lisp :results none
 (use-package typo
   :ensure t
+  :diminish typo-mode
   :init
   (setq typo-language "English"))
 #+end_src
 ** Sentence Highlight
 #+begin_src emacs-lisp :results none
 (use-package sentence-highlight
-  :ensure t)
+  :ensure t
+  :diminish sentence-highlight-mode)
 #+end_src
 
 * Programming Modes
