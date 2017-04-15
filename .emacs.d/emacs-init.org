@@ -1200,15 +1200,11 @@ Seems like the default value is too small.  =mu4e= sometimes gives an error abou
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
   (global-unset-key (kbd "C-x c"))
 
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
-  (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
-
   ;; Vim keybindings
-  (define-key helm-map (kbd "C-j") 'helm-next-line) ; rebind tab to run persistent action
-  (define-key helm-map (kbd "C-k") 'helm-previous-line) ; make TAB work in terminal
-  (define-key helm-map (kbd "C-l") 'helm-next-source) ; make TAB work in terminal
-  (define-key helm-map (kbd "C-h") 'helm-previous-source) ; make TAB work in terminal
+  (define-key helm-map (kbd "C-j") 'helm-next-line)
+  (define-key helm-map (kbd "C-k") 'helm-previous-line)
+  (define-key helm-map (kbd "C-l") 'helm-next-source)
+  (define-key helm-map (kbd "C-h") 'helm-previous-source)
 
   (when (executable-find "curl")
     (setq helm-google-suggest-use-curl-p t))
