@@ -1181,6 +1181,12 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   :ensure t)
 #+end_src
 
+** Increase maximum number of variable bindings
+Seems like the default value is too small.  =mu4e= sometimes gives an error about this.
+#+begin_src emacs-lisp :results none
+(setq max-specpdl-size 100000)
+#+end_src
+
 * Helm
 #+begin_src emacs-lisp :results silent
 (use-package helm
