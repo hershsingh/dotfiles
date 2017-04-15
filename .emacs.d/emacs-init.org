@@ -701,13 +701,6 @@ There are two ways to use snippets from another mode. One is to include a =.yas-
   )
 #+END_SRC
 
-** Slime
-#+BEGIN_SRC emacs-lisp :results silent
-
-; SLIME
-(setq inferior-lisp-program "/usr/bin/ecl")
-
-#+END_SRC
 ** Epresent
 #+BEGIN_SRC emacs-lisp :results silent
 ; (use-package epresent
@@ -2218,10 +2211,7 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
 #+BEGIN_SRC emacs-lisp :results silent
 (setq LaTeX-math-abbrev-prefix ";")
 (setq LaTeX-math-list '(
-    (?8 "infty" nil)))
-
-(evil-define-key 'insert LaTeX-mode-map (kbd "==") (lambda () (interactive) (insert "&=")))
-(evil-define-key 'insert LaTeX-mode-map (kbd "= SPC") (lambda () (interactive) (insert "= ")))
+                        (?8 "infty" nil)))
 
 (defun my/latex-settings()
 
@@ -2251,7 +2241,11 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   ;; Shortcuts for typing math
   (define-key LaTeX-mode-map (kbd "]=")
     '(lambda () (interactive) (insert "&=")))
-  )
+
+  (setq LaTeX-babel-hyphen nil); Disable language-specific hyphen insertion.
+
+  ;; Enable Flyspell
+  (flyspell-mode))
 
 (defun my/latex-math-mode-settings()
   ;; AUCTeX can help you write subscripts and superscripts in math
@@ -2278,28 +2272,27 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 (setq reftex-plug-into-AUCTeX t)
 
+;; ============ Latexmk setup ==============
+(defun run-latexmk ()
+  (interactive)
+  (let ((TeX-save-query nil)
+        (TeX-process-asynchronous nil)
+        (master-file (TeX-master-file)))
+    (TeX-save-document "")
+    (TeX-run-TeX "latexmk"
+                 (TeX-command-expand "latexmk -pdf %s" 'TeX-master-file)
+                 master-file))
+  (if (plist-get TeX-error-report-switches (intern master-file))
+      (TeX-next-error t)
+    (progn
+      (demolish-tex-help)
+      (minibuffer-message "latexmk: done."))))
 
-    ;; ============ Latexmk setup ==============                                        
-    (defun run-latexmk ()
-      (interactive)
-      (let ((TeX-save-query nil)
-            (TeX-process-asynchronous nil)
-            (master-file (TeX-master-file)))
-        (TeX-save-document "")
-        (TeX-run-TeX "latexmk"
-                     (TeX-command-expand "latexmk -pdf %s" 'TeX-master-file)
-                     master-file))
-        (if (plist-get TeX-error-report-switches (intern master-file))
-            (TeX-next-error t)
-          (progn
-            (demolish-tex-help)
-            (minibuffer-message "latexmk: done."))))
-
-    (add-hook 'LaTeX-mode-hook (lambda ()
-        (push
-         '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
-           :help "Run Latexmk on file")
-         TeX-command-list)))
+(add-hook 'LaTeX-mode-hook (lambda ()
+                             (push
+                              '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+                                :help "Run Latexmk on file")
+                              TeX-command-list)))
 
 
 ;; (use-package auctex-latexmk
@@ -2337,10 +2330,73 @@ Autocompletion in latex.
           (progn
             (push '("\\>" . ?⟩) prettify-symbols-alist)
             (push '("\\<" . ?⟨) prettify-symbols-alist)
-            (push '("\\del" . ?∇) prettify-symbols-alist)
+            (push '("\\del" . ?∂) prettify-symbols-alist)
             (push '("\\dotsc" . ?…) prettify-symbols-alist)
             )
           ))
+#+end_src
+
+** Helm-Bibtex
+#+begin_src emacs-lisp :results none
+(use-package helm-bibtex
+  :ensure t
+  :config
+
+  ;; This is where to look for .bib files
+  (setq bibtex-completion-bibliography
+        (directory-files "~/notebook/references/" 1 ".*\.bib$"))
+
+  ;; This is where the notes are stored
+  (setq bibtex-completion-notes-path "~/notebook/references/notes.org")
+
+  ;; Make "Insert Citation" as the default action
+  (helm-delete-action-from-source "Insert citation" helm-source-bibtex)
+  (helm-add-action-to-source "Insert citation" 'helm-bibtex-insert-citation helm-source-bibtex 0)
+
+  ;; Zotero stores the filename in the field "file"
+  (setq bibtex-completion-pdf-field "File")
+
+  ;; Use 'xdg-open' to open pdfs
+  (setq bibtex-completion-pdf-open-function
+        (lambda (fpath)
+          (call-process "xdg-open" nil 0 nil fpath)))
+
+  ;; "Better BibLaTeX" exports the "date" field instead of the "year" field
+  (setq bibtex-completion-additional-search-fields '(date))
+  (setq bibtex-completion-display-formats
+        '((t             . "${date:4} | ${author:36} ${title:*} ${=has-pdf=:1}${=has-note=:1} | ${=type=:7}")))
+
+  ;; Don't ask for pre-note and post-note while inserting citations
+  (setq bibtex-completion-cite-prompt-for-optional-arguments nil)
+
+  (setq bibtex-completion-notes-template-one-file
+        "\n* ${author} (${date}): ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :END:\n\n")
+  )
+#+end_src
+
+** Star environment DWIM
+#+begin_src emacs-lisp :results none
+;; http://stackoverflow.com/questions/10531115/insert-starred-environment-or-command-in-auctex
+(defun LaTeX-star-environment-dwim ()
+  "Convert between the starred and the not starred version of the current environment."
+  (interactive)
+  ;; If the current environment is starred.
+  (message (concat "Modifying environment: " (LaTeX-current-environment)))
+  (if (string-match "\*$" (LaTeX-current-environment))
+      ;; Remove the star from the current environment.
+      (LaTeX-modify-environment (substring (LaTeX-current-environment) 0 -1))
+    ;; Else add a star to the current environment.
+    (LaTeX-modify-environment (concat (LaTeX-current-environment) "*"))))
+#+end_src
+
+** Disable Babel Hyphen
+#+begin_src emacs-lisp :results none
+(setq LaTeX-babel-hyphen nil)
+#+end_src
+
+* PDF tools
+#+begin_src emacs-lisp :results none
+
 #+end_src
 
 * Customizations
