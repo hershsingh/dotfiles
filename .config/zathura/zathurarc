@@ -3,4 +3,6 @@ map u scroll half-up
 
 map \<Enter> :nohlsearch<CR>
 
+set smooth-scroll true
+
 
