@@ -1911,7 +1911,11 @@ Enable =LaTeX-math-mode= when in org-mode.
 ** Capture
 #+begin_src emacs-lisp :results silent
 (setq org-capture-templates
-      '(("t" "Todo" entry (file+headline "~/org/private/today.org" "Tasks")
+      '(
+        ("t" "Today" entry (file+headline "~/org/private/today.org"
+                                          (format-time-string "%B %d, %Y, %A"))
+         "* TODO %?\n  %i\n  %a")
+        ("T" "Todo" entry (file+headline "~/org/private/today.org" "Tasks")
          "* TODO %?\n  %i\n  %a")
         ("j" "Journal" entry (file+datetree "~/org/private/journal.org")
          "* %?\nEntered on %U\n  %i\n  %a")
