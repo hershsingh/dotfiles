@@ -12,9 +12,9 @@ local vpn_widget = wibox.widget{
 local function update_vpn_status()
    status = io.popen("pgrep openvpn", "r")
    if status:read() == nil then
-      vpn_widget:set_markup(" <span color='#FF2A2A'>VPN: Off</span> ")
+      vpn_widget:set_markup(" <span color='#FF2A2A'>VPN: OFF</span> ")
    else
-      vpn_widget:set_markup(" <span color='#00FF00'>VPN: On</span> ")
+      vpn_widget:set_markup(" <span color='#00FF00'>VPN: ON</span> ")
    end
    status:close()    
    return true

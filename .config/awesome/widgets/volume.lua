@@ -11,11 +11,11 @@ local volume_widget = wibox.widget {
         max_value     = 1,
         value         = 0.33,
         widget        = wibox.widget.progressbar,
+        margins = 3,
         background_color = '#494B4F',
         color = '#AECF96'
     },
-    forced_height = 10,
-    forced_width  = 10,
+    forced_width  = 16,
     direction     = 'east',
     layout        = wibox.container.rotate,
 }
