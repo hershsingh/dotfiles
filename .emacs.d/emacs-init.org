@@ -1691,31 +1691,31 @@ Reference: https://tuhdo.github.io/c-ide.html
 There are quite a fewamajor modes for python out there, which confused me in the beginning. There's the native =python.el=, which ships with emacs, and there is a =python-mode.el=, which has to be installed explicitly. I am trying out =python.el= for now.
 
 #+BEGIN_SRC emacs-lisp :results silent
-    ;(use-package python-mode
-        ;:config
-        ; use IPython
-        ;(setq-default py-shell-name "ipython")
-        ;(setq-default py-which-bufname "IPython")
-        ; use the wx backend, for both mayavi and matplotlib
-        ;(setq py-python-command-args
-          ;'("--pylab=wx" "-colors" "Linux"))
-        ;(setq py-force-py-shell-name-p t)
-
-        ; switch to the interpreter after executing code
-        ;(setq py-shell-switch-buffers-on-execute-p t)
-        ;(setq py-switch-buffers-on-execute-p t)
-        ; don't split windows
-        ;(setq py-split-windows-on-execute-p nil)
-        ; try to automagically figure out indentation
-        ;(setq py-smart-indentation t)
-        ; (global-set-key (kbd "C-c C-l") 'py-execute-line)
-    ;)
     (use-package python
         :config
-        (setq python-shell-interpreter "ipython"
+        (setq python-shell-completion-native nil)
+        (setq python-shell-interpreter "ipython3"
             python-shell-interpreter-args "-i --simple-prompt")
         )
+
 #+END_SRC
+*** Anaconda Mode
+#+begin_src emacs-lisp :results none
+(use-package anaconda-mode
+  :ensure t
+  :config
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+
+  )
+(use-package company-anaconda
+  :ensure t
+  :config
+  (eval-after-load "company"
+    '(add-to-list 'company-backends 'company-anaconda))
+  )
+#+end_src
+
 *** Send current paragraph to python 
 #+begin_src emacs-lisp :results silent
 (defun my/python-shell-send-block (arg)
