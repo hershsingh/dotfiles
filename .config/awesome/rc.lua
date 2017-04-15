@@ -68,7 +68,7 @@ awful.layout.layouts = {
     awful.layout.suit.max,
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
-    -- awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.bottom,
     -- awful.layout.suit.tile.top,
     -- awful.layout.suit.fair,
     -- awful.layout.suit.fair.horizontal,
@@ -283,8 +283,10 @@ awful.screen.connect_for_each_screen(function(s)
             volume_widget,
             widget_seperator,
             mytextclock,
-            s.mylayoutbox,
+            widget_seperator,
             wibox.widget.systray(),
+            widget_seperator,
+            s.mylayoutbox,
         },
     }
 end)
