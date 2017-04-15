@@ -84,6 +84,8 @@
     (,evil-mu4e-state mu4e-headers-mode-map "/"            mu4e-headers-search-narrow)
     (,evil-mu4e-state mu4e-headers-mode-map "?"            mu4e-headers-mark-for-unread)
     (,evil-mu4e-state mu4e-headers-mode-map "!"            mu4e-headers-mark-for-read)
+    (,evil-mu4e-state mu4e-headers-mode-map "+"            mu4e-headers-mark-for-flag)
+    (,evil-mu4e-state mu4e-headers-mode-map "-"            mu4e-headers-mark-for-unflag)
     (,evil-mu4e-state mu4e-headers-mode-map "\C-j"         mu4e-headers-next)
     (,evil-mu4e-state mu4e-headers-mode-map "\C-k"         mu4e-headers-prev)
 
@@ -94,6 +96,8 @@
     (,evil-mu4e-state mu4e-view-mode-map "\C-k"            mu4e-view-headers-prev)
     (,evil-mu4e-state mu4e-view-mode-map "?"               mu4e-view-mark-for-unread)
     (,evil-mu4e-state mu4e-view-mode-map "!"               mu4e-view-mark-for-read)
+    (,evil-mu4e-state mu4e-view-mode-map "+"               mu4e-view-mark-for-flag)
+    (,evil-mu4e-state mu4e-view-mode-map "-"               mu4e-view-mark-for-unflag)
     (,evil-mu4e-state mu4e-view-mode-map "\C-u"            evil-scroll-up)
 
     (,evil-mu4e-state mu4e-view-mode-map "F"            mu4e-compose-forward)
