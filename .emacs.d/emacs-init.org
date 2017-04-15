@@ -1171,6 +1171,7 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   :ensure t
   :config
   (ranger-override-dired-mode t)
+  (setq ranger-show-dotfiles nil)
   )
 #+end_src
 
