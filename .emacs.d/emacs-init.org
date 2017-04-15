@@ -1161,7 +1161,8 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   (diminish 'visual-line-mode)
   (diminish 'abbrev-mode "Abv")
   (diminish 'buffer-face-mode)
-  )
+  (diminish 'orgstruct-mode)
+)
 #+end_src
 
 ** Ranger
