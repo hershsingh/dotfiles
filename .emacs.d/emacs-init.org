@@ -882,18 +882,30 @@ This configures Magit and Evil to play well with each other
 
 #+begin_src emacs-lisp :results silent
 ;; LaTeX mode
-(defhydra hydra-major-latex(:color blue :hint nil)
-  "^AucTeX shortcuts^
-  ----------------
+(defhydra hydra-major-latex(:color teal :hint nil)
   "
-  ("l" reftex-label "Insert label")
-  ("(" reftex-citation "Insert Citation")
-  ("c" TeX-command-master "Compile")
-  ("v" TeX-view "View")
-  ("f" outline-toggle-children "Toggle fold")
-  ("]" LaTeX-close-environment "Close environment")
-  ("e" (LaTeX-environment 1) "Modify Current environment")
-  )
+[_l_] Label                         [_c_] Compile Document
+[_(_] Citation                      [_v_] View Document
+[_q_] Equation reference
+[_r_] Reference                     [_]_] Close environment
+[_b_] Helm-bibtex                   [_*_] Star/unstar environment
+[_=_] Table of Contents
+[_w_] Biber
+  "
+  ("l" reftex-label nil)
+  ("(" reftex-citation nil)
+  ("q" (reftex-reference 'e) nil) ; Equation Reference
+  ("r" (reftex-reference) nil)
+  ("c" TeX-command-master nil)
+  ("v" TeX-view nil)
+  ("f" outline-toggle-children nil)
+  ("]" LaTeX-close-environment nil)
+  ("e" (LaTeX-environment 1) nil)
+  ("*" (LaTeX-star-environment-dwim) nil)
+  ("b" (helm-bibtex) nil)
+  ("=" (reftex-toc) nil)
+  ("w" (shell-command (concat "/usr/bin/vendor_perl/biber " (TeX-master-file)) nil))
+)
 
 ;; org mode
 (defhydra hydra-major-org()
