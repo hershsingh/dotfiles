@@ -922,6 +922,7 @@ This configures Magit and Evil to play well with each other
   ("C" helm-mu-contacts "helm-mu-contacts")
   ("c" my/mu4e-select-contact "Contact autocompletion")
   ("r" (progn (mu4e~request-contacts)) "Refresh contacts")
+  ("m" mu4e-compose-attach-captured-message "Attach captured message")
   )
 
 (defhydra hydra-major-mu4e-view(:color blue)
@@ -929,6 +930,8 @@ This configures Magit and Evil to play well with each other
 -------------------
 "
   ("l" my/mu4e-view-preview-latex "Preview LaTeX fragments")
+  ("e" mu4e-compose-edit "Edit draft")
+  ("r" mu4e-headers-toggle-include-related "Toggle Related")
   )
 
 (defhydra hydra-major-mu4e-headers(:color blue)
@@ -936,6 +939,8 @@ This configures Magit and Evil to play well with each other
 -------------------
 "
   ("m" helm-mu "Helm-mu")
+  ("e" mu4e-compose-edit "Edit draft")
+  ("r" mu4e-headers-toggle-include-related "Toggle Related")
   )
 
 ;; C-mode
