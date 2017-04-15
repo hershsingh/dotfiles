@@ -12,7 +12,8 @@
 let g:LatexBox_loaded_matchparen=1
 " }}}
 
-" Vundle: Load the plugins! "{{{
+" Vundle: Load the plugins! "{{{ 
+
 set nocompatible
 filetype off
 
@@ -78,6 +79,10 @@ Plugin 'sjl/gundo.vim'
 Plugin 'ivanov/vim-ipython'
 
 Plugin 'godlygeek/tabular'
+
+" Distraction free writing
+Plugin 'junegunn/goyo.vim'
+Plugin 'junegunn/limelight.vim'
 
 " All of your Plugins must be added before the following line
 call vundle#end()
@@ -276,6 +281,44 @@ let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\
 let g:neocomplcache_force_omni_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
 
 "}}}
+
+" Plugin: Vim-Orgmode {{{
+
+let g:org_aggressive_conceal = 1
+
+" }}}
+
+" Plugin: Goyo/Limelight {{{
+
+" Color name (:help cterm-colors) or ANSI code
+let g:limelight_conceal_ctermfg = 'gray'
+let g:limelight_conceal_ctermfg = 240
+
+" Color name (:help gui-colors) or RGB color
+let g:limelight_conceal_guifg = 'DarkGray'
+let g:limelight_conceal_guifg = '#777777'
+
+" Default: 0.5
+let g:limelight_default_coefficient = 0.7
+
+" Number of preceding/following paragraphs to include (default: 0)
+let g:limelight_paragraph_span = 0 
+
+" Beginning/end of paragraph
+"   When there's no empty line between the paragraphs
+"   and each paragraph starts with indentation
+let g:limelight_bop = '^\s'
+let g:limelight_eop = '\ze\n^\s'
+
+" Highlighting priority (default: 10)
+"   Set it to -1 not to overrule hlsearch
+let g:limelight_priority = -1
+
+" Goyo Integration
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+
+" }}}
 
 " --- Non-Vundle Plugins ---
 " Plugin: let-modeline {{{
