@@ -307,20 +307,12 @@ info_modal_keybinds = "\
     2 - Google Chrome\
     3 - Emacsclient\
     4 - Vim\
-    5 - LinuxDCPP\
-    6 - GoldenDict\
-    7 - Dropbox\
+    m - mu4e\
+    s - Sync Offlineimap\
+    c - Emacs Calc\
     \
 <b>Notebook</b>\
     a - Arch Notes\
-    w - Remind Calendar\
-    d - Dokuwiki IDE\
-    f - Dokuwiki in Vim\
-    s - Wordlist\
-    \
-<b>Quotebook</b>\
-    s - Save Current Quote\
-    q - Open QuoteBook\
     \
 <b>Edit Config files</b>\
     l - Awesome, rc.lua\
@@ -332,7 +324,7 @@ info_modal_keybinds = "\
     x - disconnect all profiles\
     \
 <b>Stuff</b>\
-    / - Mount/Dismount \"Stuff\"\
+    / - Mount/Dismount\
 <b>Logout</b>\
     o - Turn off the monitor\
     p - Poweroff\
@@ -345,24 +337,25 @@ info_modal_keybinds = "\
 global_mode_modal_keybinds = {
     Escape = function() modal_keybinds_notification= naughty.notify({title="[~] Mode", text="Cancelled"}) end,
     -- Apps
-    ["1"] = function () run_or_raise("firefox", {class="FireFox"} ) end,
-    ["2"] = function () run_or_raise("google-chrome-stable", {class="Google-chrome"} ) end,
+    ["1"] = function () run_or_raise("firefox --private-window", {class="FireFox"} ) end,
+    ["2"] = function () run_or_raise("chromium", {class="Google-chrome"} ) end,
     --["3"] = function () awful.util.spawn(terminal .. ' -e "ncmpcpp"') end,
     ["3"] = function () awful.util.spawn("emacsclient -c") end,
     ["4"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/scratchpad.txt"') end,
-    ["5"] = function () awful.util.spawn('linuxdcpp') end,
-    ["6"] = function () awful.util.spawn('goldendict') end,
-    ["7"] = function () awful.util.spawn('dropboxd') end,
+    -- ["m"] = function () awful.util.spawn('emacsclient -c -e ''"(progn (mu4e) (mu4e~headers-jump-to-maildir "/INBOX")) ') end,
+    -- ["m"] = function () awful.util.spawn('emacsclient -c -e "(mu4e)" ') end,
+    ["m"] = function () awful.util.spawn('emacsclient -c -e \'(mu4e~headers-jump-to-maildir "/INBOX")\' ') end,
+    ["c"] = function () awful.util.spawn('emacsclient -c -e \'(full-calc)\' ') end,
+    ["s"] =
+       function ()
+          awful.spawn.easy_async('killall -9 offlineimap',
+                                 function(stdout, stderr, reason, exit_code)
+                                    if(exit_code==0) then naughty.notify { text = "OfflineIMAP sync done." }
+                                    else naughty.notify {text = "OfflineIMAP sync did not work for some reason..."} end
+          end)
+       end,
     -- Notebook
     ["a"] = function () awful.util.spawn('emacsclient -c ~/org/arch.org') end,
-    ["w"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/calendars/imp.rem"') end,
-    ["d"] = function () awful.util.spawn('firefox -new-window http://localhost/doku') 
-        awful.util.spawn('urxvt -e vim /home/hersh/doku -c "silent cd /home/hersh/doku" -c "silent call FirefoxRefresher()"') end,
-    ["f"] = function () awful.util.spawn('urxvt -e vim /home/hersh/doku -c "silent cd /home/hersh/doku"') end,
-    ["s"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/notes/study/wordlist/wordlist.txt"') end,
-    -- Quotebook
-    ["s"] = function () awful.util.spawn(homedir .. '/scripts/getQuote/save_current_quote.sh') end,
-    ["q"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/scripts/getQuote/quotesdb.txt"') end,
     -- Config Files
     ["l"] = function () awful.util.spawn(editor_cmd .. " ~/.config/awesome/rc.lua") end,
     ["v"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/.vimrc"') end,
