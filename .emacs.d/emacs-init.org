@@ -430,7 +430,14 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
 *** Disable evil mode for specific modes
 #+begin_src emacs-lisp :results none
 (add-to-list 'evil-emacs-state-modes 'calc-mode)
+(add-to-list 'evil-emacs-state-modes 'reftec-toc-mode)
 (add-hook 'calc-mode-hook 'turn-off-evil-mode)
+
+;; (loop for (mode . state) in '(
+;;                               (reftec-toc-mode . emacs)
+;;                               (calc-mode . emacs)
+;;                               )
+;;       do (evil-set-initial-state mode state))
 #+end_src
 
 ** Avy-mode
