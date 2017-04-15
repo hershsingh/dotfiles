@@ -17,7 +17,7 @@ syndaemon -i 0.5 -t -d &
 #/home/hersh/scripts/conky_start.sh &
 
 # Set the keymap
-xmodmap /home/hersh/.Xmodmap &
+xmodmap $HOME/.Xmodmap &
 
 # Source .Xresources
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
