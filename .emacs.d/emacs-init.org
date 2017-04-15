@@ -1824,6 +1824,51 @@ This is really cool major mode for writing Lisp.
   )
 #+end_src
 
+** SLIME
+#+BEGIN_SRC emacs-lisp :results silent
+;; SLIME
+(use-package slime
+  :ensure t
+  :config
+  (add-hook 'lisp-mode-hook (lambda () (slime-mode t)))
+  (add-hook 'inferior-lisp-mode-hook (lambda () (inferior-slime-mode t)))
+  (setq inferior-lisp-program "/usr/bin/sbcl")
+  (setq slime-contribs '(slime-fancy))
+
+  (use-package eval-in-repl
+    :ensure t
+    :init
+    ;; SLIME support (for Common Lisp)
+    ;; (require 'slime) ; if not done elsewhere
+    (add-hook 'lisp-mode-hook
+              '(lambda ()
+                 (local-set-key (kbd "<C-return>") 'eir-eval-in-slime)))
+    )
+  )
+#+END_SRC
+
+** Eval-In-Repl
+#+begin_src emacs-lisp :results none
+#+end_src
+
+** Common Lisp
+
+*** Fontify descriptions
+#+begin_src emacs-lisp :results none
+    (defun slime-description-fontify ()
+      "Fontify sections of SLIME Description."
+      (with-current-buffer "*SLIME Description*"
+        (highlight-regexp
+         (concat "^Function:\\|"
+                 "^Macro-function:\\|"
+                 "^Its associated name.+?) is\\|"
+                 "^The .+'s arguments are:\\|"
+                 "^Function documentation:$\\|"
+                 "^Its.+\\(is\\|are\\):\\|"
+                 "^On.+it was compiled from:$")
+         'hi-green-b)))
+#+end_src
+
 * Org-Mode
 ** General
 #+BEGIN_SRC emacs-lisp :results silent
