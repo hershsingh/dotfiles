@@ -1338,7 +1338,7 @@ interface for all of them.
         mu4e-headers-duplicate-prefix    '("="  . "└≡")   ; Duplicate
         mu4e-headers-default-prefix      '("|"  . "  ●")) ; Default. 
   
-  (setq mu4e-headers-unread-mark    '("u" . "✉ ")
+  (setq mu4e-headers-unread-mark   '("u" . "✉ ")
         mu4e-headers-passed-mark   '("P" . "→ ") ;; ↪
         mu4e-headers-replied-mark  '("R" . "← ")
         mu4e-headers-trashed-mark  '("T" . "✗ ") ;; 🗑
@@ -1381,6 +1381,7 @@ interface for all of them.
       (visual-line-mode t)
       (visual-fill-column-mode t)
       (flyspell-mode t)
+      (orgstruct-mode)
   )
   (add-hook 'mu4e-compose-mode-hook 'my/mu4e-compose-mode-settings 'append)
   
