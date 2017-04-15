@@ -991,6 +991,8 @@ find-_f_ile
    ("m" mu4e "mu4e")
    ("r" ranger "ranger")
    ("a" org-agenda "org-agenda")
+   ("c" calc "calc")
+   ("b" helm-bibtex "helm-bibtex")
 )
 #+end_src
 
@@ -1103,6 +1105,7 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 (evil-leader/set-key "p" 'hydra-projectile/body)
 (evil-leader/set-key "s" 'projectile-switch-to-buffer)
 #+end_src
+
 ** Ansi-colors
 *** Make colors work in c/c++ compilation buffers
 Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
