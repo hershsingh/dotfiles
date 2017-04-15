@@ -1,3 +1,6 @@
+-- Emacs keybinding to reload Awesome in a Xephyr instance on display :5
+-- (evil-leader/set-key "a" '(lambda() (interactive) (shell-command "DISPLAY=:5 xdotool key ctrl+super+r")))
+
 -- Standard awesome library
 
 local gears = require("gears")
