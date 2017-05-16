@@ -1872,6 +1872,14 @@ This is really cool major mode for writing Lisp.
          'hi-green-b)))
 #+end_src
 
+** Cadabra2
+#+begin_src emacs-lisp :results none
+(use-package cadabra-mode
+    :load-path "lisp/cadabra-mode"
+)
+#+end_src
+
+
 * Org-Mode
 ** General
 #+BEGIN_SRC emacs-lisp :results silent
