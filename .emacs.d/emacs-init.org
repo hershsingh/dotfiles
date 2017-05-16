@@ -1601,6 +1601,16 @@ Load the =mu4e-contact-rewrite-function= from an external file.  This rewrites s
   :ensure t
   :diminish sentence-highlight-mode)
 #+end_src
+** Markdown
+#+begin_src emacs-lisp :results none
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+#+end_src
 
 * Programming Modes
 ** General programming mode settings
