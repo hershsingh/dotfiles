@@ -1061,8 +1061,7 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
   ("`"   hydra-projectile-other-window/body "other window")
   ("q"   nil "cancel" :color blue))
 
-(evil-leader/set-key "p" 'hydra-projectile/body)
-(evil-leader/set-key "s" 'projectile-switch-to-buffer)
+; (evil-leader/set-key "p" 'hydra-projectile/body)
 #+end_src
 
 ** Ansi-colors
@@ -1092,7 +1091,10 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 ** Helm-projectile
 #+begin_src emacs-lisp :results none
 (use-package helm-projectile
-  :ensure t)
+  :ensure t
+  :config
+  (evil-leader/set-key "p" 'helm-projectile)
+  (evil-leader/set-key "s" 'helm-projectile-switch-to-buffer))
 #+end_src
 
 ** Which-Key
@@ -1104,6 +1106,7 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
   (which-key-mode 1)
 )
 #+end_src
+
 ** Diminish
 #+begin_src emacs-lisp :results silent
 (use-package diminish
