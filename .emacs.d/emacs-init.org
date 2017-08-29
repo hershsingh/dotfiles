@@ -2218,13 +2218,15 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
 ** AucTeX
 
 #+BEGIN_SRC emacs-lisp :results silent
+
 (setq LaTeX-math-abbrev-prefix ";")
 (setq LaTeX-math-list '(
                         (?8 "infty" nil)))
 
 (defun my/latex-settings()
 
-  (setq-default TeX-engine 'luatex)
+  (setq TeX-PDF-mode t)
+  ;; (setq-default TeX-engine 'luatex)
 
   ;; Make Auctex aware of multidoc structure
   (setq-default TeX-master nil)
@@ -2232,8 +2234,8 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   ;; Don't ask to save when compiling
   (setq TeX-save-query nil)
 
-  ;; Don't ask the command
-  (setq TeX-command-force "LaTeX")  
+  ;; Don't ask the command: Use Latexmk
+  ;; (setq TeX-command-force "LatexMk")  
   
   ;; Enable parsing
   (setq TeX-auto-save t)
@@ -2282,33 +2284,33 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
 (setq reftex-plug-into-AUCTeX t)
 
 ;; ============ Latexmk setup ==============
-(defun run-latexmk ()
-  (interactive)
-  (let ((TeX-save-query nil)
-        (TeX-process-asynchronous nil)
-        (master-file (TeX-master-file)))
-    (TeX-save-document "")
-    (TeX-run-TeX "latexmk"
-                 (TeX-command-expand "latexmk -pdf %s" 'TeX-master-file)
-                 master-file))
-  (if (plist-get TeX-error-report-switches (intern master-file))
-      (TeX-next-error t)
-    (progn
-      (demolish-tex-help)
-      (minibuffer-message "latexmk: done."))))
+;; (defun run-latexmk ()
+;;   (interactive)
+;;   (let ((TeX-save-query nil)
+;;         (TeX-process-asynchronous nil)
+;;         (master-file (TeX-master-file)))
+;;     (TeX-save-document "")
+;;     (TeX-run-TeX "latexmk"
+;;                  (TeX-command-expand "latexmk -pdf %s" 'TeX-master-file)
+;;                  master-file))
+;;   (if (plist-get TeX-error-report-switches (intern master-file))
+;;       (TeX-next-error t)
+;;     (progn
+;;       (demolish-tex-help)
+;;       (minibuffer-message "latexmk: done."))))
 
-(add-hook 'LaTeX-mode-hook (lambda ()
-                             (push
-                              '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
-                                :help "Run Latexmk on file")
-                              TeX-command-list)))
+;; (add-hook 'LaTeX-mode-hook (lambda ()
+;;                              (push
+;;                               '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+;;                                 :help "Run Latexmk on file")
+;;                               TeX-command-list)))
 
 
-;; (use-package auctex-latexmk
-;;   :ensure t
-;;   :config
-;;   (auctex-latexmk-setup)
-;;   )
+(use-package auctex-latexmk
+  :ensure t
+  :init
+  (auctex-latexmk-setup)
+  )
 #+END_SRC
 
 ** Company-AucTeX
