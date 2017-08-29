@@ -871,7 +871,8 @@ This configures Magit and Evil to play well with each other
   ("(" reftex-citation nil)
   ("q" (reftex-reference 'e) nil) ; Equation Reference
   ("r" (reftex-reference) nil)
-  ("c" TeX-command-master nil)
+  ("c" (TeX-command "LatexMk" 'TeX-master-file nil) nil)
+  ("l" (TeX-command "LaTeX" 'TeX-master-file nil) nil)
   ("v" TeX-view nil)
   ("f" outline-toggle-children nil)
   ("]" LaTeX-close-environment nil)
