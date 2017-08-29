@@ -1738,21 +1738,22 @@ Python code between =###= is treated as a "cell". If you press =C-Ret=, the curr
   "Send the current python cell (delimited by ###) to the python inferior shell"
   (interactive)
 
-  (python-shell-send-region
-   (progn
+  (save-excursion
+    (python-shell-send-region
+     (progn
+       (goto-char
+        (if (re-search-backward "^\\s-*###[^#]" nil t)
+            (match-end 0)
+          (point-min)))
+       (while (and (my/python-inside-comment-p)
+                   (eq 0 (forward-line 1)))
+         nil)
+       (setq python-cell-beg (point))
+       (point-marker))
      (goto-char
-      (if (re-search-backward "^\\s-*###[^#]" nil t)
-          (match-end 0)
-        (point-min)))
-     (while (and (my/python-inside-comment-p)
-                 (eq 0 (forward-line 1)))
-       nil)
-     (setq python-cell-beg (point))
-     (point-marker))
-   (goto-char
-    (if (re-search-forward "^\\s-*\\(###[^#]\\)" nil t)
-        (- (match-beginning 1) 2)
-      (point-max)))))
+      (if (re-search-forward "^\\s-*\\(###[^#]\\)" nil t)
+          (- (match-beginning 1) 2)
+        (point-max))))))
 
 (define-key python-mode-map (kbd "<C-return>") 'my/python-shell-send-cell)
 (define-key python-mode-map (kbd "<M-return>") 'my/python-shell-send-block)
