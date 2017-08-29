@@ -2330,6 +2330,12 @@ Autocompletion in latex.
 (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
 
 (evil-leader/set-key "ot" 'outline-toggle-children)
+(push '("\\\\frametitle\\b" 2) TeX-outline-extra)
+(push '("\\\\block\\b" 2) TeX-outline-extra)
+; (push '("^[^%\n]*\\\\begin *{frame}" 2) TeX-outline-extra)
+(evil-define-key 'normal LaTeX-mode-map
+  "]]" 'outline-next-visible-heading
+  "[[" 'outline-previous-visible-heading)
 #+end_src
 
 ** Prettify-symbols
