@@ -432,6 +432,7 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
 (add-to-list 'evil-emacs-state-modes 'calc-mode)
 (add-to-list 'evil-emacs-state-modes 'reftec-toc-mode)
 (add-hook 'calc-mode-hook 'turn-off-evil-mode)
+(add-hook 'pdf-view-mode-hook 'turn-off-evil-mode)
 
 ;; (loop for (mode . state) in '(
 ;;                               (reftec-toc-mode . emacs)
@@ -849,6 +850,7 @@ This configures Magit and Evil to play well with each other
         (mu4e-headers-mode . hydra-major-mu4e-headers/body)
         (c++-mode . hydra-major-c/body)
         (c-mode . hydra-major-c/body)
+        (pdf-view-mode . hydra-major-pdf-view/body)
         ))
 
 #+end_src
@@ -2413,6 +2415,37 @@ Autocompletion in latex.
 
 * PDF tools
 #+begin_src emacs-lisp :results none
+(use-package pdf-tools
+  :ensure t
+  :init
+  (pdf-tools-install)
+  :config
+  (add-hook 'pdf-view-mode-hook
+             (lambda()
+               (local-set-key (kbd "h") 'pdf-annot-add-highlight-markup-annotation)))
+
+  (add-hook 'pdf-annot-list-mode-hook
+             (lambda()
+               (turn-off-evil-mode))))
+;; (use-package pdf-tools
+;;   :ensure t
+;;   :config
+;;   (add-hook 'pdf-tools-enabled-hook
+;;   ;(add-hook 'pdf-view-mode-hook
+;;             (lambda () (local-set-key (kbd "SPC h") #'pdf-annot-add-highlight-markup-annotation)
+;;               (local-set-key (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+;;               (evil-leader/set-key (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+;;               (pdf-tools-enable-minor-modes)
+;;              (turn-off-evil-mode)
+;; ))))
+
+;;   (defhydra hydra-major-pdf-view(:color teal :hint nil)
+;;     " ^PDF Tools mode^
+;; -------------------
+;; "
+;;     ("h" pdf-annot-add-highlight-markup-annotation nil)
+;;     )
+;;   )
 
 #+end_src
 
