@@ -556,6 +556,19 @@ This is the modeline from Spacemacs.
 
 *** Some tips for Yasnippet
 There are two ways to use snippets from another mode. One is to include a =.yas-parents= file in the =snippets/major-mode= directory, and the other is to simply use the =yas-activate-extra-mode= command. 
+
+** Auto-Yasnippet
+#+begin_src emacs-lisp :results none
+(use-package auto-yasnippet
+  :ensure t
+  :config
+  (evil-leader/set-key "ac" #'aya-create)
+  (evil-leader/set-key "ae" #'aya-expand)
+  (evil-leader/set-key "ao" #'aya-open-line)
+)
+
+#+end_src
+
 ** Nerd-commenter
 #+BEGIN_SRC emacs-lisp :results silent
 (use-package evil-nerd-commenter
