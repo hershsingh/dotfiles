@@ -542,6 +542,9 @@ This is the modeline from Spacemacs.
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
   (yas-global-mode 1)
+
+  ;; Dont show warning for snippets that use a backquote to evaluate elisp
+  (push '(yasnippet backquote-change) warning-suppress-types)
   )
 #+END_SRC
 
