@@ -186,11 +186,11 @@ Can't live without this.
   (setq ido-enable-flex-matching t)
   (setq ido-everywhere t)
   ;; (ido-mode 1)
-  (use-package ido-ubiquitous
-    :ensure t
-    :init
-    (ido-ubiquitous-mode)
-    )
+  ;; (use-package ido-ubiquitous
+  ;;   :ensure t
+  ;;   :init
+  ;;   (ido-ubiquitous-mode)
+  ;;   )
 
   ; never ask before creating buffers
   (setq ido-create-new-buffer 'always)
