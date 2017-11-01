@@ -549,7 +549,7 @@ This is the modeline from Spacemacs.
   (yas-global-mode 1)
 
   ;; Dont show warning for snippets that use a backquote to evaluate elisp
-  (push '(yasnippet backquote-change) warning-suppress-types)
+  ;; (push '(yasnippet backquote-change) warning-suppress-types)
   )
 #+END_SRC
 
