@@ -274,8 +274,10 @@ To make emacs into a good text editor :-)
 (use-package evil-surround
   :ensure t
   :config
-    (global-evil-surround-mode 1)
-)
+  (global-evil-surround-mode 1)
+  (add-hook 'LaTeX-mode-hook (lambda ()
+                             (push '(?l. ("\\left( " . " \\right)")) evil-surround-pairs-alist)))
+  )
 #+end_src
 
 *** Evil-leader
@@ -407,6 +409,8 @@ forwards, if negative)."
 ; between pipe characters:
 (define-and-bind-text-object "|" "|" "|")
 
+; between latex \left..\right characters:
+(define-and-bind-text-object "l" "\\\\left." "\\\\right.")
 ; from regex "b" up to regex "c", bound to k (invoke with "vik" or "vak"):
 ;(define-and-bind-text-object "k" "b" "c")
 
