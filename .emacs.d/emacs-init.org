@@ -1336,6 +1336,10 @@ interface for all of them.
   ;; Line wrapping for cited messages
   (setq message-fill-column nil)
   )
+
+  ;; Don't ask to quit... why is this the default?
+  (setq mu4e-confirm-quit nil)
+
 #+END_SRC
 
 ** Interface and Usability Tweaks
