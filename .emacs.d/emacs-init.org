@@ -1167,7 +1167,9 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 ** Evil-lion
 #+begin_src emacs-lisp :results none
 (use-package evil-lion
-  :ensure t)
+  :ensure t
+  :config
+  (evil-lion-mode))
 #+end_src
 
 ** Increase maximum number of variable bindings
