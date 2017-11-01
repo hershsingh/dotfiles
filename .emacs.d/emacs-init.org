@@ -208,7 +208,7 @@ Can't live without this.
   (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
   ;; Other-window 
-  (global-set-key (kbd "M-o") 'other-window)
+  (global-set-key (kbd "M-o") 'evil-window-next)
 
   (global-set-key (kbd "M-b") 'ido-switch-buffer)
 
