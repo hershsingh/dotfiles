@@ -1786,7 +1786,7 @@ Reference: https://tuhdo.github.io/c-ide.html
 #+end_src
 
 ** Python-mode
-There are quite a fewamajor modes for python out there, which confused me in the beginning. There's the native =python.el=, which ships with emacs, and there is a =python-mode.el=, which has to be installed explicitly. I am trying out =python.el= for now.
+There are quite a few major modes for python out there, which confused me in the beginning. There's the native =python.el=, which ships with emacs, and there is a =python-mode.el=, which has to be installed explicitly. I am trying out =python.el= for now.
 
 #+BEGIN_SRC emacs-lisp :results silent
     (use-package python
@@ -1801,6 +1801,8 @@ There are quite a fewamajor modes for python out there, which confused me in the
 #+begin_src emacs-lisp :results none
 (use-package anaconda-mode
   :ensure t
+  :diminish anaconda-mode
+  :diminish anaconda-eldoc-mode
   :config
   (add-hook 'python-mode-hook 'anaconda-mode)
   (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
