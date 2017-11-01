@@ -1664,6 +1664,61 @@ Load the =mu4e-contact-rewrite-function= from an external file.  This rewrites s
              (auto-fill-mode 1)
              ))
 #+end_src
+** Outline Mode
+http://www.modernemacs.com/post/outline-ivy/
+#+begin_src emacs-lisp :results none
+;; Require packages for following code
+(use-package dash
+  :ensure t
+  )
+
+(use-package outshine
+  :ensure t
+  :config
+  ;; Required for outshine
+  (add-hook 'outline-minor-mode-hook 'outshine-hook-function)
+
+  ;; Enables outline-minor-mode for *ALL* programming buffers
+  (add-hook 'prog-mode-hook 'outline-minor-mode)
+
+
+  (let ((kmap outline-minor-mode-map))
+    ;; (define-key kmap (kbd "M-RET") 'outshine-insert-heading)
+    ;; (define-key kmap (kbd "<backtab>") 'outshine-cycle-buffer)
+    ;; (define-key kmap (kbd "<tab>") 'outline-cycle)
+
+    (evil-define-key '(normal) kmap (kbd "TAB") 'outline-cycle)
+
+    ;; Evil outline navigation keybindings
+    (evil-define-key '(normal visual motion) kmap
+      "gh" 'outline-up-heading
+      "gj" 'outline-forward-same-level
+      "gk" 'outline-backward-same-level
+      "gl" 'outline-next-visible-heading
+      "gu" 'outline-previous-visible-heading)))
+
+;; (custom-theme-set-faces
+;;  'solarized-dark
+;;  `(outline-1 ((t (:height 1.25 :background "#268bd2"
+;;                           :foreground ,my-black :weight bold))))
+;;  `(outline-2 ((t (:height 1.15 :background "#2aa198"
+;;                           :foreground ,my-black :weight bold))))
+;;  `(outline-3 ((t (:height 1.05 :background "#b58900"
+;;                           :foreground ,my-black :weight bold)))))
+
+;; (require 'color)
+;; (set-face-attribute 'outline-1 nil :background
+;;     (color-darken-name (face-attribute 'outline-1 :background) 2))
+
+;; (set-face-attribute 'font-lock-comment-face nil :foreground
+;;     (color-darken-name (face-attribute 'default :foreground) 1))
+;; (set-face-attribute 'font-lock-comment-face nil :background
+;;     (color-lighten-name (face-attribute 'default :background) 10))
+;; )
+
+
+#+end_src
+
 ** C++ Mode
 *** Tips
 - =Imenu= provides a table of contents functionality for the current buffer. It can use =ido= for completion.
