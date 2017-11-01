@@ -1178,6 +1178,29 @@ Seems like the default value is too small.  =mu4e= sometimes gives an error abou
 (setq max-specpdl-size 100000)
 #+end_src
 
+** Multiple Cursors
+#+begin_src emacs-lisp :results none
+(use-package multiple-cursors
+  :bind (("C-S-<mouse-1>" . mc/add-cursor-on-click)))
+#+end_src
+
+** Beacon-mode
+#+begin_src emacs-lisp :results none
+(use-package beacon
+  :ensure t
+  :config 
+  (beacon-mode 1))
+#+end_src
+
+** Tramp
+To allow a remote program to create an X11 window on the local host, set the DISPLAY environment variable for the remote host as follows in the local .emacs file:
+
+#+begin_src emacs-lisp :results none
+;; (add-to-list 'tramp-remote-process-environment
+;;              (format "DISPLAY=%s" (getenv "DISPLAY")))
+#+end_src
+
+
 * Helm
 #+begin_src emacs-lisp :results silent
 (use-package helm
@@ -1252,7 +1275,6 @@ Seems like the default value is too small.  =mu4e= sometimes gives an error abou
 (add-hook 'helm-after-initialize-hook 
           'spacemacs//hide-cursor-in-helm-buffer)
 #+end_src
-
 * mu4e
 mu4e might just be the email client I had been looking for. It has
 excellent search, unlike thunderbird. It's easy to use and setup,
