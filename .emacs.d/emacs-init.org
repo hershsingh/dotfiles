@@ -163,7 +163,21 @@ I think at some point I'll replace all =electric= things with something like =sm
 ** Fill-column indicator
 #+begin_src emacs-lisp :results silent
 (use-package fill-column-indicator
-  :ensure t)
+  :ensure t
+  :config
+
+  ;; There is display issue with fci-mode + company-mode
+  ;; https://github.com/alpaker/Fill-Column-Indicator/issues/54
+  (defun on-off-fci-before-company(command)
+    (when fci-mode
+      (when (string= "show" command)
+        (turn-off-fci-mode))
+      (when (string= "hide" command)
+        (turn-on-fci-mode))))
+
+  (advice-add 'company-call-frontends :before #'on-off-fci-before-company)
+  )
+
 #+end_src
 
 ** Recentf
@@ -175,7 +189,15 @@ Keeps a track of recently used files.
   :config
   (recentf-mode t)
   (setq recentf-max-saved-items 200)
-)
+  (run-at-time nil (* 5 60) 'recentf-save-list)
+  (setq recentf-exclude '("^/var/folders\\.*"
+                          ".*/Maildir/"
+                          "COMMIT_EDITMSG\\'"
+                          ".*-autoloads\\.el\\'"
+                          "[/\\]\\.elpa/"
+                          ))
+
+  )
 #+END_SRC
 ** Ido-mode
 Can't live without this.
@@ -277,6 +299,7 @@ To make emacs into a good text editor :-)
   (global-evil-surround-mode 1)
   (add-hook 'LaTeX-mode-hook (lambda ()
                              (push '(?l. ("\\left( " . " \\right)")) evil-surround-pairs-alist)))
+
   )
 #+end_src
 
@@ -449,6 +472,14 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
 ;;       do (evil-set-initial-state mode state))
 #+end_src
 
+*** Evil-Collection 
+#+begin_src emacs-lisp :results none
+(use-package evil-collection
+  :ensure t
+  :custom (evil-collection-setup-minibuffer t)
+  :init (evil-collection-init))
+#+end_src
+
 ** Avy-mode
 
 #+begin_src emacs-lisp :results none
@@ -514,7 +545,6 @@ then it takes a second \\[keyboard-quit] to abort the minibuffer."
 
 #+end_src
 
- 
 ** Smooth scrolling
 #+BEGIN_SRC emacs-lisp :results silent
   ;; Smooth-Scrolling
@@ -875,6 +905,7 @@ This configures Magit and Evil to play well with each other
 [_b_] Helm-bibtex                   [_*_] Star/unstar environment
 [_=_] Table of Contents
 [_w_] Biber
+[_0_] Delete synctex file
   "
   ("l" reftex-label nil)
   ("(" reftex-citation nil)
@@ -890,6 +921,7 @@ This configures Magit and Evil to play well with each other
   ("b" (helm-bibtex) nil)
   ("=" (reftex-toc) nil)
   ("w" (shell-command (concat "/usr/bin/vendor_perl/biber " (TeX-master-file)) nil))
+  ("0" (delete-file (concat (TeX-master-file) ".synctex.gz") "delete synctex file"))
 )
 
 ;; org mode
@@ -1090,6 +1122,19 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 ; (evil-leader/set-key "p" 'hydra-projectile/body)
 #+end_src
 
+*** Helm utilities
+#+begin_src emacs-lisp :results none
+(defhydra hydra-helm (:color teal :hint nil)
+  "helm"
+  ("a"  helm-do-grep-ag "grep-ag")
+  ("r"  helm-resume "resume")
+  ("u"  helm-unicode "unicode")
+  ("c"  helm-colors "colors")
+)
+
+(evil-leader/set-key "h" 'hydra-helm/body)
+#+end_src
+
 ** Ansi-colors
 *** Make colors work in c/c++ compilation buffers
 Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilation-mode
@@ -1199,7 +1244,6 @@ To allow a remote program to create an X11 window on the local host, set the DIS
 ;; (add-to-list 'tramp-remote-process-environment
 ;;              (format "DISPLAY=%s" (getenv "DISPLAY")))
 #+end_src
-
 
 * Helm
 #+begin_src emacs-lisp :results silent
@@ -1363,63 +1407,58 @@ interface for all of them.
         mu4e-headers-passed-mark   '("P" . "→ ") ;; ↪
         mu4e-headers-replied-mark  '("R" . "← ")
         mu4e-headers-trashed-mark  '("T" . "✗ ") ;; 🗑
-      )
+        )
   ;; (mu4e-headers-seen-mark . ("S" . "")) ;; ✓ 🗸 ✔
   ;; (mu4e-headers-attach-mark . ("a" . ":paperclip: "))
   ;; (mu4e-headers-encrypted-mark . ("x" . ":closed_lock_with_key: "))
   ;; (mu4e-headers-signed-mark . ("s" . ":lock_with_ink_pen: "))
   ;; (mu4e-headers-unread-mark . ("u" . "✉ "))
   
-  
-  ; Ignore my email address when sending replies, looks at 'mu4e-user-mail-addresss-list'
+  ;; Ignore my email address when sending replies, looks at 'mu4e-user-mail-addresss-list'
   (setq mu4e-dont-compose-reply-to-self t)
   
-  ; Compose messages in a new frame
+  ;; Compose messages in a new frame
   (setq mu4e-compose-in-new-frame t)
   
   (setq mu4e-view-show-addresses t)
   
   (defun my/mu4e-headers-mode-settings() 
-      (nlinum-mode -1)
-      (visual-line-mode -1)
-      (auto-fill-mode -1)
-      (set-default 'truncate-lines -1)
-  
-      )
+    (nlinum-mode -1)
+    (visual-line-mode -1)
+    (auto-fill-mode -1)
+    (set-default 'truncate-lines -1))
   (add-hook 'mu4e-headers-mode-hook 'my/mu4e-headers-mode-settings 'append)
   
   (defun my/mu4e-view-mode-settings()
     ;; Use a variable width font when reading messages
     ;; I think it makes text easier on the eyes
-    (variable-pitch-mode)
-  )
+    (variable-pitch-mode))
   
   (add-hook 'mu4e-view-mode-hook 'my/mu4e-view-mode-settings 'append)
   
   (defun my/mu4e-compose-mode-settings() 
-      ; Hard word wrapping makes the emails harder to read on mobile devices
-      (auto-fill-mode -1)
-      (visual-line-mode t)
-      (visual-fill-column-mode t)
-      (flyspell-mode t)
-      (orgstruct-mode)
-  )
+    ;; Hard word wrapping makes the emails harder to read on mobile devices
+    (auto-fill-mode -1)
+    (visual-line-mode t)
+    (visual-fill-column-mode t)
+    (flyspell-mode t)
+    (orgstruct-mode))
   (add-hook 'mu4e-compose-mode-hook 'my/mu4e-compose-mode-settings 'append)
   
   ;; the headers to show in the headers list -- a pair of a field
   ;; and its width, with `nil' meaning 'unlimited'
   ;; (better only use that for the last field.)
   (setq mu4e-headers-fields
-      '((:human-date    .  12)
-        (:maildir       .  10)
-        (:flags         .   4)
-        (:from          .  22)
-        (:subject       .  nil)))
+        '((:human-date    .  12)
+          (:maildir       .  10)
+          (:flags         .   4)
+          (:from          .  22)
+          (:subject       .  nil)))
   
   (setq mu4e-headers-visible-columns 110)
   (setq mu4e-headers-include-related t)
   
-  ;(setq mu4e-html2text-command "html2text --unicode-snob -b 72")
+  ;;(setq mu4e-html2text-command "html2text --unicode-snob -b 72")
   (use-package mu4e-contrib)
   
   ;; Fix some colors for HTML rendering by shr2text
@@ -1433,10 +1472,10 @@ interface for all of them.
   (setq mu4e-view-show-images t)
   ;; use imagemagick, if available
   (when (fboundp 'imagemagick-register-types)
-  (imagemagick-register-types))
+    (imagemagick-register-types))
   
   (add-to-list 'mu4e-view-actions
-      '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+               '("ViewInBrowser" . mu4e-action-view-in-browser) t)
   
   ;; I find vertical splits better on a widescreen
   (setq mu4e-split-view 'vertical)
@@ -1446,9 +1485,9 @@ interface for all of them.
   
   ;; Ask before sending a message. Very important! 
   (add-hook 'message-send-hook
-  (lambda ()
-      (unless (yes-or-no-p "Sure you want to send this?")
-      (signal 'quit nil))))
+            (lambda ()
+              (unless (yes-or-no-p "Sure you want to send this?")
+                (signal 'quit nil))))
   )
 #+end_src
 
@@ -1517,6 +1556,46 @@ These little functions are used in snippets to figure out the name of the recipi
         (setq rlt (match-string 1 str)))
     (message "rlt=%s" rlt)
     rlt))
+
+;; Source:  http://pragmaticemacs.com/emacs/email-templates-in-mu4e-with-yasnippet
+(defun my/mu4e-get-names-for-yasnippet ()
+  "Return comma separated string of names for an email"
+  (interactive)
+  (let ((email-name "") str email-string email-list email-name2 tmpname)
+    (save-excursion
+      (goto-char (point-min))
+      ;; first line in email could be some hidden line containing NO to field
+      (setq str (buffer-substring-no-properties (point-min) (point-max))))
+    ;; take name from TO field - match series of names
+    (when (string-match "^To: \"?\\(.+\\)" str)
+      (setq email-string (match-string 1 str)))
+    ;;split to list by comma
+    (setq email-list (split-string email-string " *, *"))
+    ;;loop over emails
+    (dolist (tmpstr email-list)
+      ;;get first word of email string
+      (setq tmpname (car (split-string tmpstr " ")))
+      ;;remove whitespace or ""
+      (setq tmpname (replace-regexp-in-string "[ \"]" "" tmpname))
+      ;;join to string
+      (setq email-name
+            (concat email-name ", " tmpname)))
+    ;;remove initial comma
+    (setq email-name (replace-regexp-in-string "^, " "" email-name))
+
+    ;;see if we want to use the name in the FROM field
+    ;;get name in FROM field if available, but only if there is only
+    ;;one name in TO field
+    (if (< (length email-list) 2)
+        (when (string-match "^\\([^ ,\n]+\\).+writes:$" str)
+          (progn (setq email-name2 (match-string 1 str))
+                 ;;prefer name in FROM field if TO field has "@"
+                 (when (string-match "@" email-name)
+                   (setq email-name email-name2))
+                 )))
+    email-name))
+
+
 #+end_src
 
 ** Address completion using Ido
@@ -1632,6 +1711,8 @@ Load the =mu4e-contact-rewrite-function= from an external file.  This rewrites s
   :diminish typo-mode
   :init
   (setq typo-language "English"))
+  :config
+    (push '(?, . ("“" . "”")) evil-surround-pairs-alist)
 #+end_src
 ** Sentence Highlight
 #+begin_src emacs-lisp :results none
@@ -1794,6 +1875,7 @@ There are quite a few major modes for python out there, which confused me in the
         (setq python-shell-completion-native nil)
         (setq python-shell-interpreter "ipython3"
             python-shell-interpreter-args "-i --simple-prompt")
+        (add-hook 'python-mode-hook 'flycheck-mode)
         )
 
 #+END_SRC
@@ -2412,7 +2494,9 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   ;; Show errors 
   (setq TeX-error-overview-open-after-TeX-run t)
 
-  (add-to-list 'TeX-view-program-selection '(output-pdf "Zathura"))
+  ;; (add-to-list 'TeX-view-program-selection '(output-pdf "Zathura"))
+
+  (setq TeX-view-program-selection '((output-pdf "Zathura")))
 
   ;; (add-to-list 'TeX-view-program-list '("zathura" zathura-forward-search))
   ;; (setq TeX-view-program-selection '((output-pdf "zathura") (output-dvi "xdvi")))
@@ -2447,32 +2531,11 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
 
 (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 
+(add-hook 'LaTeX-mode-hook 'which-func-mode)
+
 ;; RefTex
 (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 (setq reftex-plug-into-AUCTeX t)
-
-;; ============ Latexmk setup ==============
-;; (defun run-latexmk ()
-;;   (interactive)
-;;   (let ((TeX-save-query nil)
-;;         (TeX-process-asynchronous nil)
-;;         (master-file (TeX-master-file)))
-;;     (TeX-save-document "")
-;;     (TeX-run-TeX "latexmk"
-;;                  (TeX-command-expand "latexmk -pdf %s" 'TeX-master-file)
-;;                  master-file))
-;;   (if (plist-get TeX-error-report-switches (intern master-file))
-;;       (TeX-next-error t)
-;;     (progn
-;;       (demolish-tex-help)
-;;       (minibuffer-message "latexmk: done."))))
-
-;; (add-hook 'LaTeX-mode-hook (lambda ()
-;;                              (push
-;;                               '("Latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
-;;                                 :help "Run Latexmk on file")
-;;                               TeX-command-list)))
-
 
 (use-package auctex-latexmk
   :ensure t
@@ -2541,7 +2604,8 @@ Autocompletion in latex.
   (helm-add-action-to-source "Insert citation" 'helm-bibtex-insert-citation helm-source-bibtex 0)
 
   ;; Zotero stores the filename in the field "file"
-  (setq bibtex-completion-pdf-field "File")
+  (setq bibtex-completion-pdf-field "file")
+   (setq bibtex-completion-find-additional-pdfs t)
 
   ;; Use 'xdg-open' to open pdfs
   (setq bibtex-completion-pdf-open-function
