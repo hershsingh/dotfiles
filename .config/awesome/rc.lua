@@ -239,8 +239,8 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    --awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
-    awful.tag({ "1", "2", "3", "4", "5"}, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    -- awful.tag({ "1", "2", "3", "4", "5", "6", }, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -313,13 +313,14 @@ info_modal_keybinds = "\
     \
 <b>Notebook</b>\
     a - Arch Notes\
+    e - eft\
+    5 - eft-october\
     \
 <b>Edit Config files</b>\
     l - Awesome, rc.lua\
     v - Vim, vimrc\
     \
 <b>netctl</b>\
-    e - Ethernet-dhcp\
     n - select netctl profile\
     x - disconnect all profiles\
     \
@@ -356,11 +357,13 @@ global_mode_modal_keybinds = {
        end,
     -- Notebook
     ["a"] = function () awful.util.spawn('emacsclient -c ~/org/arch.org') end,
+    ["e"] = function () awful.util.spawn('/usr/bin/zathura ' .. homedir ..  '/notebook/eft/eft.pdf') end,
+    ["5"] = function () awful.util.spawn('/usr/bin/zathura ' .. homedir ..  '/notebook/eft/log_2017_october.pdf') end,
     -- Config Files
     ["l"] = function () awful.util.spawn(editor_cmd .. " ~/.config/awesome/rc.lua") end,
     ["v"] = function () awful.util.spawn('urxvt -e bash -ic "vim ~/.vimrc"') end,
     -- Netctl 
-    ["e"] = function () awful.util.spawn(homedir .. '/scripts/netctlpanel.sh connect ethernet-dhcp') end,
+    -- ["e"] = function () awful.util.spawn(homedir .. '/scripts/netctlpanel.sh connect ethernet-dhcp') end,
     ["n"] = function () awful.util.spawn(homedir .. '/scripts/netcon.sh') end,
     ["x"] = function () awful.util.spawn(homedir .. '/scripts/netctlpanel.sh disconnect') end,
     -- Stuff
@@ -563,41 +566,41 @@ globalkeys = awful.util.table.join(
 )
 
 clientkeys = awful.util.table.join(
-    awful.key({ modkey,           }, "f",
-        function (c)
-            c.fullscreen = not c.fullscreen
-            c:raise()
-        end,
-        {description = "toggle fullscreen", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
-              {description = "close", group = "client"}),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
-              {description = "toggle floating", group = "client"}),
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
-              {description = "move to master", group = "client"}),
-    awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
-              {description = "move to screen", group = "client"}),
-    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
-              {description = "toggle keep on top", group = "client"}),
-    awful.key({ modkey,           }, "n",
-        function (c)
-            -- The client currently has the input focus, so it cannot be
-            -- minimized, since minimized clients can't have the focus.
-            c.minimized = true
-        end ,
-        {description = "minimize", group = "client"}),
-    awful.key({ modkey,           }, "m",
-        function (c)
-            c.maximized = not c.maximized
-            c:raise()
-        end ,
-        {description = "maximize", group = "client"})
+   awful.key({ modkey,           }, "f",
+      function (c)
+         c.fullscreen = not c.fullscreen
+         c:raise()
+      end,
+      {description = "toggle fullscreen", group = "client"}),
+   awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
+      {description = "close", group = "client"}),
+   awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
+      {description = "toggle floating", group = "client"}),
+   awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
+      {description = "move to master", group = "client"}),
+   awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
+      {description = "move to screen", group = "client"}),
+   awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
+      {description = "toggle keep on top", group = "client"}),
+   awful.key({ modkey,           }, "n",
+      function (c)
+         -- The client currently has the input focus, so it cannot be
+         -- minimized, since minimized clients can't have the focus.
+         c.minimized = true
+      end ,
+      {description = "minimize", group = "client"}),
+   awful.key({ modkey,           }, "m",
+      function (c)
+         c.maximized = not c.maximized
+         c:raise()
+      end ,
+      {description = "maximize", group = "client"})
 )
 
 -- Bind all key numbers to tags.
 -- Be careful: we use keycodes to make it works on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
-local num_tags = 5
+local num_tags = 9
 for i = 1, num_tags do
     globalkeys = awful.util.table.join(globalkeys,
         -- View tag only.
@@ -673,7 +676,7 @@ awful.rules.rules = {
     -- Floating clients.
     { rule_any = {
         instance = {
-          "DTA",  -- Firefox addon DownThemAll.
+          -- "DTA",  -- Firefox addon DownThemAll.
           "copyq",  -- Includes session name in class.
         },
         class = {
@@ -862,4 +865,3 @@ local function dbg(vars)
     for i=1, #vars do text = text .. vars[i] .. " | " end
     naughty.notify({ text = text, timeout = 0 })
 end
-

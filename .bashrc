@@ -15,6 +15,7 @@ export EDITOR=vim
 export BROWSER=firefox
 export SUDO_EDITOR="/usr/bin/vim -p -X"
 
+
 # Pipe output to xclip to put it in the X clipboard so that you can paste it.
 alias xclip='xclip -selection c'
 
