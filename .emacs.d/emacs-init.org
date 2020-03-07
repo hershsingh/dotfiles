@@ -45,6 +45,16 @@ This is a nice package to keep the package configs tidy.
 #+END_SRC
 
 * Config
+** Set path from shell
+#+begin_src emacs-lisp :results none
+(use-package exec-path-from-shell
+  :ensure t
+  :config 
+    (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+#+end_src
+
 ** Fix shell in emacs
 #+begin_src emacs-lisp :results silent
 (setq system-uses-terminfo nil)
@@ -206,7 +216,7 @@ Can't live without this.
   ;;--------------------------------------------------;; 
   ;; Ido-mode
   (setq ido-enable-flex-matching t)
-  (setq ido-everywhere t)
+  ;; (setq ido-everywhere f)
   ;; (ido-mode 1)
   ;; (use-package ido-ubiquitous
   ;;   :ensure t
@@ -278,6 +288,9 @@ To make emacs into a good text editor :-)
 ;; Evil Mode
 (use-package evil
   :ensure t
+  :init
+    (setq evil-want-keybinding nil)
+    (setq evil-want-integration nil)
   :config
     (setq evil-want-Y-yank-to-eol t)
 
@@ -474,10 +487,17 @@ Source: [[http://stackoverflow.com/questions/8473131/set-the-evil-shift-width-to
 
 *** Evil-Collection 
 #+begin_src emacs-lisp :results none
-(use-package evil-collection
-  :ensure t
-  :custom (evil-collection-setup-minibuffer t)
-  :init (evil-collection-init))
+  ; (use-package evil-collection
+  ;   :ensure t
+  ;   :custom (evil-collection-setup-minibuffer t)
+  ;   :init (evil-collection-init))
+
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+
 #+end_src
 
 ** Avy-mode
@@ -572,13 +592,16 @@ This is the modeline from Spacemacs.
 
 ** Yasnippet
 #+BEGIN_SRC emacs-lisp :results silent
+;(use-package yasnippet-snippets
+; :ensure t)
+
 (use-package yasnippet
   :ensure t
   :init
   ;; This must be set before enabling yas-global-mode
   ;; (setq yas-snippet-dirs '("~/.emacs.d/snippets") yas-installed-snippets-dir)
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode 1)
 
   ;; Dont show warning for snippets that use a backquote to evaluate elisp
@@ -823,6 +846,11 @@ Use =hunspell= for for spell-checking.  It provides better suggestions than =asp
 #+begin_src emacs-lisp :results none
 ;; find aspell and hunspell automatically
 (cond
+
+ ((executable-find "aspell")
+  (setq ispell-program-name "aspell")
+  ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
+  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US")))
  ;; try hunspell at first
   ;; if hunspell does NOT exist, use aspell
  ((executable-find "hunspell")
@@ -834,10 +862,8 @@ Use =hunspell= for for spell-checking.  It provides better suggestions than =asp
         '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)
           )))
 
- ((executable-find "aspell")
-  (setq ispell-program-name "aspell")
-  ;; Please note ispell-extra-args contains ACTUAL parameters passed to aspell
-  (setq ispell-extra-args '("--sug-mode=ultra" "--lang=en_US"))))
+)
+
 #+end_src
 
 ** Magit
@@ -887,6 +913,7 @@ This configures Magit and Evil to play well with each other
         (mu4e-headers-mode . hydra-major-mu4e-headers/body)
         (c++-mode . hydra-major-c/body)
         (c-mode . hydra-major-c/body)
+        (makefile-gmake-mode . hydra-major-c/body)
         (pdf-view-mode . hydra-major-pdf-view/body)
         ))
 
@@ -900,13 +927,14 @@ This configures Magit and Evil to play well with each other
   "
 [_l_] Label                         [_c_] Compile Document
 [_(_] Citation                      [_v_] View Document
-[_q_] Equation reference
-[_r_] Reference                     [_]_] Close environment
-[_b_] Helm-bibtex                   [_*_] Star/unstar environment
+  [_q_] Equation reference
+  [_r_] Reference                     [_]_] Close environment
+[_b_] helm-bibtex                   [_*_] Star/unstar environment
+[_B_] helm-bibtex (local bibliography)
 [_=_] Table of Contents
 [_w_] Biber
 [_0_] Delete synctex file
-  "
+"
   ("l" reftex-label nil)
   ("(" reftex-citation nil)
   ("q" (reftex-reference 'e) nil) ; Equation Reference
@@ -919,6 +947,7 @@ This configures Magit and Evil to play well with each other
   ("e" (LaTeX-environment 1) nil)
   ("*" (LaTeX-star-environment-dwim) nil)
   ("b" (helm-bibtex) nil)
+  ("B" (helm-bibtex-with-local-bibliography) nil)
   ("=" (reftex-toc) nil)
   ("w" (shell-command (concat "/usr/bin/vendor_perl/biber " (TeX-master-file)) nil))
   ("0" (delete-file (concat (TeX-master-file) ".synctex.gz") "delete synctex file"))
@@ -928,7 +957,7 @@ This configures Magit and Evil to play well with each other
 (defhydra hydra-major-org()
   "^Org-mode shortcuts"
   ("r" org-refile "Refile")
-)
+  )
 
 ;; mu4e message compose mode
 (defhydra hydra-major-mu4e-compose(:color blue)
@@ -949,7 +978,8 @@ This configures Magit and Evil to play well with each other
   ("l" my/mu4e-view-preview-latex "Preview LaTeX fragments")
   ("e" mu4e-compose-edit "Edit draft")
   ("r" mu4e-headers-toggle-include-related "Toggle Related")
-  ("t" mu4e-headers-toggle-threading "Toggle threading"))
+  ("t" mu4e-headers-toggle-threading "Toggle threading")
+  ("v" global-mu4e-conversation-mode "Toggle conversation mode"))
 
 (defhydra hydra-major-mu4e-headers(:color blue)
   " ^mu4e major mode^
@@ -958,7 +988,8 @@ This configures Magit and Evil to play well with each other
   ("m" helm-mu "Helm-mu")
   ("e" mu4e-compose-edit "Edit draft")
   ("r" mu4e-headers-toggle-include-related "Toggle Related")
-  )
+  ("t" mu4e-headers-toggle-threading "Toggle threading")
+  ("v" global-mu4e-conversation-mode "Toggle conversation mode"))
 
 ;; C-mode
 (defhydra hydra-major-c(:color teal :hint nil)
@@ -982,12 +1013,14 @@ find-_f_ile
   ("gu" ggtags-update-tags "ggtags-update-tags")
   ("go" ggtags-find-other-symbol "ggtags-find-other-symbol")
   ("gh" ggtags-view-tag-history  "ggtags-view-tag-history")
-
   ("c" projectile-compile-project)
+  ("r" (progn (setq compilation-read-command "make run")
+        (projectile-compile-project)
+        (setq compilation-read-command t)))
   ("C" compile)
   ("n" next-error)
   ("p" previous-error)
-  )
+)
 #+end_src
 
 *** Zoom 
@@ -1123,6 +1156,7 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 #+end_src
 
 *** Helm utilities
+
 #+begin_src emacs-lisp :results none
 (defhydra hydra-helm (:color teal :hint nil)
   "helm"
@@ -1133,6 +1167,54 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 )
 
 (evil-leader/set-key "h" 'hydra-helm/body)
+#+end_src
+
+*** Window management
+#+begin_src emacs-lisp :results none
+(defhydra hydra-window (:color red
+                        :hint nil)
+  "
+ Split: _v_ert _x_:horz
+Delete: _o_nly  _da_ce  _dw_indow  _db_uffer  _df_rame
+  Move: _s_wap
+Frames: _f_rame new  _df_ delete
+  Misc: _m_ark _a_ce  _u_ndo  _r_edo"
+  ("h" windmove-left)
+  ("j" windmove-down)
+  ("k" windmove-up)
+  ("l" windmove-right)
+  ("H" hydra-move-splitter-left)
+  ("J" hydra-move-splitter-down)
+  ("K" hydra-move-splitter-up)
+  ("L" hydra-move-splitter-right)
+  ("|" (lambda ()
+         (interactive)
+         (split-window-right)
+         (windmove-right)))
+  ("_" (lambda ()
+         (interactive)
+         (split-window-below)
+         (windmove-down)))
+  ("v" split-window-right)
+  ("x" split-window-below)
+  ;("t" transpose-frame "'")
+  ;; winner-mode must be enabled
+  ("u" winner-undo)
+  ("r" winner-redo) ;;Fixme, not working?
+  ("o" delete-other-windows :exit t)
+  ("a" ace-window :exit t)
+  ("f" new-frame :exit t)
+  ("s" ace-swap-window)
+  ("da" ace-delete-window)
+  ("dw" delete-window)
+  ("db" kill-this-buffer)
+  ("df" delete-frame :exit t)
+  ("q" nil)
+  ;("i" ace-maximize-window "ace-one" :color blue)
+  ;("b" ido-switch-buffer "buf")
+  ("m" headlong-bookmark-jump))
+
+(evil-leader/set-key "w" 'hydra-window/body)
 #+end_src
 
 ** Ansi-colors
@@ -1157,15 +1239,19 @@ Reference: http://stackoverflow.com/questions/13397737/ansi-coloring-in-compilat
 #+begin_src emacs-lisp :results silent
 (use-package projectile
   :ensure t
-)
+  :config
+    (setq projectile-completion-system 'ivy)
+    (evil-leader/set-key "s" 'projectile-switch-to-buffer)
+  )
 #+end_src
 ** Helm-projectile
 #+begin_src emacs-lisp :results none
-(use-package helm-projectile
-  :ensure t
-  :config
-  (evil-leader/set-key "p" 'helm-projectile)
-  (evil-leader/set-key "s" 'helm-projectile-switch-to-buffer))
+; (use-package helm-projectile
+;   :ensure t
+;   :config
+;   (evil-leader/set-key "p" 'helm-projectile)
+;   (evil-leader/set-key "s" 'helm-projectile-switch-to-buffer))
+ 
 #+end_src
 
 ** Which-Key
@@ -1231,10 +1317,10 @@ Seems like the default value is too small.  =mu4e= sometimes gives an error abou
 
 ** Beacon-mode
 #+begin_src emacs-lisp :results none
-(use-package beacon
-  :ensure t
-  :config 
-  (beacon-mode 1))
+;; (use-package beacon
+;;   :ensure t
+;;   :config 
+;;   (beacon-mode 1))
 #+end_src
 
 ** Tramp
@@ -1243,6 +1329,14 @@ To allow a remote program to create an X11 window on the local host, set the DIS
 #+begin_src emacs-lisp :results none
 ;; (add-to-list 'tramp-remote-process-environment
 ;;              (format "DISPLAY=%s" (getenv "DISPLAY")))
+#+end_src
+
+** Poporg
+#+begin_src emacs-lisp :results none
+(use-package poporg
+    :ensure t
+    :after (org-mode)
+    :bind (("C-c /" . poporg-dwim)))
 #+end_src
 
 * Helm
@@ -1319,6 +1413,22 @@ To allow a remote program to create an X11 window on the local host, set the DIS
 (add-hook 'helm-after-initialize-hook 
           'spacemacs//hide-cursor-in-helm-buffer)
 #+end_src
+** Uniquify buffer names
+#+begin_src emacs-lisp :results none
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+(setq uniquify-separator "/")
+(setq uniquify-after-kill-buffer-p t)    ; rename after killing uniquified
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+#+end_src
+** Adaptive cursor width
+#+begin_src emacs-lisp :results none
+;; make cursor the width of the character it is under
+;; i.e. full width of a TAB
+(setq x-stretch-cursor t)
+#+end_src
+
+
 * mu4e
 mu4e might just be the email client I had been looking for. It has
 excellent search, unlike thunderbird. It's easy to use and setup,
@@ -1369,7 +1479,8 @@ interface for all of them.
   ;; (setq smtpmail-smtp-service 465)
   
   ;; allow for updating mail using 'U' in the main view:
-  (setq mu4e-get-mail-command "offlineimap -o") ;; -o to run it only once
+  ;;(setq mu4e-get-mail-command "offlineimap -o") ;; -o to run it only once
+  (setq mu4e-get-mail-command "mbsync physics") ;; -o to run it only once
   ;; (setq mu4e-update-interval 30)
   
   ;; Message citation line
@@ -1379,10 +1490,16 @@ interface for all of them.
 
   ;; Line wrapping for cited messages
   (setq message-fill-column nil)
-  )
 
   ;; Don't ask to quit... why is this the default?
   (setq mu4e-confirm-quit nil)
+
+  ;; Migration from offlineimap to mbsync caused error messages from mbsync about duplicate UIDs. The form of the message was Maildir error: duplicate UID 12 (or some other number).
+  ;; http://pragmaticemacs.com/emacs/fixing-duplicate-uid-errors-when-using-mbsync-and-mu4e/
+  (setq mu4e-change-filenames-when-moving t)
+
+  )
+
 
 #+END_SRC
 
@@ -1435,6 +1552,9 @@ interface for all of them.
     (variable-pitch-mode))
   
   (add-hook 'mu4e-view-mode-hook 'my/mu4e-view-mode-settings 'append)
+
+(setq mu4e-maildir (expand-file-name "~/Maildir/physics"))
+
   
   (defun my/mu4e-compose-mode-settings() 
     ;; Hard word wrapping makes the emails harder to read on mobile devices
@@ -1703,6 +1823,12 @@ Load the =mu4e-contact-rewrite-function= from an external file.  This rewrites s
   (add-hook 'mu4e-compose-mode-hook 'sentence-highlight-mode))
 #+end_src
 
+** mu4e-conversation
+#+begin_src emacs-lisp :results none
+(use-package mu4e-conversation
+  :ensure t)
+#+end_src
+
 * Writing
 ** Typo Mode
 #+begin_src emacs-lisp :results none
@@ -1741,6 +1867,7 @@ Load the =mu4e-contact-rewrite-function= from an external file.  This rewrites s
              (linum-mode) ; Line numbers
              (visual-line-mode -1) ; Disable line wrapping at 80 chars
              (toggle-truncate-lines 1) ; Disable line wrapping at window boundary
+             (set-fill-column 110)
              (setq comment-auto-fill-only-comments t)
              (auto-fill-mode 1)
              ))
@@ -1757,7 +1884,7 @@ http://www.modernemacs.com/post/outline-ivy/
   :ensure t
   :config
   ;; Required for outshine
-  (add-hook 'outline-minor-mode-hook 'outshine-hook-function)
+  (add-hook 'outline-minor-mode-hook 'outshine-mode)
 
   ;; Enables outline-minor-mode for *ALL* programming buffers
   (add-hook 'prog-mode-hook 'outline-minor-mode)
@@ -1812,8 +1939,12 @@ http://www.modernemacs.com/post/outline-ivy/
 (add-hook 'c-mode-common-hook
           (lambda ()
             (which-func-mode 1)))
+
+;; Identify .h files as C++
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 #+end_src
-    
+
+   
 *** GGtags
 Reference: https://tuhdo.github.io/c-ide.html
 #+begin_src emacs-lisp :results silent
@@ -1878,24 +2009,49 @@ There are quite a few major modes for python out there, which confused me in the
         (add-hook 'python-mode-hook 'flycheck-mode)
         )
 
+;; (use-package elpy
+;;   :ensure t
+;;   :init
+;;   (elpy-enable)
+;;   :config
+;;   (setq python-shell-interpreter "ipython"
+;;         python-shell-interpreter-args "-i --simple-prompt"))
+
+
 #+END_SRC
+*** Jedi
+#+begin_src emacs-lisp :results none
+;; company-mode completion back-end for Python JEDI
+(use-package company-jedi             
+  :ensure t
+  :config
+  (setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)
+  (setq jedi:use-shortcuts t)
+  (defun config/enable-company-jedi ()
+    (add-to-list 'company-backends 'company-jedi))
+  (add-hook 'python-mode-hook 'config/enable-company-jedi))
+
+#+end_src
+
 *** Anaconda Mode
 #+begin_src emacs-lisp :results none
-(use-package anaconda-mode
-  :ensure t
-  :diminish anaconda-mode
-  :diminish anaconda-eldoc-mode
-  :config
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
-
-  )
-(use-package company-anaconda
-  :ensure t
-  :config
-  (eval-after-load "company"
-    '(add-to-list 'company-backends 'company-anaconda))
-  )
+ (use-package anaconda-mode
+   :ensure t
+   :diminish anaconda-mode
+   :diminish anaconda-eldoc-mode
+   :config
+   (add-hook 'python-mode-hook 'anaconda-mode)
+   (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+ 
+   )
+ (use-package company-anaconda
+   :ensure t
+   :config
+   (eval-after-load "company"
+     '(add-to-list 'company-backends 'company-anaconda))
+   )
 #+end_src
 
 *** Send current paragraph to python 
@@ -2059,6 +2215,12 @@ This is really cool major mode for writing Lisp.
 )
 #+end_src
 
+** RealGUD
+#+begin_src emacs-lisp :results none
+(use-package realgud
+  :ensure t)
+#+end_src
+
 * Org-Mode
 ** General
 #+BEGIN_SRC emacs-lisp :results silent
@@ -2205,7 +2367,8 @@ This is definitely one of the coolest things that show off the power of org-mode
     :config
     (org-babel-do-load-languages
      'org-babel-load-languages
-     '((sh         . t)
+     '(
+       ;; (sh         . t)
        (emacs-lisp . t)
        (lisp       . t)
        (scheme     . t)
@@ -2497,6 +2660,8 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
   ;; (add-to-list 'TeX-view-program-selection '(output-pdf "Zathura"))
 
   (setq TeX-view-program-selection '((output-pdf "Zathura")))
+  ;; (setq TeX-view-program-selection '((output-pdf "Evince")))
+  (setq TeX-view-evince-keep-focus t)
 
   ;; (add-to-list 'TeX-view-program-list '("zathura" zathura-forward-search))
   ;; (setq TeX-view-program-selection '((output-pdf "zathura") (output-dvi "xdvi")))
@@ -2547,13 +2712,13 @@ I am still trying to grok all the features in AucTeX. Eventually, I would like t
 ** Company-AucTeX
 Autocompletion in latex. 
 #+begin_src emacs-lisp :results silent
-(use-package company-auctex
-  :ensure t
-  :init
-  ;; Set the delay before autcompletion activates to be 0.1
-  (setq company-idle-delay 0.05)
-  (company-auctex-init)
-)
+;;(use-package company-auctex
+;;  :ensure t
+;;  :init
+;;  ;; Set the delay before autcompletion activates to be 0.1
+;;  (setq company-idle-delay 0.05)
+;;  (company-auctex-init)
+;;)
 #+end_src
 
 ** Outline Minor Mode
@@ -2593,35 +2758,34 @@ Autocompletion in latex.
 
   ;; This is where to look for .bib files
   (setq bibtex-completion-bibliography '("~/notebook/references/everything.bib"))
-        ;; (directory-files "~/notebook/references/" 1 ".*\.bib$"))
-        ;; (directory-files "~/notebook/references/" 1 ".*\.bib$"))
 
   ;; This is where the notes are stored
-  (setq bibtex-completion-notes-path "~/notebook/references/notes.org")
+  ;; (setq bibtex-completion-notes-path "~/notebook/references/notes.org")
+  (setq bibtex-completion-notes-path nil)
 
   ;; Make "Insert Citation" as the default action
-  (helm-delete-action-from-source "Insert citation" helm-source-bibtex)
-  (helm-add-action-to-source "Insert citation" 'helm-bibtex-insert-citation helm-source-bibtex 0)
+  ;; (helm-delete-action-from-source "Insert citation" helm-source-bibtex)
+  ;; (helm-add-action-to-source "Insert citation" 'helm-bibtex-insert-citation helm-source-bibtex 0)
 
   ;; Zotero stores the filename in the field "file"
   (setq bibtex-completion-pdf-field "file")
-   (setq bibtex-completion-find-additional-pdfs t)
+  (setq bibtex-completion-find-additional-pdfs t)
 
-  ;; Use 'xdg-open' to open pdfs
+  ;; ;; Use 'xdg-open' to open pdfs
   (setq bibtex-completion-pdf-open-function
         (lambda (fpath)
           (call-process "xdg-open" nil 0 nil fpath)))
 
-  ;; "Better BibLaTeX" exports the "date" field instead of the "year" field
-  (setq bibtex-completion-additional-search-fields '(date))
+  ;; ;; "Better BibLaTeX" exports the "date" field instead of the "year" field
+  ;; (setq bibtex-completion-additional-search-fields '(date))
   (setq bibtex-completion-display-formats
         '((t             . "${date:4} | ${author:36} ${title:*} ${=has-pdf=:1}${=has-note=:1} | ${=type=:7}")))
 
-  ;; Don't ask for pre-note and post-note while inserting citations
+  ;; ;; Don't ask for pre-note and post-note while inserting citations
   (setq bibtex-completion-cite-prompt-for-optional-arguments nil)
 
-  (setq bibtex-completion-notes-template-one-file
-        "\n* ${author} (${date}): ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :END:\n\n")
+  ;; (setq bibtex-completion-notes-template-one-file
+  ;;       "\n* ${author} (${date}): ${title}\n  :PROPERTIES:\n  :Custom_ID: ${=key=}\n  :END:\n\n")
   )
 #+end_src
 
@@ -2645,20 +2809,36 @@ Autocompletion in latex.
 (setq LaTeX-babel-hyphen nil)
 #+end_src
 
+** Review Hydra
+
+#+begin_src emacs-lisp :results none
+(fset 'latex-review-remove
+   [?s ?i ?\\ backspace backspace ?\\ ?r ?e ?m ?o ?v ?e ?\{ escape ?P ?l ?i ?\\ ?h ?s ?\{ ?\C-q ?q backspace escape ?i])
+
+(evil-leader/set-key "r" 'hydra-latex-review/body)
+(defhydra hydra-latex-review ()
+  "zoom"
+  ("-" latex-review-remove  "remove")
+  ("a" latex-review-add "add")
+  ("r" latex-review-replace "replace"))
+(evil-leader/set-key "r" 'latex-review-remove)
+
+
+#+end_src
+
 * PDF tools
 #+begin_src emacs-lisp :results none
-(use-package pdf-tools
-  :ensure t
-  :init
-  (pdf-tools-install)
-  :config
-  (add-hook 'pdf-view-mode-hook
-             (lambda()
-               (local-set-key (kbd "h") 'pdf-annot-add-highlight-markup-annotation)))
+;; (use-package pdf-tools
+;;   :init
+;;   (pdf-tools-install)
+;;   :config
+;;   (add-hook 'pdf-view-mode-hook
+;;              (lambda()
+;;                (local-set-key (kbd "h") 'pdf-annot-add-highlight-markup-annotation)))
 
-  (add-hook 'pdf-annot-list-mode-hook
-             (lambda()
-               (turn-off-evil-mode))))
+;;   (add-hook 'pdf-annot-list-mode-hook
+;;              (lambda()
+;;                (turn-off-evil-mode))))
 ;; (use-package pdf-tools
 ;;   :ensure t
 ;;   :config
@@ -2719,6 +2899,17 @@ Autocompletion in latex.
                      ;; ((equal prefix '(4)) "[%H:%M:%S; %Y-%m-%d]"))))
                     )))
         (insert (format-time-string format))))
+#+end_src
+
+* The Outside World
+** Atomic Chrome
+https://github.com/alpha22jp/atomic-chrome
+#+begin_src emacs-lisp :results none
+(use-package atomic-chrome
+  :ensure t
+  :config 
+  (atomic-chrome-start-server)
+  )
 #+end_src
 
 * Random

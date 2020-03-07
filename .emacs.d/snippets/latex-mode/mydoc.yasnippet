@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# key: mydoc
+# name: My document template
+# group: skeleton
+# --
+\documentclass[bibliography=totoc, paper=letter]{scrartcl}
+
+\input{include/preamble_general}
+\input{include/preamble_math_macros}
+\usepackage{derivatives}
+
+\title{New Document}
+\author{Hersh Singh}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+$0
+
+\end{document}

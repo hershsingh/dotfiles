@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: ax
+# key: ax
+# group : figure
+# --
+fig = plt.figure(**good_fig_settings)
+ax = fig.add_subplot(111)
+$0
